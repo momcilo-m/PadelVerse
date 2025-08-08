@@ -19,6 +19,8 @@ const user_entity_1 = require("./models/user.entity");
 const users_module_1 = require("./users/users.module");
 const mailer_service_1 = require("./mailer/mailer.service");
 const mailer_module_1 = require("./mailer/mailer.module");
+const jwt_1 = require("@nestjs/jwt");
+const auth_guard_1 = require("./auth/auth.guard");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,9 +39,10 @@ exports.AppModule = AppModule = __decorate([
             }),
             users_module_1.UsersModule,
             mailer_module_1.MailerModule,
+            jwt_1.JwtModule.register({ secret: 'hard!to-guess_secret' })
         ],
         controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController],
-        providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, users_service_1.UsersService, mailer_service_1.MailerService],
+        providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, users_service_1.UsersService, mailer_service_1.MailerService, auth_guard_1.AuthGuard],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

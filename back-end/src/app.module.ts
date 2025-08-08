@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './auth/auth.controller';
@@ -10,6 +10,8 @@ import { User } from './models/user.entity';
 import { UsersModule } from './users/users.module';
 import { MailerService } from './mailer/mailer.service';
 import { MailerModule } from './mailer/mailer.module';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -25,8 +27,9 @@ import { MailerModule } from './mailer/mailer.module';
     }),
      UsersModule,
      MailerModule,
+    JwtModule.register({ secret: 'hard!to-guess_secret' })
   ],
   controllers: [AppController, UsersController, AuthController],
-  providers: [AppService, AuthService, UsersService, UsersService, MailerService],
+  providers: [AppService, AuthService, UsersService, UsersService, MailerService,AuthGuard],
 })
-export class AppModule {}
+export class AppModule{}

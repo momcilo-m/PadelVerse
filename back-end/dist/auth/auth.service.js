@@ -54,17 +54,20 @@ const argon2 = __importStar(require("argon2"));
 const crypto_1 = require("crypto");
 const class_transformer_1 = require("class-transformer");
 const mailer_service_1 = require("../mailer/mailer.service");
+const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
     userRepository;
     mail;
-    constructor(userRepository, mail) {
+    jwtService;
+    constructor(userRepository, mail, jwtService) {
         this.userRepository = userRepository;
         this.mail = mail;
+        this.jwtService = jwtService;
     }
     async create(userDTO) {
         const hash = await argon2.hash(userDTO.password);
         const token = (0, crypto_1.randomBytes)(32).toString('hex');
-        const hashedToken = await argon2.hash(token);
+        const hashedToken = (0, crypto_1.createHmac)('sha256', "0v0 j3 v30m4 t3z4k fl4gg").update(token).digest('hex');
         const user = (0, class_transformer_1.plainToClass)(user_entity_1.User, userDTO);
         user.token_registration = hashedToken;
         user.password = hash;
@@ -74,17 +77,36 @@ let AuthService = class AuthService {
         return res;
     }
     async activateUser(token_registration) {
-        const user = await this.userRepository.findOneBy({ token_registration });
+        const hashedToken = (0, crypto_1.createHmac)('sha256', "0v0 j3 v30m4 t3z4k fl4gg").update(token_registration).digest('hex');
+        const user = await this.userRepository.findOneBy({ token_registration: hashedToken });
         if (!user) {
-            throw new common_1.NotFoundException('Korisnik sa datim tokenom nije pronađen.');
-        }
-        const isMatch = await argon2.verify(user.token_registration, token_registration);
-        if (!isMatch) {
-            throw new common_1.UnauthorizedException('Neispravan token za aktivaciju.');
+            throw new common_1.UnauthorizedException('Invalid registration token');
         }
         user.is_active = true;
         user.token_registration = "";
         return await this.userRepository.save(user);
+    }
+    async login(email, password) {
+        if (!email || !password)
+            throw new common_1.UnauthorizedException('Please insert your email and password');
+        const user = await this.userRepository.findOneBy({ email });
+        if (!user)
+            throw new common_1.UnauthorizedException('user not found');
+        const verify = await argon2.verify(user.password, password);
+        if (!verify)
+            throw new common_1.UnauthorizedException('Incorrect email or password');
+        const token = this.jwtService.sign({ id: user.id }, { expiresIn: 30 * 24 * 60 * 60 });
+        user.password = "";
+        return {
+            'status': 'success',
+            'token': token
+        };
+    }
+    async isLogin(req) {
+        return {
+            'status': 'success',
+            'user': req.user
+        };
     }
 };
 exports.AuthService = AuthService;
@@ -92,6 +114,7 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        mailer_service_1.MailerService])
+        mailer_service_1.MailerService,
+        jwt_1.JwtService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map
