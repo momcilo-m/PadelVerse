@@ -34,7 +34,7 @@ export class AuthService {
         user.password = hash;
 
         //Upis u bazu
-        this.userRepository.create()
+        //const userRes = this.userRepository.create(user)
         const res = await this.userRepository.save(user);
 
         //Slanje mejla
@@ -66,8 +66,8 @@ export class AuthService {
 
         const user = await this.userRepository.findOneBy({email});
 
-        if(!user)
-            throw new UnauthorizedException('user not found');
+        if(!user || !user.is_active)
+            throw new UnauthorizedException('User not found');
 
         const verify = await argon2.verify(user.password,password);
 

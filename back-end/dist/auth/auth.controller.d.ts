@@ -11,6 +11,6 @@ export declare class AuthController {
     }>;
     me(req: any): Promise<{
         status: string;
-        user: import("../models/user.entity").User | undefined;
+        user: import("../models/user.entity").User;
     }>;
 }

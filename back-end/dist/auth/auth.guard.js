@@ -39,7 +39,7 @@ let AuthGuard = class AuthGuard {
         }
         const verify = this.jwtService.verify(token);
         const user = await this.userRepository.findOneBy({ id: verify.id });
-        if (!user)
+        if (!user || !user.is_active)
             throw new common_1.NotFoundException('User not found');
         req.user = user;
         return true;

@@ -71,7 +71,6 @@ let AuthService = class AuthService {
         const user = (0, class_transformer_1.plainToClass)(user_entity_1.User, userDTO);
         user.token_registration = hashedToken;
         user.password = hash;
-        this.userRepository.create();
         const res = await this.userRepository.save(user);
         this.mail.send(user.email, token, user.first_name);
         return res;
@@ -90,8 +89,8 @@ let AuthService = class AuthService {
         if (!email || !password)
             throw new common_1.UnauthorizedException('Please insert your email and password');
         const user = await this.userRepository.findOneBy({ email });
-        if (!user)
-            throw new common_1.UnauthorizedException('user not found');
+        if (!user || !user.is_active)
+            throw new common_1.UnauthorizedException('User not found');
         const verify = await argon2.verify(user.password, password);
         if (!verify)
             throw new common_1.UnauthorizedException('Incorrect email or password');

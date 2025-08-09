@@ -12,6 +12,11 @@ import { MailerService } from './mailer/mailer.service';
 import { MailerModule } from './mailer/mailer.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './auth/auth.guard';
+import { CourtsController } from './courts/courts.controller';
+import { Court } from './models/court.entity';
+import { CourtsService } from './courts/courts.service';
+import { CourtsModule } from './courts/courts.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,14 +27,15 @@ import { AuthGuard } from './auth/auth.guard';
       username: 'momcilo',
       password: 'padelvrese',
       database: 'postgres',
-      entities: [User],
+      entities: [User,Court],
       synchronize: true,
     }),
-     UsersModule,
-     MailerModule,
-    JwtModule.register({ secret: 'hard!to-guess_secret' })
+    UsersModule,
+    MailerModule,
+    CourtsModule,
+    AuthModule,
   ],
-  controllers: [AppController, UsersController, AuthController],
-  providers: [AppService, AuthService, UsersService, UsersService, MailerService,AuthGuard],
+  controllers: [AppController, UsersController, AuthController, CourtsController],
+  providers: [AppService, AuthService, UsersService, MailerService, AuthGuard, CourtsService],
 })
 export class AppModule{}
