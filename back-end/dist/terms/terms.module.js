@@ -6,23 +6,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CourtsModule = void 0;
+exports.TermsModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const court_entity_1 = require("../models/court.entity");
-const courts_service_1 = require("./courts.service");
-const courts_controller_1 = require("./courts.controller");
-const users_module_1 = require("../users/users.module");
 const auth_module_1 = require("../auth/auth.module");
-let CourtsModule = class CourtsModule {
+const terms_entity_1 = require("../models/terms.entity");
+const users_module_1 = require("../users/users.module");
+const terms_service_1 = require("./terms.service");
+const terms_controller_1 = require("./terms.controller");
+const courts_module_1 = require("../courts/courts.module");
+let TermsModule = class TermsModule {
 };
-exports.CourtsModule = CourtsModule;
-exports.CourtsModule = CourtsModule = __decorate([
+exports.TermsModule = TermsModule;
+exports.TermsModule = TermsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([court_entity_1.Court]), users_module_1.UsersModule, auth_module_1.AuthModule],
-        exports: [typeorm_1.TypeOrmModule, courts_service_1.CourtsService],
-        providers: [courts_service_1.CourtsService],
-        controllers: [courts_controller_1.CourtsController],
+        imports: [typeorm_1.TypeOrmModule.forFeature([terms_entity_1.Term]), users_module_1.UsersModule, auth_module_1.AuthModule, courts_module_1.CourtsModule],
+        exports: [typeorm_1.TypeOrmModule],
+        providers: [terms_service_1.TermsService],
+        controllers: [terms_controller_1.TermsController],
     })
-], CourtsModule);
-//# sourceMappingURL=courts.module.js.map
+], TermsModule);
+//# sourceMappingURL=terms.module.js.map

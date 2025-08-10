@@ -9,7 +9,7 @@ import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Court]),UsersModule,AuthModule],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule,CourtsService],
   providers: [CourtsService],
   controllers: [CourtsController],
 })

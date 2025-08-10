@@ -9,45 +9,57 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Court = void 0;
+exports.Term = void 0;
 const typeorm_1 = require("typeorm");
+const court_entity_1 = require("./court.entity");
 const user_entity_1 = require("./user.entity");
-let Court = class Court {
+let Term = class Term {
     id;
-    name;
-    location;
-    owner;
-    open_time;
-    close_time;
+    court;
+    user;
+    date;
+    time;
+    get end_time() {
+        const [hours] = this.time.split(':')[0];
+        return (this.count + parseInt(hours, 10)) + ":00:00";
+    }
+    equipment;
+    count;
 };
-exports.Court = Court;
+exports.Term = Term;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Court.prototype, "id", void 0);
+], Term.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Court.prototype, "name", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'point' }),
-    __metadata("design:type", String)
-], Court.prototype, "location", void 0);
+    (0, typeorm_1.ManyToOne)(() => court_entity_1.Court),
+    (0, typeorm_1.JoinColumn)({ name: 'court' }),
+    __metadata("design:type", Number)
+], Term.prototype, "court", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     (0, typeorm_1.ManyToOne)(() => user_entity_1.User),
-    (0, typeorm_1.JoinColumn)({ name: 'owner' }),
+    (0, typeorm_1.JoinColumn)({ name: 'user' }),
     __metadata("design:type", Number)
-], Court.prototype, "owner", void 0);
+], Term.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Date)
+], Term.prototype, "date", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "time" }),
     __metadata("design:type", String)
-], Court.prototype, "open_time", void 0);
+], Term.prototype, "time", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "time" }),
-    __metadata("design:type", String)
-], Court.prototype, "close_time", void 0);
-exports.Court = Court = __decorate([
-    (0, typeorm_1.Entity)('courts')
-], Court);
-//# sourceMappingURL=court.entity.js.map
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Boolean)
+], Term.prototype, "equipment", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Term.prototype, "count", void 0);
+exports.Term = Term = __decorate([
+    (0, typeorm_1.Entity)("terms")
+], Term);
+//# sourceMappingURL=terms.entity.js.map

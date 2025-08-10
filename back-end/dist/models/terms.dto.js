@@ -9,32 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CourtEditDTO = void 0;
+exports.TermsDTO = void 0;
+const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
-class CourtEditDTO {
-    id;
-    name;
-    location;
-    open_time;
-    close_time;
+class TermsDTO {
+    court;
+    user;
+    date;
+    time;
+    equipment;
+    count;
 }
-exports.CourtEditDTO = CourtEditDTO;
+exports.TermsDTO = TermsDTO;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsPositive)(),
     __metadata("design:type", Number)
-], CourtEditDTO.prototype, "id", void 0);
+], TermsDTO.prototype, "court", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsPositive)(),
+    __metadata("design:type", Number)
+], TermsDTO.prototype, "user", void 0);
+__decorate([
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], TermsDTO.prototype, "date", void 0);
+__decorate([
+    (0, class_validator_1.IsDefined)(),
     __metadata("design:type", String)
-], CourtEditDTO.prototype, "name", void 0);
+], TermsDTO.prototype, "time", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "start_time must be in HH:mm:ss format" }),
-    __metadata("design:type", Date)
-], CourtEditDTO.prototype, "open_time", void 0);
+    (0, class_validator_1.IsDefined)(),
+    __metadata("design:type", Boolean)
+], TermsDTO.prototype, "equipment", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "end_time must be in HH:mm:ss format" }),
-    __metadata("design:type", Date)
-], CourtEditDTO.prototype, "close_time", void 0);
-//# sourceMappingURL=court-edit.dto.js.map
+    (0, class_validator_1.IsPositive)(),
+    (0, class_validator_1.Min)(1),
+    __metadata("design:type", Number)
+], TermsDTO.prototype, "count", void 0);
+//# sourceMappingURL=terms.dto.js.map

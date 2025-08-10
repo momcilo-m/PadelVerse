@@ -17,6 +17,10 @@ import { Court } from './models/court.entity';
 import { CourtsService } from './courts/courts.service';
 import { CourtsModule } from './courts/courts.module';
 import { AuthModule } from './auth/auth.module';
+import { TermsController } from './terms/terms.controller';
+import { TermsService } from './terms/terms.service';
+import { TermsModule } from './terms/terms.module';
+import { Term } from './models/terms.entity';
 
 @Module({
   imports: [
@@ -27,15 +31,16 @@ import { AuthModule } from './auth/auth.module';
       username: 'momcilo',
       password: 'padelvrese',
       database: 'postgres',
-      entities: [User,Court],
+      entities: [User,Court,Term],
       synchronize: true,
     }),
     UsersModule,
     MailerModule,
     CourtsModule,
     AuthModule,
+    TermsModule,
   ],
-  controllers: [AppController, UsersController, AuthController, CourtsController],
-  providers: [AppService, AuthService, UsersService, MailerService, AuthGuard, CourtsService],
+  controllers: [AppController, UsersController, AuthController, CourtsController, TermsController],
+  providers: [AppService, AuthService, UsersService, MailerService, AuthGuard, CourtsService, TermsService],
 })
 export class AppModule{}

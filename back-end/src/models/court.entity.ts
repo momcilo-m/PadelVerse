@@ -20,8 +20,8 @@ export class Court
 
 
     @Column({type:"time"})
-    open_time:Date
+    open_time:string
 
     @Column({type:"time"})
-    close_time:Date
+    close_time:string
 }

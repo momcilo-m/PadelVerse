@@ -25,6 +25,10 @@ const court_entity_1 = require("./models/court.entity");
 const courts_service_1 = require("./courts/courts.service");
 const courts_module_1 = require("./courts/courts.module");
 const auth_module_1 = require("./auth/auth.module");
+const terms_controller_1 = require("./terms/terms.controller");
+const terms_service_1 = require("./terms/terms.service");
+const terms_module_1 = require("./terms/terms.module");
+const terms_entity_1 = require("./models/terms.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -38,16 +42,17 @@ exports.AppModule = AppModule = __decorate([
                 username: 'momcilo',
                 password: 'padelvrese',
                 database: 'postgres',
-                entities: [user_entity_1.User, court_entity_1.Court],
+                entities: [user_entity_1.User, court_entity_1.Court, terms_entity_1.Term],
                 synchronize: true,
             }),
             users_module_1.UsersModule,
             mailer_module_1.MailerModule,
             courts_module_1.CourtsModule,
             auth_module_1.AuthModule,
+            terms_module_1.TermsModule,
         ],
-        controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, courts_controller_1.CourtsController],
-        providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, auth_guard_1.AuthGuard, courts_service_1.CourtsService],
+        controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, courts_controller_1.CourtsController, terms_controller_1.TermsController],
+        providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, auth_guard_1.AuthGuard, courts_service_1.CourtsService, terms_service_1.TermsService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

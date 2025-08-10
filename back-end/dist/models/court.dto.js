@@ -32,11 +32,12 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "start_time must be in HH:mm:ss format" }),
-    __metadata("design:type", Date)
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", String)
 ], CourtDTO.prototype, "open_time", void 0);
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "end_time must be in HH:mm:ss format" }),
-    __metadata("design:type", Date)
+    __metadata("design:type", String)
 ], CourtDTO.prototype, "close_time", void 0);
 //# sourceMappingURL=court.dto.js.map
