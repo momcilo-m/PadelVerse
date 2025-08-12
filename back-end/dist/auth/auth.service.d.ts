@@ -17,6 +17,6 @@ export declare class AuthService {
     }>;
     isLogin(req: Request): Promise<{
         status: string;
-        user: User;
+        user: Express.User;
     }>;
 }

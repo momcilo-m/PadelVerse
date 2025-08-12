@@ -16,7 +16,7 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const user_dto_1 = require("../models/user.dto");
 const auth_service_1 = require("./auth.service");
-const auth_guard_1 = require("./auth.guard");
+const jwt_auth_guard_1 = require("./jwt-auth.guard");
 let AuthController = class AuthController {
     service;
     constructor(service) {
@@ -64,7 +64,7 @@ __decorate([
 __decorate([
     (0, common_1.HttpCode)(200),
     (0, common_1.Get)("/me"),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

@@ -1,12 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
-import { NotFoundError } from 'rxjs';
 import { CourtsService } from 'src/courts/courts.service';
-import { Court } from 'src/models/court.entity';
-import { TermsDTO } from 'src/models/terms.dto';
-import { Term } from 'src/models/terms.entity';
-import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { TermsDTO } from 'src/models/term.dto';
+import { Term } from 'src/models/term.entity';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 
 @Injectable()
 export class TermsService {
@@ -63,12 +61,9 @@ export class TermsService {
         .andWhere(':endTime > term.time', { endTime })
         .getMany();
 
-        console.log(overlapingTerms)
-
         if(overlapingTerms.length > 0)
             throw new BadRequestException('Terms are intercepted')
 
-        //console.log(termsDTO)
         return await this.termsRepository.save(plainToClass(Term,termsDTO));
     }
 

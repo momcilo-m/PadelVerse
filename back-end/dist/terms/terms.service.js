@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const class_transformer_1 = require("class-transformer");
 const courts_service_1 = require("../courts/courts.service");
-const terms_entity_1 = require("../models/terms.entity");
+const term_entity_1 = require("../models/term.entity");
 const typeorm_2 = require("typeorm");
 let TermsService = class TermsService {
     termsRepository;
@@ -59,16 +59,15 @@ let TermsService = class TermsService {
             .andWhere(':startTime < (term.time + (term.count || \' hours\')::interval)', { startTime })
             .andWhere(':endTime > term.time', { endTime })
             .getMany();
-        console.log(overlapingTerms);
         if (overlapingTerms.length > 0)
             throw new common_1.BadRequestException('Terms are intercepted');
-        return await this.termsRepository.save((0, class_transformer_1.plainToClass)(terms_entity_1.Term, termsDTO));
+        return await this.termsRepository.save((0, class_transformer_1.plainToClass)(term_entity_1.Term, termsDTO));
     }
 };
 exports.TermsService = TermsService;
 exports.TermsService = TermsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(terms_entity_1.Term)),
+    __param(0, (0, typeorm_1.InjectRepository)(term_entity_1.Term)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         courts_service_1.CourtsService])
 ], TermsService);

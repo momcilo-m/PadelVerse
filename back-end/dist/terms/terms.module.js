@@ -10,7 +10,7 @@ exports.TermsModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const auth_module_1 = require("../auth/auth.module");
-const terms_entity_1 = require("../models/terms.entity");
+const term_entity_1 = require("../models/term.entity");
 const users_module_1 = require("../users/users.module");
 const terms_service_1 = require("./terms.service");
 const terms_controller_1 = require("./terms.controller");
@@ -20,7 +20,7 @@ let TermsModule = class TermsModule {
 exports.TermsModule = TermsModule;
 exports.TermsModule = TermsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([terms_entity_1.Term]), users_module_1.UsersModule, auth_module_1.AuthModule, courts_module_1.CourtsModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([term_entity_1.Term]), users_module_1.UsersModule, auth_module_1.AuthModule, courts_module_1.CourtsModule],
         exports: [typeorm_1.TypeOrmModule],
         providers: [terms_service_1.TermsService],
         controllers: [terms_controller_1.TermsController],

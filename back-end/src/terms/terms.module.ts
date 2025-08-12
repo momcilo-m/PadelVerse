@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
-import { Term } from 'src/models/terms.entity';
+import { Term } from 'src/models/term.entity';
 import { UsersModule } from 'src/users/users.module';
 import { TermsService } from './terms.service';
 import { TermsController } from './terms.controller';

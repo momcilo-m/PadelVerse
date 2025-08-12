@@ -1,8 +1,7 @@
 import { Body, Controller, Get, HttpCode, Param, ParseIntPipe, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
 import { UserDTO } from 'src/models/user.dto';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
-
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -32,7 +31,7 @@ export class AuthController {
 
     @HttpCode(200)
     @Get("/me")
-    @UseGuards(AuthGuard)
+    @UseGuards(JwtAuthGuard)
     me(@Req()req:any)
     {
         return this.service.isLogin(req);

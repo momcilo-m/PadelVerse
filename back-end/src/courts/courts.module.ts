@@ -4,7 +4,6 @@ import { Court } from 'src/models/court.entity';
 import { CourtsService } from './courts.service';
 import { CourtsController } from './courts.controller';
 import { UsersModule } from 'src/users/users.module';
-import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({

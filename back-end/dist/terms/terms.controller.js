@@ -15,7 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TermsController = void 0;
 const common_1 = require("@nestjs/common");
 const terms_service_1 = require("./terms.service");
-const terms_dto_1 = require("../models/terms.dto");
+const term_dto_1 = require("../models/term.dto");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let TermsController = class TermsController {
     service;
     constructor(service) {
@@ -40,10 +41,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TermsController.prototype, "getTermsByCourt", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)(new common_1.ValidationPipe({ transform: true }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [terms_dto_1.TermsDTO]),
+    __metadata("design:paramtypes", [term_dto_1.TermsDTO]),
     __metadata("design:returntype", void 0)
 ], TermsController.prototype, "create", null);
 exports.TermsController = TermsController = __decorate([

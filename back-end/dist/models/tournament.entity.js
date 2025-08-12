@@ -9,57 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Term = void 0;
+exports.Tournament = void 0;
 const typeorm_1 = require("typeorm");
-const court_entity_1 = require("./court.entity");
-const user_entity_1 = require("./user.entity");
-let Term = class Term {
+let Tournament = class Tournament {
     id;
-    court;
-    user;
-    date;
-    time;
-    get end_time() {
-        const [hours] = this.time.split(':')[0];
-        return (this.count + parseInt(hours, 10)) + ":00:00";
-    }
-    equipment;
-    count;
+    name;
+    start;
+    end;
+    country;
+    city;
 };
-exports.Term = Term;
+exports.Tournament = Tournament;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Term.prototype, "id", void 0);
+], Tournament.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    (0, typeorm_1.ManyToOne)(() => court_entity_1.Court),
-    (0, typeorm_1.JoinColumn)({ name: 'court' }),
-    __metadata("design:type", Number)
-], Term.prototype, "court", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User),
-    (0, typeorm_1.JoinColumn)({ name: 'user' }),
-    __metadata("design:type", Number)
-], Term.prototype, "user", void 0);
+    __metadata("design:type", String)
+], Tournament.prototype, "name", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], Term.prototype, "date", void 0);
+], Tournament.prototype, "start", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "time" }),
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Date)
+], Tournament.prototype, "end", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Term.prototype, "time", void 0);
+], Tournament.prototype, "country", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", Boolean)
-], Term.prototype, "equipment", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Term.prototype, "count", void 0);
-exports.Term = Term = __decorate([
-    (0, typeorm_1.Entity)("terms")
-], Term);
-//# sourceMappingURL=terms.entity.js.map
+    __metadata("design:type", String)
+], Tournament.prototype, "city", void 0);
+exports.Tournament = Tournament = __decorate([
+    (0, typeorm_1.Entity)('tournaments')
+], Tournament);
+//# sourceMappingURL=tournament.entity.js.map

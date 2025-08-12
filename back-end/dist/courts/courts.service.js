@@ -34,11 +34,10 @@ let CourtsService = class CourtsService {
             .where('courts.id=:id', { id })
             .getOne();
     }
-    async create(courtDTO, req) {
-        courtDTO.owner = req.user.id;
+    async create(courtDTO) {
         return this.courtsRepository.save((0, class_transformer_1.plainToClass)(court_entity_1.Court, courtDTO));
     }
-    async edit(id, courtDTO, req) {
+    async edit(id, courtDTO) {
         if (!courtDTO)
             return new common_1.BadRequestException('Please insert a valid data to edit');
         const updateData = {};
@@ -50,7 +49,7 @@ let CourtsService = class CourtsService {
             updateData.location = courtDTO.location;
         if (courtDTO.name !== undefined)
             updateData.name = courtDTO.name;
-        const court = await this.courtsRepository.update({ id, owner: req.user.id }, updateData);
+        const court = await this.courtsRepository.update({ id, owner: courtDTO.owner }, updateData);
         if (court.affected == 0)
             throw new common_1.NotFoundException('Court not found');
         return { success: true, message: 'Court updated successfully' };

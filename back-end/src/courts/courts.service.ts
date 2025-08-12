@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UseGuards } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Req, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { CourtDTO } from 'src/models/court.dto';
@@ -28,13 +28,12 @@ export class CourtsService {
                 .getOne();
     }
 
-    async create(courtDTO:CourtDTO,req:Request)
+    async create(courtDTO:CourtDTO)
     {
-        courtDTO.owner = req.user.id;
         return this.courtsRepository.save(plainToClass(Court,courtDTO));
     }
 
-    async edit(id:number,courtDTO:CourtDTO,req:Request)
+    async edit(id:number,courtDTO:CourtDTO)
     {
         if(!courtDTO)
             return new BadRequestException('Please insert a valid data to edit');
@@ -46,7 +45,7 @@ export class CourtsService {
         if (courtDTO.location !== undefined) updateData.location = courtDTO.location;
         if (courtDTO.name !== undefined) updateData.name = courtDTO.name;
 
-        const court = await this.courtsRepository.update({ id, owner: req.user.id }, updateData);
+        const court = await this.courtsRepository.update({ id, owner: courtDTO.owner }, updateData);
 
         if(court.affected == 0)
             throw new NotFoundException('Court not found');

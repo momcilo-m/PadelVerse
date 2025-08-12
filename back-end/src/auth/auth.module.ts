@@ -6,6 +6,7 @@ import { MailerService } from 'src/mailer/mailer.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { MailerModule } from 'src/mailer/mailer.module';
 import { AuthController } from './auth.controller';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { AuthController } from './auth.controller';
     JwtModule.register({ secret: 'hard!to-guess_secret' }),
     MailerModule
   ],
-  providers: [AuthService],
+  providers: [AuthService,JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService,JwtModule],
 })

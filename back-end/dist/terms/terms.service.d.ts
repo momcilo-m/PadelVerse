@@ -1,6 +1,6 @@
 import { CourtsService } from 'src/courts/courts.service';
-import { TermsDTO } from 'src/models/terms.dto';
-import { Term } from 'src/models/terms.entity';
+import { TermsDTO } from 'src/models/term.dto';
+import { Term } from 'src/models/term.entity';
 import { Repository } from 'typeorm';
 export declare class TermsService {
     private readonly termsRepository;

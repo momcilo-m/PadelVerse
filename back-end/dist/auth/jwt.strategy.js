@@ -12,44 +12,37 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthGuard = void 0;
+exports.JwtStrategy = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
+const passport_1 = require("@nestjs/passport");
 const typeorm_1 = require("@nestjs/typeorm");
+const passport_jwt_1 = require("passport-jwt");
 const user_entity_1 = require("../models/user.entity");
 const typeorm_2 = require("typeorm");
-let AuthGuard = class AuthGuard {
+let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy, 'jwt') {
     userRepository;
-    jwtService;
-    constructor(userRepository, jwtService) {
+    constructor(userRepository) {
+        super({
+            jwtFromRequest: passport_jwt_1.ExtractJwt.fromExtractors([
+                passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+                (req) => req.cookies.jwt
+            ]),
+            secretOrKey: 'hard!to-guess_secret'
+        });
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
     }
-    async canActivate(context) {
-        const req = context.switchToHttp().getRequest();
-        let token = '';
-        if (req.headers['authorization'] && req.headers['authorization'].startsWith('Bearer')) {
-            token = req.headers['authorization']?.split('Bearer ')[1];
+    async validate(payload) {
+        const user = await this.userRepository.findOneBy(payload.id);
+        console.log(user, payload, "a");
+        if (!user || !user.is_active) {
+            throw new common_1.UnauthorizedException('User not found or inactive');
         }
-        else {
-            token = req?.cookies?.jwt;
-        }
-        if (!token) {
-            throw new common_1.NotFoundException('Please Login');
-        }
-        const verify = this.jwtService.verify(token);
-        const user = await this.userRepository.findOneBy({ id: verify.id });
-        if (!user || !user.is_active)
-            throw new common_1.NotFoundException('User not found');
-        req.user = user;
-        return true;
+        return user;
     }
 };
-exports.AuthGuard = AuthGuard;
-exports.AuthGuard = AuthGuard = __decorate([
-    (0, common_1.Injectable)(),
+exports.JwtStrategy = JwtStrategy;
+exports.JwtStrategy = JwtStrategy = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
-        jwt_1.JwtService])
-], AuthGuard);
-//# sourceMappingURL=auth.guard.js.map
+    __metadata("design:paramtypes", [typeorm_2.Repository])
+], JwtStrategy);
+//# sourceMappingURL=jwt.strategy.js.map

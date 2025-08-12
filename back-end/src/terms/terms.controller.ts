@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { TermsService } from './terms.service';
-import { TermsDTO } from 'src/models/terms.dto';
+import { TermsDTO } from 'src/models/term.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('terms')
 export class TermsController {
@@ -15,6 +16,7 @@ export class TermsController {
         return this.service.getByIds(court,user, new Date(start)?? null, new Date(end)?? null);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     create(@Body(new ValidationPipe({transform:true}))termsDTO:TermsDTO)
     {

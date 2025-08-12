@@ -16,7 +16,7 @@ exports.CourtsController = void 0;
 const common_1 = require("@nestjs/common");
 const courts_service_1 = require("./courts.service");
 const court_dto_1 = require("../models/court.dto");
-const auth_guard_1 = require("../auth/auth.guard");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let CourtsController = class CourtsController {
     service;
     constructor(service) {
@@ -29,10 +29,12 @@ let CourtsController = class CourtsController {
         return this.service.getById(id);
     }
     createCourt(req, courtDTO) {
-        return this.service.create(courtDTO, req);
+        courtDTO.owner = req.user.id;
+        return this.service.create(courtDTO);
     }
     editCourt(req, courtDTO, id) {
-        return this.service.edit(id, courtDTO, req);
+        courtDTO.owner = req.user.id;
+        return this.service.edit(id, courtDTO);
     }
 };
 exports.CourtsController = CourtsController;
@@ -51,7 +53,7 @@ __decorate([
 ], CourtsController.prototype, "getById", null);
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)(new common_1.ValidationPipe({ transform: true }))),
     __metadata("design:type", Function),
@@ -60,7 +62,7 @@ __decorate([
 ], CourtsController.prototype, "createCourt", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Param)('id', common_1.ParseIntPipe)),

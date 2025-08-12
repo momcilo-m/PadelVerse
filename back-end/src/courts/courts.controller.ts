@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CourtsService } from './courts.service';
 import { CourtDTO } from 'src/models/court.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('courts')
 export class CourtsController {
@@ -22,16 +22,18 @@ export class CourtsController {
     }
 
     @Post()
-    @UseGuards(AuthGuard)
+    @UseGuards(JwtAuthGuard)
     createCourt(@Req()req:any, @Body(new ValidationPipe({transform:true}))courtDTO:CourtDTO)
     {
-        return this.service.create(courtDTO,req)
+        courtDTO.owner = req.user.id;
+        return this.service.create(courtDTO)
     }
 
     @Patch(':id')
-    @UseGuards(AuthGuard)
+    @UseGuards(JwtAuthGuard)
     editCourt(@Req()req:any, @Body()courtDTO:CourtDTO,@Param('id',ParseIntPipe)id:number)
     {
-        return this.service.edit(id,courtDTO,req);
+        courtDTO.owner = req.user.id;
+        return this.service.edit(id,courtDTO);
     }
 }

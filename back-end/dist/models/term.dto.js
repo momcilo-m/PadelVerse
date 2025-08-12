@@ -47,4 +47,4 @@ __decorate([
     (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)
 ], TermsDTO.prototype, "count", void 0);
-//# sourceMappingURL=terms.dto.js.map
+//# sourceMappingURL=term.dto.js.map

@@ -10,8 +10,6 @@ import { User } from './models/user.entity';
 import { UsersModule } from './users/users.module';
 import { MailerService } from './mailer/mailer.service';
 import { MailerModule } from './mailer/mailer.module';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthGuard } from './auth/auth.guard';
 import { CourtsController } from './courts/courts.controller';
 import { Court } from './models/court.entity';
 import { CourtsService } from './courts/courts.service';
@@ -20,7 +18,11 @@ import { AuthModule } from './auth/auth.module';
 import { TermsController } from './terms/terms.controller';
 import { TermsService } from './terms/terms.service';
 import { TermsModule } from './terms/terms.module';
-import { Term } from './models/terms.entity';
+import { Term } from './models/term.entity';
+import { TournamentsModule } from './tournaments/tournaments.module';
+import { Tournament } from './models/tournament.entity';
+import { TournamentsController } from './tournaments/tournaments.controller';
+import { TournamentsService } from './tournaments/tournaments.service';
 
 @Module({
   imports: [
@@ -31,7 +33,7 @@ import { Term } from './models/terms.entity';
       username: 'momcilo',
       password: 'padelvrese',
       database: 'postgres',
-      entities: [User,Court,Term],
+      entities: [User,Court,Term,Tournament],
       synchronize: true,
     }),
     UsersModule,
@@ -39,8 +41,9 @@ import { Term } from './models/terms.entity';
     CourtsModule,
     AuthModule,
     TermsModule,
+    TournamentsModule,
   ],
-  controllers: [AppController, UsersController, AuthController, CourtsController, TermsController],
-  providers: [AppService, AuthService, UsersService, MailerService, AuthGuard, CourtsService, TermsService],
+  controllers: [AppController, UsersController, AuthController, CourtsController, TermsController,TournamentsController],
+  providers: [AppService, AuthService, UsersService, MailerService, CourtsService, TermsService, TournamentsService],
 })
 export class AppModule{}
