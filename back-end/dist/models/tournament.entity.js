@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tournament = void 0;
 const typeorm_1 = require("typeorm");
+const court_entity_1 = require("./court.entity");
 let Tournament = class Tournament {
     id;
     name;
@@ -18,6 +19,7 @@ let Tournament = class Tournament {
     end;
     country;
     city;
+    court;
 };
 exports.Tournament = Tournament;
 __decorate([
@@ -44,6 +46,21 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Tournament.prototype, "city", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => court_entity_1.Court, court => court.tour),
+    (0, typeorm_1.JoinTable)({
+        name: 'court_tournament',
+        joinColumn: {
+            name: 'court',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'tournament',
+            referencedColumnName: 'id'
+        }
+    }),
+    __metadata("design:type", Array)
+], Tournament.prototype, "court", void 0);
 exports.Tournament = Tournament = __decorate([
     (0, typeorm_1.Entity)('tournaments')
 ], Tournament);

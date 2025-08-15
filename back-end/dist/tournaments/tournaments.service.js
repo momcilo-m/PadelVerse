@@ -16,12 +16,15 @@ exports.TournamentsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const class_transformer_1 = require("class-transformer");
+const courts_service_1 = require("../courts/courts.service");
 const tournament_entity_1 = require("../models/tournament.entity");
 const typeorm_2 = require("typeorm");
 let TournamentsService = class TournamentsService {
     tourRepository;
-    constructor(tourRepository) {
+    courtService;
+    constructor(tourRepository, courtService) {
         this.tourRepository = tourRepository;
+        this.courtService = courtService;
     }
     async getAll() {
         return await this.tourRepository.find();
@@ -31,13 +34,15 @@ let TournamentsService = class TournamentsService {
     }
     async create(tournamentDTO) {
         const { country, city } = tournamentDTO;
-        return await this.tourRepository.save((0, class_transformer_1.plainToClass)(tournament_entity_1.Tournament, tournamentDTO));
+        const courts = await this.courtService.getByIds(tournamentDTO.court);
+        return await this.tourRepository.save((0, class_transformer_1.plainToClass)(tournament_entity_1.Tournament, { ...tournamentDTO, court: courts }));
     }
 };
 exports.TournamentsService = TournamentsService;
 exports.TournamentsService = TournamentsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(tournament_entity_1.Tournament)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        courts_service_1.CourtsService])
 ], TournamentsService);
 //# sourceMappingURL=tournaments.service.js.map

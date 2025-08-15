@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Court = void 0;
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
+const tournament_entity_1 = require("./tournament.entity");
 let Court = class Court {
     id;
     name;
@@ -19,6 +20,7 @@ let Court = class Court {
     owner;
     open_time;
     close_time;
+    tour;
 };
 exports.Court = Court;
 __decorate([
@@ -47,6 +49,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: "time" }),
     __metadata("design:type", String)
 ], Court.prototype, "close_time", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => tournament_entity_1.Tournament, tour => tour.court),
+    __metadata("design:type", Array)
+], Court.prototype, "tour", void 0);
 exports.Court = Court = __decorate([
     (0, typeorm_1.Entity)('courts')
 ], Court);

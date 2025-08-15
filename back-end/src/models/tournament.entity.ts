@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Court } from "./court.entity";
 
 @Entity('tournaments')
 export class Tournament
@@ -7,7 +8,7 @@ export class Tournament
     id:number
 
     @Column()
-    name:String
+    name:string
 
     @Column()
     start:Date
@@ -20,4 +21,18 @@ export class Tournament
 
     @Column()
     city:string
+
+    @ManyToMany(()=>Court,court=>court.tour)
+    @JoinTable({
+        name: 'court_tournament',
+        joinColumn: {
+            name: 'court',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'tournament', 
+            referencedColumnName: 'id'
+        }
+    })
+    court:Court[]
 }

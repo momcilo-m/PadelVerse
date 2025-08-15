@@ -8,4 +8,5 @@ export declare class TermsService {
     constructor(termsRepository: Repository<Term>, courtService: CourtsService);
     getByIds(court?: number, user?: number, start_date?: Date, end_date?: Date): Promise<Term[]>;
     create(termsDTO: TermsDTO): Promise<Term>;
+    delete(id: number): Promise<import("typeorm").DeleteResult>;
 }

@@ -38,8 +38,6 @@ export class TermsService {
         const {time,count,date,court:cId} = termsDTO;
         date.setHours(0,0,0,0);
 
-        const [hours] = time.split(":").map(Number);
-
         const startTime = time;
         const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2,'0')+":00:00";
 
@@ -67,4 +65,20 @@ export class TermsService {
         return await this.termsRepository.save(plainToClass(Term,termsDTO));
     }
 
+    async delete(id:number)
+    {
+        const terms = await this.termsRepository.findOneBy({id});
+
+        if(!terms)
+            throw new NotFoundException(terms);
+
+        const termTime = new Date(terms.date);
+        const [hours] = terms.time.split(':').map(Number);
+        termTime.setHours(hours);
+
+        if(termTime.getTime() < Date.now())
+            throw new BadRequestException('You can\'t delete term that past');
+
+        return await this.termsRepository.delete({id})
+    }
 }

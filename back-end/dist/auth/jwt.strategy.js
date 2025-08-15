@@ -33,7 +33,6 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
     }
     async validate(payload) {
         const user = await this.userRepository.findOneBy(payload.id);
-        console.log(user, payload, "a");
         if (!user || !user.is_active) {
             throw new common_1.UnauthorizedException('User not found or inactive');
         }

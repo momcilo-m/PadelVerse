@@ -5,4 +5,5 @@ export declare class TermsController {
     constructor(service: TermsService);
     getTermsByCourt(court: number, user: number, start: string, end: string): Promise<import("../models/term.entity").Term[]>;
     create(termsDTO: TermsDTO): Promise<import("../models/term.entity").Term>;
+    delete(id: number): Promise<import("typeorm").DeleteResult>;
 }

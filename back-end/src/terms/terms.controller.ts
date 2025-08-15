@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { TermsService } from './terms.service';
 import { TermsDTO } from 'src/models/term.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -21,5 +21,12 @@ export class TermsController {
     create(@Body(new ValidationPipe({transform:true}))termsDTO:TermsDTO)
     {
         return this.service.create(termsDTO);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete(":id")
+    delete(@Param('id',ParseIntPipe)id:number)
+    {
+        return this.service.delete(id);
     }
 }

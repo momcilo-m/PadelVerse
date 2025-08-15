@@ -43,7 +43,6 @@ let TermsService = class TermsService {
     async create(termsDTO) {
         const { time, count, date, court: cId } = termsDTO;
         date.setHours(0, 0, 0, 0);
-        const [hours] = time.split(":").map(Number);
         const startTime = time;
         const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2, '0') + ":00:00";
         const court = await this.courtService.getById(cId);
@@ -62,6 +61,17 @@ let TermsService = class TermsService {
         if (overlapingTerms.length > 0)
             throw new common_1.BadRequestException('Terms are intercepted');
         return await this.termsRepository.save((0, class_transformer_1.plainToClass)(term_entity_1.Term, termsDTO));
+    }
+    async delete(id) {
+        const terms = await this.termsRepository.findOneBy({ id });
+        if (!terms)
+            throw new common_1.NotFoundException(terms);
+        const termTime = new Date(terms.date);
+        const [hours] = terms.time.split(':').map(Number);
+        termTime.setHours(hours);
+        if (termTime.getTime() < Date.now())
+            throw new common_1.BadRequestException('You can\'t delete term that past');
+        return await this.termsRepository.delete({ id });
     }
 };
 exports.TermsService = TermsService;

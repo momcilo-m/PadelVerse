@@ -28,6 +28,9 @@ let TermsController = class TermsController {
     create(termsDTO) {
         return this.service.create(termsDTO);
     }
+    delete(id) {
+        return this.service.delete(id);
+    }
 };
 exports.TermsController = TermsController;
 __decorate([
@@ -48,6 +51,14 @@ __decorate([
     __metadata("design:paramtypes", [term_dto_1.TermsDTO]),
     __metadata("design:returntype", void 0)
 ], TermsController.prototype, "create", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)(":id"),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], TermsController.prototype, "delete", null);
 exports.TermsController = TermsController = __decorate([
     (0, common_1.Controller)('terms'),
     __metadata("design:paramtypes", [terms_service_1.TermsService])

@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
+import { Tournament } from "./tournament.entity";
 
 @Entity('courts')
 export class Court
@@ -24,4 +25,7 @@ export class Court
 
     @Column({type:"time"})
     close_time:string
+
+    @ManyToMany(()=>Tournament,tour=>tour.court)
+    tour:Tournament[]
 }

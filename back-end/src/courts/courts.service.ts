@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { CourtDTO } from 'src/models/court.dto';
 import { Court } from 'src/models/court.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import {Request} from 'express'
 
 @Injectable()
@@ -26,6 +26,15 @@ export class CourtsService {
                 .addSelect(['users.phone', 'users.email'])
                 .where('courts.id=:id',{id})
                 .getOne();
+    }
+
+    async getByIds(id:number[])
+    {
+        return this.courtsRepository.find({
+            where:{
+                id:In(id)
+            }
+        })
     }
 
     async create(courtDTO:CourtDTO)

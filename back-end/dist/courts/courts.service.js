@@ -34,6 +34,13 @@ let CourtsService = class CourtsService {
             .where('courts.id=:id', { id })
             .getOne();
     }
+    async getByIds(id) {
+        return this.courtsRepository.find({
+            where: {
+                id: (0, typeorm_2.In)(id)
+            }
+        });
+    }
     async create(courtDTO) {
         return this.courtsRepository.save((0, class_transformer_1.plainToClass)(court_entity_1.Court, courtDTO));
     }

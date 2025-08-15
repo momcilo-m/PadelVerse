@@ -1,13 +1,11 @@
 import { Type } from "class-transformer";
-import { IsDefined, IsOptional, IsPositive, Max, Min } from "class-validator";
+import { IsDefined, IsNotEmpty, IsOptional, IsPositive, Max, MaxLength, Min, MinLength } from "class-validator";
 
 export class TournamentsDTO
 {
-    @IsPositive()
-    id:number
-
-    @Min(3)
-    @Max(100)
+    @IsDefined()
+    @MinLength(3)
+    @MaxLength(100)
     name:string
 
     @IsDefined()
@@ -18,11 +16,15 @@ export class TournamentsDTO
     @Type(()=>Date)
     end:string
 
-    @Min(3)
-    @Max(50)
+    @IsDefined()
+    @MinLength(3)
+    @MaxLength(50)
     country:string
 
     @IsOptional()
-    @Max(50)
+    @MaxLength(50)
     city:string
+
+    @IsNotEmpty()
+    court:number[]
 }

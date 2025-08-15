@@ -7,6 +7,7 @@ export declare class CourtsService {
     constructor(courtsRepository: Repository<Court>);
     getAll(): Promise<Court[]>;
     getById(id: number): Promise<Court | null>;
+    getByIds(id: number[]): Promise<Court[]>;
     create(courtDTO: CourtDTO): Promise<Court>;
     edit(id: number, courtDTO: CourtDTO): Promise<BadRequestException | {
         success: boolean;

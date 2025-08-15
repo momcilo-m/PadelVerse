@@ -13,21 +13,18 @@ exports.TournamentsDTO = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class TournamentsDTO {
-    id;
     name;
     start;
     end;
     country;
     city;
+    court;
 }
 exports.TournamentsDTO = TournamentsDTO;
 __decorate([
-    (0, class_validator_1.IsPositive)(),
-    __metadata("design:type", Number)
-], TournamentsDTO.prototype, "id", void 0);
-__decorate([
-    (0, class_validator_1.Min)(3),
-    (0, class_validator_1.Max)(100),
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.MinLength)(3),
+    (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], TournamentsDTO.prototype, "name", void 0);
 __decorate([
@@ -41,13 +38,18 @@ __decorate([
     __metadata("design:type", String)
 ], TournamentsDTO.prototype, "end", void 0);
 __decorate([
-    (0, class_validator_1.Min)(3),
-    (0, class_validator_1.Max)(50),
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.MinLength)(3),
+    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
 ], TournamentsDTO.prototype, "country", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.Max)(50),
+    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
 ], TournamentsDTO.prototype, "city", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Array)
+], TournamentsDTO.prototype, "court", void 0);
 //# sourceMappingURL=tournament.dto.js.map

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
+import { CourtsService } from 'src/courts/courts.service';
 import { TournamentsDTO } from 'src/models/tournament.dto';
 import { Tournament } from 'src/models/tournament.entity';
 import { Repository } from 'typeorm';
@@ -9,7 +10,8 @@ import { Repository } from 'typeorm';
 export class TournamentsService {
 
     constructor(
-        @InjectRepository(Tournament) private readonly tourRepository: Repository<Tournament>
+        @InjectRepository(Tournament) private readonly tourRepository: Repository<Tournament>,
+        private readonly courtService: CourtsService
     ){}
 
     async getAll()
@@ -27,6 +29,8 @@ export class TournamentsService {
         //Provera da li grad i drzava postoje
         const {country,city} = tournamentDTO;
 
-        return await this.tourRepository.save(plainToClass(Tournament,tournamentDTO));
+        const courts = await this.courtService.getByIds(tournamentDTO.court)
+
+        return await this.tourRepository.save(plainToClass(Tournament,{...tournamentDTO, court:courts}));
     }
 }
