@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { isBoolean, IsDate, IsDefined, IsPositive, Matches, Min } from "class-validator";
+import { IsDate, IsDefined, IsPositive, Matches, Max, Min } from "class-validator";
 
 export class TermsDTO
 {
@@ -22,4 +22,10 @@ export class TermsDTO
     @IsPositive()
     @Min(1)
     count:number
+
+    @IsPositive()
+    @Min(2)
+    @Max(4)
+    player:number
+
 }

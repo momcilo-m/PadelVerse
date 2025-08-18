@@ -28,4 +28,7 @@ export class Court
 
     @ManyToMany(()=>Tournament,tour=>tour.court)
     tour:Tournament[]
+
+    @Column()
+    price:number
 }

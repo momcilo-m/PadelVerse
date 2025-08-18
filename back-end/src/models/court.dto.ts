@@ -1,4 +1,4 @@
-import { IsDate, IsDefined, IsNumber, IsOptional, Matches, MaxLength, Min } from "class-validator";
+import { IsDate, IsDefined, IsNumber, IsOptional, IsPositive, Matches, MaxLength, Min } from "class-validator";
 import { Point } from "typeorm";
 
 export class CourtDTO
@@ -22,4 +22,8 @@ export class CourtDTO
     @IsDefined()
     @Matches(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/,{message:"end_time must be in HH:mm:ss format"})
     close_time:string;
+
+    @IsPositive()
+    @Min(1)
+    price:number
 }

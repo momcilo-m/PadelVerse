@@ -24,16 +24,13 @@ export class Term
     @Column({type:"time"})
     time:string
 
-    get end_time():string
-    {
-        const [hours] = this.time.split(':')[0];
-        
-        return (this.count + parseInt(hours,10))+":00:00";
-    }
-
     @Column()
     equipment:boolean
 
     @Column()
     count:number
+
+    @Column()
+    players:number
+
 }
