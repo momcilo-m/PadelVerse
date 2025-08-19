@@ -4,7 +4,7 @@ export declare class Term {
     user: number;
     date: Date;
     time: string;
-    get end_time(): string;
     equipment: boolean;
     count: number;
+    players: number;
 }

@@ -10,9 +10,10 @@ export class UserService {
  
   http = inject(HttpClient)
 
-  login(email:String, password:String):Observable<User[]>
+  login(email:String, password:String):Observable<User>
   {
-    return this.http.post<User[]>("http://localhost:3000/auth/login",{email,password});
+    console.log('Pozivam login sa:', email, password);
+    return this.http.post<User>("http://localhost:3000/auth/login",{email,password},{withCredentials:true});
   }
 
 }

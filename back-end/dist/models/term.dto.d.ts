@@ -5,4 +5,5 @@ export declare class TermsDTO {
     time: string;
     equipment: boolean;
     count: number;
+    player: number;
 }

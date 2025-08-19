@@ -76,11 +76,19 @@ export class AuthService {
 
         const token = this.jwtService.sign({ id: user.id }, { expiresIn: 30 * 24 * 60 * 60 });
 
+        const cookieOptions = {
+            expire:new Date(Date.now() + 30 * 24 * 60 *60 * 1000),
+            httpOnly:true,
+            sameSite:"lax",
+            secure:false
+        }
+        
         user.password = "";
 
         return {
             'status':'success',
-            'token':token
+            'token':token,
+            user
         };
 
     }

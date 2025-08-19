@@ -1,15 +1,14 @@
 <p>login works!</p>
-<div class="form-container">
-    <form (ngSubmit)="onSubmit()" class="form-container">
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-container">
         <mat-form-field appearance="fill">
             <mat-label>Email</mat-label>
-            <input matInput type="email" placeholder="Email" />
+            <input matInput type="email" placeholder="Email" formControlName="email"/>
             <mat-icon matSuffix>email</mat-icon>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Password</mat-label>
-            <input matInput [type]="hide() ? 'password' : 'text'" />
+            <input formControlName="password" matInput [type]="hide() ? 'password' : 'text'" />
             <button
             matIconButton
             matSuffix
@@ -24,5 +23,4 @@
         <button mat-raised-button color="primary" type="submit">
             Prijavi se
         </button>
-    </form>
-</div>
+</form>

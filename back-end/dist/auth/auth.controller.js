@@ -28,8 +28,18 @@ let AuthController = class AuthController {
     confirmRegister(token) {
         return this.service.activateUser(token);
     }
-    login(email, password) {
-        return this.service.login(email, password);
+    async login(email, password, response) {
+        const res = await this.service.login(email, password);
+        if (res.token) {
+            response.cookie('jwt', res.token, {
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            });
+            res.token = "";
+        }
+        return res;
     }
     me(req) {
         return this.service.isLogin(req);
@@ -57,9 +67,10 @@ __decorate([
     (0, common_1.Post)("/login"),
     __param(0, (0, common_1.Body)('email')),
     __param(1, (0, common_1.Body)('password')),
+    __param(2, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.HttpCode)(200),

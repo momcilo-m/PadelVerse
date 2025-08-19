@@ -46,7 +46,7 @@ exports.AppModule = AppModule = __decorate([
                 password: 'padelvrese',
                 database: 'postgres',
                 entities: [user_entity_1.User, court_entity_1.Court, term_entity_1.Term, tournament_entity_1.Tournament],
-                synchronize: true,
+                synchronize: false,
             }),
             users_module_1.UsersModule,
             mailer_module_1.MailerModule,

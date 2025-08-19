@@ -7,4 +7,5 @@ export declare class Court {
     open_time: string;
     close_time: string;
     tour: Tournament[];
+    price: number;
 }

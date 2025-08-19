@@ -34,7 +34,7 @@ import { TournamentsService } from './tournaments/tournaments.service';
       password: 'padelvrese',
       database: 'postgres',
       entities: [User,Court,Term,Tournament],
-      synchronize: true,
+      synchronize: false,
     }),
     UsersModule,
     MailerModule,

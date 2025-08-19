@@ -1,4 +1,5 @@
-import { Body, Controller, Get, HttpCode, Param, ParseIntPipe, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import type { Response } from 'express';
 import { UserDTO } from 'src/models/user.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -24,9 +25,20 @@ export class AuthController {
 
     @HttpCode(200)
     @Post("/login")
-    login(@Body('email')email:string, @Body('password')password:string)
+    async login(@Body('email')email:string, @Body('password')password:string, @Res({ passthrough: true }) response: Response)
     {
-        return this.service.login(email,password);
+        const res = await  this.service.login(email,password); 
+        if(res.token)
+        {
+             response.cookie('jwt', res.token, {
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            });
+            res.token = ""
+        }
+        return res 
     }
 
     @HttpCode(200)

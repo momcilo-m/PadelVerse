@@ -19,12 +19,9 @@ let Term = class Term {
     user;
     date;
     time;
-    get end_time() {
-        const [hours] = this.time.split(':')[0];
-        return (this.count + parseInt(hours, 10)) + ":00:00";
-    }
     equipment;
     count;
+    players;
 };
 exports.Term = Term;
 __decorate([
@@ -59,6 +56,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Term.prototype, "count", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Term.prototype, "players", void 0);
 exports.Term = Term = __decorate([
     (0, typeorm_1.Entity)("terms")
 ], Term);

@@ -14,6 +14,7 @@ export declare class AuthService {
     login(email: string, password: string): Promise<{
         status: string;
         token: string;
+        user: User;
     }>;
     isLogin(req: Request): Promise<{
         status: string;

@@ -21,6 +21,7 @@ let Court = class Court {
     open_time;
     close_time;
     tour;
+    price;
 };
 exports.Court = Court;
 __decorate([
@@ -53,6 +54,10 @@ __decorate([
     (0, typeorm_1.ManyToMany)(() => tournament_entity_1.Tournament, tour => tour.court),
     __metadata("design:type", Array)
 ], Court.prototype, "tour", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Court.prototype, "price", void 0);
 exports.Court = Court = __decorate([
     (0, typeorm_1.Entity)('courts')
 ], Court);

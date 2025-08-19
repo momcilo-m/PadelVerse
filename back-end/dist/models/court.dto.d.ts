@@ -4,4 +4,5 @@ export declare class CourtDTO {
     owner: number;
     open_time: string;
     close_time: string;
+    price: number;
 }
