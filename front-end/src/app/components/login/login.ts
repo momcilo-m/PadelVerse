@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { User } from '../../models/user.interface';
 import { Store } from '@ngrx/store';
 import { login } from '../../store/actions/user.action';
+import { AppState } from '../../store/states/app.states';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ import { login } from '../../store/actions/user.action';
 })
 export class Login {
   
-  store = inject<Store<User>>(Store)
+  store = inject<Store<AppState>>(Store)
   hide = signal(true);
   
   loginForm = new FormGroup({

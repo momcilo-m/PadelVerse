@@ -1,19 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { User } from '../models/user.interface';
+import { LoginSuccess } from '../models/login.success';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
  
-  http = inject(HttpClient)
+  private http = inject(HttpClient)
 
   login(email:String, password:String):Observable<User>
   {
-    console.log('Pozivam login sa:', email, password);
-    return this.http.post<User>("http://localhost:3000/auth/login",{email,password},{withCredentials:true});
+    return this.http.post<LoginSuccess>("http://localhost:3000/auth/login",{email,password},{withCredentials:true})
+    .pipe(
+      map(res=>res.user)
+    );
   }
 
+  isLogin():Observable<User>
+  {
+    return this.http.get<LoginSuccess>("http://localhost:3000/auth/me",{withCredentials:true}).pipe(
+      map(res=>res.user)
+    );
+  }
 }

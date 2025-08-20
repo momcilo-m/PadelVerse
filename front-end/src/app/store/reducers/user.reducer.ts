@@ -1,16 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
-import { User } from "../../models/user.interface";
-import { login, loginFailed, loginSuccessfully } from "../actions/user.action";
-
-
-export interface userState
-{
-    user:User | null;
-    loading:boolean,
-    error:boolean,
-    message:string
-} 
-
+import { isLogin, login, loginFailed, loginSuccessfully } from "../actions/user.action"; 
+import { userState } from "../states/app.states";
 
 export const initState : userState = 
 {
@@ -23,6 +13,7 @@ export const initState : userState =
 export const userReducer = createReducer(
     initState,
     on(loginSuccessfully,(_,{user})=>{
+        console.log(user)
         return {
             user,
             loading:false,
@@ -44,6 +35,14 @@ export const userReducer = createReducer(
             loading:false,
             message,
             error:true
+        }
+    }),
+    on(isLogin,(state)=>{
+        return{
+            ...state,
+            usre:null,
+            loading:true,
+            error:false,
         }
     })
 

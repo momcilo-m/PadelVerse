@@ -6,6 +6,12 @@
   <title>Document</title>
 </head>
 <body>
-  <router-outlet></router-outlet>
+
+    <a [routerLink]="['/home']">Home</a>
+
+    <div *ngIf="isLoading$ | async">
+      Loading...
+    </div>
+    <router-outlet *ngIf="!(isLoading$ | async)"></router-outlet>
 </body>
 </html>

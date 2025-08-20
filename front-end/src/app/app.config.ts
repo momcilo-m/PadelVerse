@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     provideStore({
-      users:userReducer
+      userStatus:userReducer
     }),
     provideStoreDevtools({maxAge:25,logOnly:!isDevMode()}),
     provideEffects(UserEffect),
