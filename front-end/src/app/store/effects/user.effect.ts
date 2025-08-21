@@ -1,8 +1,8 @@
 import { inject, Injectable } from "@angular/core";
-import {Actions, createEffect, ofType} from "@ngrx/effects"
+import {Actions, createEffect, ofType, ROOT_EFFECTS_INIT} from "@ngrx/effects"
 import { UserService } from "../../services/user.service";
 import { isLogin, login, loginFailed, loginSuccessfully } from "../actions/user.action";
-import { catchError, EMPTY, exhaustMap, map, of, switchMap, tap } from "rxjs";
+import { catchError, EMPTY, exhaustMap, filter, map, of, switchMap, tap } from "rxjs";
 
 @Injectable()
 export class UserEffect
@@ -20,9 +20,9 @@ export class UserEffect
         );
     });
 
-    isLogin$ = createEffect(()=>{
+    init$ = createEffect(()=>{
         return this.actions$.pipe(
-            ofType(isLogin),
+            ofType(ROOT_EFFECTS_INIT),
             switchMap(()=>this.userService.isLogin().pipe(
                 map(user=>loginSuccessfully({user})),
                 catchError(error=>of(loginFailed({message:error.message || "Fail"})))

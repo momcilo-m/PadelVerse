@@ -17,33 +17,5 @@ import { CommonModule } from '@angular/common';
   standalone:true
 })
 export class App {
-  // protected readonly title = signal('front-end');
-  
-  user$: Observable<User | null> | undefined
-  isLoading$: Observable<boolean> | undefined
-
-  private store = inject<Store<AppState>>(Store);
-  private router = inject(Router)
-
-  ngOnInit()
-  {
-    this.user$ = this.store.select(selectUser)
-    this.isLoading$ = this.store.select(selectLoading)
-
-    this.store.dispatch(isLogin())
-
-    this.isLoading$.subscribe(isLoading=>
-    {
-      if(!isLoading)
-      {
-        this.user$?.subscribe(user=>{
-          if(user)
-            this.router.navigate(['/home'])
-          else
-            this.router.navigate(['/login'])
-        })
-      }
-    })
-  }
-
+  protected readonly title = signal('front-end');
 }

@@ -5,7 +5,7 @@ import { userState } from "../states/app.states";
 export const initState : userState = 
 {
     user:null,
-    loading:false,
+    loading:true,
     error:false,
     message:""
 }
@@ -13,7 +13,6 @@ export const initState : userState =
 export const userReducer = createReducer(
     initState,
     on(loginSuccessfully,(_,{user})=>{
-        console.log(user)
         return {
             user,
             loading:false,
