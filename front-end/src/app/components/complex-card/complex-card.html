@@ -1,0 +1,31 @@
+<mat-card class="complex-card">
+<!-- Gornja polovina -->
+<div class="card-header">
+  <img [src]="imageUrl" alt="{{ name }}" class="card-image" />
+  <div class="overlay"></div>
+  <h2 class="place-name">{{ name }}</h2>
+</div>
+
+  <!-- Donja polovina -->
+  <div class="card-content">
+    <div class="info-row">
+      <mat-icon>location_on</mat-icon>
+      <span>{{ city }}, {{ country }}</span>
+    </div>
+
+    <div class="info-row">
+      <mat-icon>schedule</mat-icon>
+      <span>{{ openTime }} - {{ closeTime }}</span>
+    </div>
+
+    <div class="info-row">
+      <mat-icon>attach_money</mat-icon>
+      <span>{{ price }}</span>
+    </div>
+
+    <div class="info-row">
+      <mat-icon>star</mat-icon>
+      <span>{{ rating }}/5</span>
+    </div>
+  </div>
+</mat-card>

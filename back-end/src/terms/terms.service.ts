@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
+import { ComplexService } from 'src/complex/complex.service';
 import { CourtsService } from 'src/courts/courts.service';
 import { TermsDTO } from 'src/models/term.dto';
 import { Term } from 'src/models/term.entity';
@@ -11,7 +12,8 @@ export class TermsService {
 
     constructor(
         @InjectRepository(Term) private readonly termsRepository: Repository<Term>,
-        private readonly courtService:CourtsService
+        private readonly courtService:CourtsService,
+        private readonly complexService:ComplexService,
     ){}
 
     async getByIds(court?:number,user?:number,start_date?:Date, end_date?:Date)
@@ -46,9 +48,12 @@ export class TermsService {
         if(!court)
             throw new NotFoundException('Court not found')
 
-        console.log(startTime,endTime)
+        const complex = await this.complexService.getById(court.complex)
 
-        if (startTime < court.open_time || endTime > court.close_time) {
+        if(!complex)
+            throw new NotFoundException('Comlpex not found')
+
+        if (startTime < complex.open_time || endTime > complex.close_time) {
             throw new BadRequestException('Term must be within court working hours');
         }
         

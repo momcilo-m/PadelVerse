@@ -16,7 +16,7 @@ exports.TournamentsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const class_transformer_1 = require("class-transformer");
-const courts_service_1 = require("../courts/courts.service");
+const complex_service_1 = require("../complex/complex.service");
 const tournament_entity_1 = require("../models/tournament.entity");
 const typeorm_2 = require("typeorm");
 let TournamentsService = class TournamentsService {
@@ -43,6 +43,6 @@ exports.TournamentsService = TournamentsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(tournament_entity_1.Tournament)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        courts_service_1.CourtsService])
+        complex_service_1.ComplexService])
 ], TournamentsService);
 //# sourceMappingURL=tournaments.service.js.map

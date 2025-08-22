@@ -8,7 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { User } from '../../models/user.interface';
 import { Store } from '@ngrx/store';
 import { login } from '../../store/actions/user.action';
-import { AppState } from '../../store/states/app.states';
+import { AppState } from '../../store/states/app.state';
 
 @Component({
   selector: 'app-login',

@@ -12,54 +12,56 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CourtsController = void 0;
+exports.ComplexController = void 0;
 const common_1 = require("@nestjs/common");
-const courts_service_1 = require("./courts.service");
-const court_dto_1 = require("../models/court.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
-let CourtsController = class CourtsController {
+const complex_service_1 = require("./complex.service");
+const complex_dto_1 = require("../models/complex.dto");
+let ComplexController = class ComplexController {
     service;
     constructor(service) {
         this.service = service;
     }
-    getAllCourts() {
-        return this.service.getAll();
+    getAllComplex(query) {
+        console.log(query);
+        return this.service.getAll(query);
     }
     getById(id) {
         return this.service.getById(id);
     }
-    createCourt(req, courtDTO) {
-        courtDTO.owner = req.user.id;
-        return this.service.create(courtDTO);
+    createCourt(req, complexDTO) {
+        complexDTO.owner = req.user.id;
+        return this.service.create(complexDTO);
     }
-    editCourt(req, courtDTO, id) {
-        courtDTO.owner = req.user.id;
-        return this.service.edit(id, courtDTO);
+    editCourt(req, complexDTO, id) {
+        complexDTO.owner = req.user.id;
+        return this.service.edit(id, complexDTO);
     }
 };
-exports.CourtsController = CourtsController;
+exports.ComplexController = ComplexController;
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], CourtsController.prototype, "getAllCourts", null);
+], ComplexController.prototype, "getAllComplex", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
-], CourtsController.prototype, "getById", null);
+], ComplexController.prototype, "getById", null);
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)(new common_1.ValidationPipe({ transform: true }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, court_dto_1.CourtDTO]),
+    __metadata("design:paramtypes", [Object, complex_dto_1.ComplexDTO]),
     __metadata("design:returntype", void 0)
-], CourtsController.prototype, "createCourt", null);
+], ComplexController.prototype, "createCourt", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
@@ -67,11 +69,11 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, court_dto_1.CourtDTO, Number]),
+    __metadata("design:paramtypes", [Object, complex_dto_1.ComplexDTO, Number]),
     __metadata("design:returntype", void 0)
-], CourtsController.prototype, "editCourt", null);
-exports.CourtsController = CourtsController = __decorate([
-    (0, common_1.Controller)('courts'),
-    __metadata("design:paramtypes", [courts_service_1.CourtsService])
-], CourtsController);
-//# sourceMappingURL=courts.controller.js.map
+], ComplexController.prototype, "editCourt", null);
+exports.ComplexController = ComplexController = __decorate([
+    (0, common_1.Controller)('complex'),
+    __metadata("design:paramtypes", [complex_service_1.ComplexService])
+], ComplexController);
+//# sourceMappingURL=complex.controller.js.map

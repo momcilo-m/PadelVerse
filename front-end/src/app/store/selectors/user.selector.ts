@@ -1,4 +1,3 @@
-import { AppState } from "../states/app.states";
+import { AppState } from "../states/app.state";
 
 export const selectUser = (state:AppState)=> state.userStatus.user;
-export const selectLoading = (state:AppState)=> state.userStatus.loading;

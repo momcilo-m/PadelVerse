@@ -4,10 +4,10 @@ import { TournamentsService } from './tournaments.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tournament } from 'src/models/tournament.entity';
 import { AuthModule } from 'src/auth/auth.module';
-import { CourtsModule } from 'src/courts/courts.module';
+import { ComplexModule } from 'src/complex/complex.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Tournament]),AuthModule,CourtsModule],
+  imports: [TypeOrmModule.forFeature([Tournament]),AuthModule,ComplexModule],
   exports:[TypeOrmModule],
   controllers: [TournamentsController],
   providers: [TournamentsService],

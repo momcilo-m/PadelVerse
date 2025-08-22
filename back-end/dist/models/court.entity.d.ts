@@ -1,11 +1,5 @@
-import { Tournament } from "./tournament.entity";
 export declare class Court {
     id: number;
+    complex: number;
     name: string;
-    location: string;
-    owner: number;
-    open_time: string;
-    close_time: string;
-    tour: Tournament[];
-    price: number;
 }

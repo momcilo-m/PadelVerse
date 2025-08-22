@@ -5,11 +5,14 @@ import { Home } from './components/home/home';
 import { login } from './guards/login-guard';
 import { Tournament } from './components/tournament/tournament';
 import { SideNav } from './components/side-nav/side-nav';
+import { Complex } from './components/complex/complex';
 
 export const routes: Routes = [
   { path: '', component: SideNav, children:[
     { path: 'home', component:Home, canActivate:[login]},
-    { path: 'tours', component:Tournament, canActivate:[login]}
+    { path: 'tours', component:Tournament, canActivate:[login]},
+    { path: 'complex', component:Complex, canActivate:[login]}
+
   ] },
   { path: 'login', component: Login},
 ];

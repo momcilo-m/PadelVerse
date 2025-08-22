@@ -13,13 +13,13 @@ const tournaments_service_1 = require("./tournaments.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const tournament_entity_1 = require("../models/tournament.entity");
 const auth_module_1 = require("../auth/auth.module");
-const courts_module_1 = require("../courts/courts.module");
+const complex_module_1 = require("../complex/complex.module");
 let TournamentsModule = class TournamentsModule {
 };
 exports.TournamentsModule = TournamentsModule;
 exports.TournamentsModule = TournamentsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([tournament_entity_1.Tournament]), auth_module_1.AuthModule, courts_module_1.CourtsModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([tournament_entity_1.Tournament]), auth_module_1.AuthModule, complex_module_1.ComplexModule],
         exports: [typeorm_1.TypeOrmModule],
         controllers: [tournaments_controller_1.TournamentsController],
         providers: [tournaments_service_1.TournamentsService],

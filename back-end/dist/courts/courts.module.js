@@ -11,18 +11,15 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const court_entity_1 = require("../models/court.entity");
 const courts_service_1 = require("./courts.service");
-const courts_controller_1 = require("./courts.controller");
-const users_module_1 = require("../users/users.module");
-const auth_module_1 = require("../auth/auth.module");
 let CourtsModule = class CourtsModule {
 };
 exports.CourtsModule = CourtsModule;
 exports.CourtsModule = CourtsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([court_entity_1.Court]), users_module_1.UsersModule, auth_module_1.AuthModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([court_entity_1.Court])],
         exports: [typeorm_1.TypeOrmModule, courts_service_1.CourtsService],
         providers: [courts_service_1.CourtsService],
-        controllers: [courts_controller_1.CourtsController],
+        controllers: [],
     })
 ], CourtsModule);
 //# sourceMappingURL=courts.module.js.map

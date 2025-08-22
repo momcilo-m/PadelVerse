@@ -5,10 +5,11 @@ import { Term } from 'src/models/term.entity';
 import { UsersModule } from 'src/users/users.module';
 import { TermsService } from './terms.service';
 import { TermsController } from './terms.controller';
+import { ComplexModule } from 'src/complex/complex.module';
 import { CourtsModule } from 'src/courts/courts.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Term]),UsersModule,AuthModule,CourtsModule],
+    imports: [TypeOrmModule.forFeature([Term]),UsersModule,AuthModule,ComplexModule,CourtsModule],
     exports: [TypeOrmModule],
     providers: [TermsService],
     controllers: [TermsController],

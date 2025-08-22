@@ -1,34 +1,16 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
-import { Tournament } from "./tournament.entity";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Complex } from "./complex.entity";
 
-@Entity('courts')
+@Entity("courts")
 export class Court
 {
     @PrimaryGeneratedColumn()
-    id:number;
+    id:number
+
+    @Column()
+    @ManyToOne(()=>Complex)
+    complex:number
 
     @Column()
     name:string
-
-    @Column({type:'point'})
-    location:string
-
-    @Column()
-    @ManyToOne(() => User)
-    @JoinColumn({ name: 'owner' })
-    owner:number
-
-
-    @Column({type:"time"})
-    open_time:string
-
-    @Column({type:"time"})
-    close_time:string
-
-    @ManyToMany(()=>Tournament,tour=>tour.court)
-    tour:Tournament[]
-
-    @Column()
-    price:number
 }

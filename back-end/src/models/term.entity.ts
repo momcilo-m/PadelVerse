@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Court } from "./court.entity";
 import { User } from "./user.entity";
+import { Court } from "./court.entity";
 
 @Entity("terms")
 export class Term

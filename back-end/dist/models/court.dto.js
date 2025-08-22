@@ -12,38 +12,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourtDTO = void 0;
 const class_validator_1 = require("class-validator");
 class CourtDTO {
+    complex;
     name;
-    location;
-    owner;
-    open_time;
-    close_time;
-    price;
 }
 exports.CourtDTO = CourtDTO;
 __decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(50),
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.IsPositive)(),
+    __metadata("design:type", Number)
+], CourtDTO.prototype, "complex", void 0);
+__decorate([
+    (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], CourtDTO.prototype, "name", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.Min)(1),
-    __metadata("design:type", Number)
-], CourtDTO.prototype, "owner", void 0);
-__decorate([
-    (0, class_validator_1.IsDefined)(),
-    (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "start_time must be in HH:mm:ss format" }),
-    (0, class_validator_1.IsDate)(),
-    __metadata("design:type", String)
-], CourtDTO.prototype, "open_time", void 0);
-__decorate([
-    (0, class_validator_1.IsDefined)(),
-    (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "end_time must be in HH:mm:ss format" }),
-    __metadata("design:type", String)
-], CourtDTO.prototype, "close_time", void 0);
-__decorate([
-    (0, class_validator_1.IsPositive)(),
-    (0, class_validator_1.Min)(1),
-    __metadata("design:type", Number)
-], CourtDTO.prototype, "price", void 0);
 //# sourceMappingURL=court.dto.js.map

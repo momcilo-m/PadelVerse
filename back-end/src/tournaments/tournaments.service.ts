@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
-import { CourtsService } from 'src/courts/courts.service';
+import { ComplexService } from 'src/complex/complex.service';
 import { TournamentsDTO } from 'src/models/tournament.dto';
 import { Tournament } from 'src/models/tournament.entity';
 import { Repository } from 'typeorm';
@@ -11,7 +11,7 @@ export class TournamentsService {
 
     constructor(
         @InjectRepository(Tournament) private readonly tourRepository: Repository<Tournament>,
-        private readonly courtService: CourtsService
+        private readonly courtService: ComplexService
     ){}
 
     async getAll()

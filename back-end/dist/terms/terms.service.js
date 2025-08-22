@@ -16,15 +16,18 @@ exports.TermsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const class_transformer_1 = require("class-transformer");
+const complex_service_1 = require("../complex/complex.service");
 const courts_service_1 = require("../courts/courts.service");
 const term_entity_1 = require("../models/term.entity");
 const typeorm_2 = require("typeorm");
 let TermsService = class TermsService {
     termsRepository;
     courtService;
-    constructor(termsRepository, courtService) {
+    complexService;
+    constructor(termsRepository, courtService, complexService) {
         this.termsRepository = termsRepository;
         this.courtService = courtService;
+        this.complexService = complexService;
     }
     async getByIds(court, user, start_date, end_date) {
         if (court == null && user == null)
@@ -48,8 +51,10 @@ let TermsService = class TermsService {
         const court = await this.courtService.getById(cId);
         if (!court)
             throw new common_1.NotFoundException('Court not found');
-        console.log(startTime, endTime);
-        if (startTime < court.open_time || endTime > court.close_time) {
+        const complex = await this.complexService.getById(court.complex);
+        if (!complex)
+            throw new common_1.NotFoundException('Comlpex not found');
+        if (startTime < complex.open_time || endTime > complex.close_time) {
             throw new common_1.BadRequestException('Term must be within court working hours');
         }
         const overlapingTerms = await this.termsRepository.createQueryBuilder('term')
@@ -79,6 +84,7 @@ exports.TermsService = TermsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(term_entity_1.Term)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        courts_service_1.CourtsService])
+        courts_service_1.CourtsService,
+        complex_service_1.ComplexService])
 ], TermsService);
 //# sourceMappingURL=terms.service.js.map

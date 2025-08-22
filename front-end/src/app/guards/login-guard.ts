@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/states/app.states';
-import { selectLoading, selectUser } from '../store/selectors/user.selector';
+import { AppState } from '../store/states/app.state';
+import { selectUser } from '../store/selectors/user.selector';
 import { filter, map, Observable, switchMap, take } from 'rxjs';
+import { selectLoading } from '../store/selectors/request.selector';
 
 export const login : CanActivateFn = (route, state) => {
   

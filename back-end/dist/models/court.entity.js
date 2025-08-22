@@ -11,17 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Court = void 0;
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("./user.entity");
-const tournament_entity_1 = require("./tournament.entity");
+const complex_entity_1 = require("./complex.entity");
 let Court = class Court {
     id;
+    complex;
     name;
-    location;
-    owner;
-    open_time;
-    close_time;
-    tour;
-    price;
 };
 exports.Court = Court;
 __decorate([
@@ -30,35 +24,14 @@ __decorate([
 ], Court.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
+    (0, typeorm_1.ManyToOne)(() => complex_entity_1.Complex),
+    __metadata("design:type", Number)
+], Court.prototype, "complex", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Court.prototype, "name", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'point' }),
-    __metadata("design:type", String)
-], Court.prototype, "location", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User),
-    (0, typeorm_1.JoinColumn)({ name: 'owner' }),
-    __metadata("design:type", Number)
-], Court.prototype, "owner", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: "time" }),
-    __metadata("design:type", String)
-], Court.prototype, "open_time", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: "time" }),
-    __metadata("design:type", String)
-], Court.prototype, "close_time", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => tournament_entity_1.Tournament, tour => tour.court),
-    __metadata("design:type", Array)
-], Court.prototype, "tour", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Court.prototype, "price", void 0);
 exports.Court = Court = __decorate([
-    (0, typeorm_1.Entity)('courts')
+    (0, typeorm_1.Entity)("courts")
 ], Court);
 //# sourceMappingURL=court.entity.js.map

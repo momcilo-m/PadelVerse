@@ -15,51 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourtsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const class_transformer_1 = require("class-transformer");
 const court_entity_1 = require("../models/court.entity");
 const typeorm_2 = require("typeorm");
 let CourtsService = class CourtsService {
-    courtsRepository;
-    constructor(courtsRepository) {
-        this.courtsRepository = courtsRepository;
+    courtRepository;
+    constructor(courtRepository) {
+        this.courtRepository = courtRepository;
     }
-    async getAll() {
-        return this.courtsRepository.find();
-    }
-    async getById(id) {
-        return this.courtsRepository
-            .createQueryBuilder('courts')
-            .leftJoin('courts.owner', 'users')
-            .addSelect(['users.phone', 'users.email'])
-            .where('courts.id=:id', { id })
-            .getOne();
-    }
-    async getByIds(id) {
-        return this.courtsRepository.find({
-            where: {
-                id: (0, typeorm_2.In)(id)
-            }
-        });
-    }
-    async create(courtDTO) {
-        return this.courtsRepository.save((0, class_transformer_1.plainToClass)(court_entity_1.Court, courtDTO));
-    }
-    async edit(id, courtDTO) {
-        if (!courtDTO)
-            return new common_1.BadRequestException('Please insert a valid data to edit');
-        const updateData = {};
-        if (courtDTO.open_time !== undefined)
-            updateData.open_time = courtDTO.open_time;
-        if (courtDTO.close_time !== undefined)
-            updateData.close_time = courtDTO.close_time;
-        if (courtDTO.location !== undefined)
-            updateData.location = courtDTO.location;
-        if (courtDTO.name !== undefined)
-            updateData.name = courtDTO.name;
-        const court = await this.courtsRepository.update({ id, owner: courtDTO.owner }, updateData);
-        if (court.affected == 0)
-            throw new common_1.NotFoundException('Court not found');
-        return { success: true, message: 'Court updated successfully' };
+    getById(id) {
+        return this.courtRepository.findOneBy({ id });
     }
 };
 exports.CourtsService = CourtsService;

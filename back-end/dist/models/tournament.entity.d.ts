@@ -1,4 +1,4 @@
-import { Court } from "./court.entity";
+import { Complex } from "./complex.entity";
 export declare class Tournament {
     id: number;
     name: string;
@@ -6,5 +6,5 @@ export declare class Tournament {
     end: Date;
     country: string;
     city: string;
-    court: Court[];
+    complex: Complex;
 }

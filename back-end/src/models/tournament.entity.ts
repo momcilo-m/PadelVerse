@@ -1,5 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Court } from "./court.entity";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Complex } from "./complex.entity";
 
 @Entity('tournaments')
 export class Tournament
@@ -22,17 +22,6 @@ export class Tournament
     @Column()
     city:string
 
-    @ManyToMany(()=>Court,court=>court.tour)
-    @JoinTable({
-        name: 'court_tournament',
-        joinColumn: {
-            name: 'court',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
-            name: 'tournament', 
-            referencedColumnName: 'id'
-        }
-    })
-    court:Court[]
+    @ManyToOne(()=>Complex)
+    complex:Complex
 }
