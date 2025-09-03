@@ -23,9 +23,9 @@ __decorate([
     __metadata("design:type", Number)
 ], Court.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
     (0, typeorm_1.ManyToOne)(() => complex_entity_1.Complex),
-    __metadata("design:type", Number)
+    (0, typeorm_1.JoinColumn)({ name: "complex" }),
+    __metadata("design:type", complex_entity_1.Complex)
 ], Court.prototype, "complex", void 0);
 __decorate([
     (0, typeorm_1.Column)(),

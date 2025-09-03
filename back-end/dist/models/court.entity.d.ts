@@ -1,5 +1,6 @@
+import { Complex } from "./complex.entity";
 export declare class Court {
     id: number;
-    complex: number;
+    complex: Complex;
     name: string;
 }

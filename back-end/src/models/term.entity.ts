@@ -32,5 +32,4 @@ export class Term
 
     @Column()
     players:number
-
 }

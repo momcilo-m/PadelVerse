@@ -1,15 +1,53 @@
-    <!-- @for (item of items; track item.id) { -->
-@for (item of complex$ | async; track item.id)
-{
-    <app-complex-card
-    imageUrl="https://picsum.photos/300/200"
-    name={{item.name}}
-    city={{item.city}}
-    country={{item.country}}
-    openTime={{item.open_time}}
-    closeTime={{item.close_time}}
-    price={{item.price}}
-    [rating]="4.5">
-    </app-complex-card>
-}
+<div class="panel">
+    <div class="location">
+        <div class="rounded-corner panel">
+            <mat-icon> location_on</mat-icon>
+            <p>McGilvra, Seatle, WA</p>
+        </div>
+    </div>
 
+    <div class="date-picker">
+        <mat-form-field appearance="outline" class="date">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="datePicker">
+        <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <mat-datepicker #datePicker></mat-datepicker>
+        </mat-form-field>
+    </div>
+    
+    <div class="time-picker">
+        <mat-form-field class="time" appearance="outline">
+        <mat-label>Start</mat-label>
+        <input matInput [matTimepicker]="startPicker">
+        <mat-timepicker-toggle matIconSuffix [for]="startPicker"></mat-timepicker-toggle>
+        <mat-timepicker #startPicker></mat-timepicker>
+        </mat-form-field>
+    </div>
+
+    <div class="time-picker">
+        <mat-form-field class="time" appearance="outline">
+            <mat-label>End</mat-label>
+            <input matInput [matTimepicker]="endPicker">
+            <mat-timepicker-toggle matIconSuffix [for]="endPicker"></mat-timepicker-toggle>
+            <mat-timepicker #endPicker></mat-timepicker>
+        </mat-form-field>
+    </div>
+
+    <div class="counter">
+        <mat-icon>person</mat-icon>
+
+        <button mat-icon-button (click)="decrement()">
+            <mat-icon>remove</mat-icon>
+        </button>
+
+        <span class="value">{{ count }}</span>
+
+        <button mat-icon-button (click)="increment()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>
+
+<div class="courts">
+
+</div>

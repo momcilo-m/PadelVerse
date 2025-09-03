@@ -48,24 +48,24 @@ let TermsService = class TermsService {
         date.setHours(0, 0, 0, 0);
         const startTime = time;
         const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2, '0') + ":00:00";
-        const court = await this.courtService.getById(cId);
-        if (!court)
-            throw new common_1.NotFoundException('Court not found');
-        const complex = await this.complexService.getById(court.complex);
-        if (!complex)
-            throw new common_1.NotFoundException('Comlpex not found');
+        const court = await this.courtService.getByIdWithCourt(cId);
+        if (!court || !court.complex)
+            throw new common_1.NotFoundException("Court not found");
+        await this.isTermFree(startTime, endTime, date, court.complex, cId);
+        return await this.termsRepository.save((0, class_transformer_1.plainToClass)(term_entity_1.Term, termsDTO));
+    }
+    async isTermFree(startTime, endTime, date, complex, court) {
         if (startTime < complex.open_time || endTime > complex.close_time) {
             throw new common_1.BadRequestException('Term must be within court working hours');
         }
         const overlapingTerms = await this.termsRepository.createQueryBuilder('term')
-            .where('term.court = :court', { court: termsDTO.court })
+            .where('term.court = :court', { court })
             .andWhere('term.date = :date', { date })
             .andWhere(':startTime < (term.time + (term.count || \' hours\')::interval)', { startTime })
             .andWhere(':endTime > term.time', { endTime })
             .getMany();
         if (overlapingTerms.length > 0)
             throw new common_1.BadRequestException('Terms are intercepted');
-        return await this.termsRepository.save((0, class_transformer_1.plainToClass)(term_entity_1.Term, termsDTO));
     }
     async delete(id) {
         const terms = await this.termsRepository.findOneBy({ id });

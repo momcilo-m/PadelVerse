@@ -28,7 +28,6 @@ export class Complex
     @Column()
     price:number
 
-
     @Column()
     country:string
 

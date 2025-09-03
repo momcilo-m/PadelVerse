@@ -1,11 +1,10 @@
 import { createReducer, on } from "@ngrx/store"
-import { Complex } from "../../components/complex/complex"
 import { ComplexState } from "../states/complex.state"
-import { failedComplex, loadComlpex, loadedComplex } from "../actions/complex.action"
+import { failedComplex, loadComlpex, loadedComplex, selectComplex } from "../actions/complex.action"
 
 export const initComplexState : ComplexState =
 {
-    selectedComplex:null,
+    selectedComplexId:-1,
     complex:[]
 }
 
@@ -17,10 +16,16 @@ export const complexReducer = createReducer(
             complex:[]
         }
     }),
-    on(loadedComplex,(state,com)=>{
+    on(loadedComplex,(state,payload)=>{
         return {
             ...state,
-            complex:com.complexes
+            complex:payload.complexes
+        }
+    }),
+    on(selectComplex,(state,payload)=>{
+        return {
+            ...state,
+            selectedComplexId:payload.id
         }
     })
 )

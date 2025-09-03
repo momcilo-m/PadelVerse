@@ -1,3 +1,4 @@
 import { AppState } from "../states/app.state";
 
-export const selectComplex = (state:AppState) => state.complexStatus.complex
+export const selectComplexes = (state:AppState) => state.complexStatus.complex
+export const selectedComplex = (state:AppState)=> state.complexStatus.selectedComplexId

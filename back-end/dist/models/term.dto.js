@@ -19,7 +19,7 @@ class TermsDTO {
     time;
     equipment;
     count;
-    player;
+    players;
 }
 exports.TermsDTO = TermsDTO;
 __decorate([
@@ -53,5 +53,5 @@ __decorate([
     (0, class_validator_1.Min)(2),
     (0, class_validator_1.Max)(4),
     __metadata("design:type", Number)
-], TermsDTO.prototype, "player", void 0);
+], TermsDTO.prototype, "players", void 0);
 //# sourceMappingURL=term.dto.js.map

@@ -15,4 +15,13 @@ export class CourtsService {
         return this.courtRepository.findOneBy({id})
     }
 
+    getByIdWithCourt(id:number)
+    {
+        return this.courtRepository
+        .createQueryBuilder('court')
+        .leftJoinAndSelect('court.complex', 'complex')
+        .where('court.id = :id', { id })
+        .getOne();
+    }
+
 }

@@ -1,0 +1,16 @@
+    <!-- @for (item of items; track item.id) { -->
+@for (item of complex$ | async; track item.id)
+{
+    <app-complex-card
+    imageUrl="https://picsum.photos/300/200"
+    name={{item.name}}
+    city={{item.city}}
+    country={{item.country}}
+    openTime={{item.open_time}}
+    closeTime={{item.close_time}}
+    price={{item.price}}
+    (click)=pickComplex(item.id)
+    [rating]="4.5">
+    </app-complex-card>
+}
+

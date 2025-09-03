@@ -25,6 +25,13 @@ let CourtsService = class CourtsService {
     getById(id) {
         return this.courtRepository.findOneBy({ id });
     }
+    getByIdWithCourt(id) {
+        return this.courtRepository
+            .createQueryBuilder('court')
+            .leftJoinAndSelect('court.complex', 'complex')
+            .where('court.id = :id', { id })
+            .getOne();
+    }
 };
 exports.CourtsService = CourtsService;
 exports.CourtsService = CourtsService = __decorate([

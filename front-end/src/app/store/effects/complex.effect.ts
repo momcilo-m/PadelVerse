@@ -14,7 +14,6 @@ export class ComplexEffect
         return this.actions$.pipe(
             ofType(loadComlpex),
             switchMap(()=>this.complexService.getComplex().pipe(
-                tap(()=>console.log("AAA")),
                 map(res=>loadedComplex({complexes:res})),
                 catchError(error=>of(failedComplex({message:error.message || "Error while fetch complex"})))
             ))

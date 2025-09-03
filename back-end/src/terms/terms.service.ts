@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { ComplexService } from 'src/complex/complex.service';
 import { CourtsService } from 'src/courts/courts.service';
+import { Complex } from 'src/models/complex.entity';
+import { Court } from 'src/models/court.entity';
 import { TermsDTO } from 'src/models/term.dto';
 import { Term } from 'src/models/term.entity';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
@@ -43,22 +45,25 @@ export class TermsService {
         const startTime = time;
         const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2,'0')+":00:00";
 
-        const court = await this.courtService.getById(cId);
+        const court = await this.courtService.getByIdWithCourt(cId);
+        
+        if(!court || !court.complex)
+            throw new NotFoundException("Court not found");
 
-        if(!court)
-            throw new NotFoundException('Court not found')
+        await this.isTermFree(startTime,endTime, date,court.complex,cId);
 
-        const complex = await this.complexService.getById(court.complex)
+        return await this.termsRepository.save(plainToClass(Term,termsDTO));
+    }
 
-        if(!complex)
-            throw new NotFoundException('Comlpex not found')
-
+    async isTermFree(startTime:string, endTime:string, date:Date,complex:Complex,court:number)
+    {
+        
         if (startTime < complex.open_time || endTime > complex.close_time) {
             throw new BadRequestException('Term must be within court working hours');
         }
         
         const overlapingTerms = await this.termsRepository.createQueryBuilder('term')
-        .where('term.court = :court', { court: termsDTO.court })
+        .where('term.court = :court', { court })
         .andWhere('term.date = :date', { date })
         .andWhere(':startTime < (term.time + (term.count || \' hours\')::interval)', { startTime })
         .andWhere(':endTime > term.time', { endTime })
@@ -66,8 +71,6 @@ export class TermsService {
 
         if(overlapingTerms.length > 0)
             throw new BadRequestException('Terms are intercepted')
-
-        return await this.termsRepository.save(plainToClass(Term,termsDTO));
     }
 
     async delete(id:number)

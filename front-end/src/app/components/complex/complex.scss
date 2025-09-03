@@ -1,0 +1,73 @@
+.panel
+{
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap:10px,
+}
+
+.rounded-corner
+{
+    border: 1px solid #606060;
+    border-radius: 20px;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #ccc;
+  border-radius: 9999px; // za zaobljene ivice kao na slici
+  padding: 4px 12px;
+  background-color: #fff;
+
+  .value {
+    font-size: 16px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  button
+  {
+    border: 0px;
+    border-radius: 20px;
+  }
+}
+
+.courts
+{
+  max-height: 300px;
+  display: grid;
+  
+}
+
+
+//   ::ng-deep .mat-datepicker-content .mat-calendar {
+//       width: 200px !important;
+//       height: 280px !important;
+// }
+
+// ::ng-deep .mat-calendar-body {
+//   font-size: 12px;
+// }
+
+// ::ng-deep .mat-calendar-body-cell {
+//   width: 30px !important;
+//   height: 30px !important;
+// }
+
+// ::ng-deep .mdc-text-field
+// {
+//   border-radius: 20px !important;
+//   border: 1px solid #000;
+//   background-color: transparent !important;
+  
+// }
+
+// ::ng-deep .mdc-text-field--disabled
+// //.mdc-text-field--filled:not
+// {
+//   background-color: transparent !important;
+// }

@@ -1,25 +1,42 @@
-import { Component, inject } from '@angular/core';
-import { ComplexCard } from '../complex-card/complex-card';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/states/app.state';
-import { loadComlpex } from '../../store/actions/complex.action';
-import { selectComplex } from '../../store/selectors/complex.selector';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute } from '@angular/router';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatTimepickerModule} from '@angular/material/timepicker';
 
 @Component({
   selector: 'app-complex',
-  imports: [ComplexCard,AsyncPipe],
+  imports: [
+    MatIconModule,MatFormFieldModule, MatInputModule, MatDatepickerModule,MatTimepickerModule
+  ],
+  providers:[provideNativeDateAdapter()],
   templateUrl: './complex.html',
-  styleUrl: './complex.scss'
+  styleUrl: './complex.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Complex {
 
-  store = inject<Store<AppState>>(Store)
+  constructor(private route: ActivatedRoute) {}
+  private id:string = "";
 
-  complex$ = this.store.select(selectComplex)
+  ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id') || "";
+  };
 
-  ngOnInit()
-  {
-    this.store.dispatch(loadComlpex());
+
+  count = 2;
+
+  increment() {
+    this.count++;
   }
+
+  decrement() {
+    if (this.count > 0) {
+      this.count--;
+    }
+  }
+
 }

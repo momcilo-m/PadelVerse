@@ -26,6 +26,6 @@ export class TermsDTO
     @IsPositive()
     @Min(2)
     @Max(4)
-    player:number
+    players:number
 
 }
