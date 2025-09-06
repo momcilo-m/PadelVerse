@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { ComplexService } from 'src/complex/complex.service';
@@ -15,7 +15,7 @@ export class TermsService {
     constructor(
         @InjectRepository(Term) private readonly termsRepository: Repository<Term>,
         private readonly courtService:CourtsService,
-        private readonly complexService:ComplexService,
+        @Inject(forwardRef(() => ComplexService)) private readonly complexService: ComplexService
     ){}
 
     async getByIds(court?:number,user?:number,start_date?:Date, end_date?:Date)
@@ -50,28 +50,59 @@ export class TermsService {
         if(!court || !court.complex)
             throw new NotFoundException("Court not found");
 
-        await this.isTermFree(startTime,endTime, date,court.complex,cId);
+        await this.isTermFree(startTime,endTime, date,cId);
 
         return await this.termsRepository.save(plainToClass(Term,termsDTO));
     }
 
-    async isTermFree(startTime:string, endTime:string, date:Date,complex:Complex,court:number)
-    {
-        
+    async isTermFree(
+        startTime: string,
+        endTime: string,
+        date: Date,
+        courtId: number,
+    ):Promise<Boolean> {
+        // 1. Uzimamo court zajedno sa complex (join)
+        const court = await this.termsRepository.manager
+            .getRepository(Court)
+            .createQueryBuilder('court')
+            .leftJoinAndSelect('court.complex', 'complex')
+            .where('court.id = :courtId', { courtId })
+            .getOne();
+
+        if (!court) {
+            throw new BadRequestException('Court not found');
+        }
+
+        const complex = court.complex;
+
+        if (!complex) {
+            throw new BadRequestException('Court has no complex assigned');
+        }
+
+        // 2. Proveravamo da li termin upada u radno vreme kompleksa
         if (startTime < complex.open_time || endTime > complex.close_time) {
             throw new BadRequestException('Term must be within court working hours');
         }
-        
-        const overlapingTerms = await this.termsRepository.createQueryBuilder('term')
-        .where('term.court = :court', { court })
-        .andWhere('term.date = :date', { date })
-        .andWhere(':startTime < (term.time + (term.count || \' hours\')::interval)', { startTime })
-        .andWhere(':endTime > term.time', { endTime })
-        .getMany();
 
-        if(overlapingTerms.length > 0)
-            throw new BadRequestException('Terms are intercepted')
+        // 3. Proveravamo da li se preklapa sa postojećim terminima
+        const overlapingTerms = await this.termsRepository
+            .createQueryBuilder('term')
+            .where('term.court = :courtId', { courtId })
+            .andWhere('term.date = :date', { date })
+            .andWhere(
+            ':startTime < (term.time + (term.count || \' hours\')::interval)',
+            { startTime },
+            )
+            .andWhere(':endTime > term.time', { endTime })
+            .getMany();
+
+        if (overlapingTerms.length > 0) {
+            throw new BadRequestException('Terms are intercepted');
+        }
+
+        return true;
     }
+
 
     async delete(id:number)
     {

@@ -14,12 +14,14 @@ const complex_service_1 = require("./complex.service");
 const complex_controller_1 = require("./complex.controller");
 const users_module_1 = require("../users/users.module");
 const auth_module_1 = require("../auth/auth.module");
+const terms_module_1 = require("../terms/terms.module");
+const courts_module_1 = require("../courts/courts.module");
 let ComplexModule = class ComplexModule {
 };
 exports.ComplexModule = ComplexModule;
 exports.ComplexModule = ComplexModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([complex_entity_1.Complex]), users_module_1.UsersModule, auth_module_1.AuthModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([complex_entity_1.Complex]), users_module_1.UsersModule, auth_module_1.AuthModule, (0, common_1.forwardRef)(() => terms_module_1.TermsModule), courts_module_1.CourtsModule],
         exports: [typeorm_1.TypeOrmModule, complex_service_1.ComplexService],
         providers: [complex_service_1.ComplexService],
         controllers: [complex_controller_1.ComplexController],

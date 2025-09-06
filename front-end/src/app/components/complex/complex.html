@@ -1,3 +1,4 @@
+<form [formGroup]="form">
 <div class="panel">
     <div class="location">
         <div class="rounded-corner panel">
@@ -6,10 +7,11 @@
         </div>
     </div>
 
-    <div class="date-picker">
+
+        <div class="date-picker">
         <mat-form-field appearance="outline" class="date">
         <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="datePicker">
+        <input matInput [matDatepicker]="datePicker" formControlName="date">
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>
         </mat-form-field>
@@ -18,16 +20,16 @@
     <div class="time-picker">
         <mat-form-field class="time" appearance="outline">
         <mat-label>Start</mat-label>
-        <input matInput [matTimepicker]="startPicker">
+        <input matInput [matTimepicker]="startPicker" formControlName="startTime">
         <mat-timepicker-toggle matIconSuffix [for]="startPicker"></mat-timepicker-toggle>
         <mat-timepicker #startPicker></mat-timepicker>
         </mat-form-field>
     </div>
-
+    
     <div class="time-picker">
         <mat-form-field class="time" appearance="outline">
             <mat-label>End</mat-label>
-            <input matInput [matTimepicker]="endPicker">
+            <input matInput [matTimepicker]="endPicker" formControlName="endTime">
             <mat-timepicker-toggle matIconSuffix [for]="endPicker"></mat-timepicker-toggle>
             <mat-timepicker #endPicker></mat-timepicker>
         </mat-form-field>
@@ -39,15 +41,19 @@
         <button mat-icon-button (click)="decrement()">
             <mat-icon>remove</mat-icon>
         </button>
-
-        <span class="value">{{ count }}</span>
+        
+        <span class="value">{{ form.get('player')?.value }}</span>
 
         <button mat-icon-button (click)="increment()">
             <mat-icon>add</mat-icon>
         </button>
     </div>
+    
 </div>
 
 <div class="courts">
-
+    Choose a panel court
+    
 </div>
+
+</form>

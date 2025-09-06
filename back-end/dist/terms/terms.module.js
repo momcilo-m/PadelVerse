@@ -21,8 +21,8 @@ let TermsModule = class TermsModule {
 exports.TermsModule = TermsModule;
 exports.TermsModule = TermsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([term_entity_1.Term]), users_module_1.UsersModule, auth_module_1.AuthModule, complex_module_1.ComplexModule, courts_module_1.CourtsModule],
-        exports: [typeorm_1.TypeOrmModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([term_entity_1.Term]), users_module_1.UsersModule, auth_module_1.AuthModule, (0, common_1.forwardRef)(() => complex_module_1.ComplexModule), courts_module_1.CourtsModule],
+        exports: [typeorm_1.TypeOrmModule, terms_service_1.TermsService],
         providers: [terms_service_1.TermsService],
         controllers: [terms_controller_1.TermsController],
     })

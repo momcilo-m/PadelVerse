@@ -18,6 +18,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const class_transformer_1 = require("class-transformer");
 const complex_service_1 = require("../complex/complex.service");
 const courts_service_1 = require("../courts/courts.service");
+const court_entity_1 = require("../models/court.entity");
 const term_entity_1 = require("../models/term.entity");
 const typeorm_2 = require("typeorm");
 let TermsService = class TermsService {
@@ -51,21 +52,37 @@ let TermsService = class TermsService {
         const court = await this.courtService.getByIdWithCourt(cId);
         if (!court || !court.complex)
             throw new common_1.NotFoundException("Court not found");
-        await this.isTermFree(startTime, endTime, date, court.complex, cId);
+        await this.isTermFree(startTime, endTime, date, cId);
         return await this.termsRepository.save((0, class_transformer_1.plainToClass)(term_entity_1.Term, termsDTO));
     }
-    async isTermFree(startTime, endTime, date, complex, court) {
+    async isTermFree(startTime, endTime, date, courtId) {
+        const court = await this.termsRepository.manager
+            .getRepository(court_entity_1.Court)
+            .createQueryBuilder('court')
+            .leftJoinAndSelect('court.complex', 'complex')
+            .where('court.id = :courtId', { courtId })
+            .getOne();
+        if (!court) {
+            throw new common_1.BadRequestException('Court not found');
+        }
+        const complex = court.complex;
+        if (!complex) {
+            throw new common_1.BadRequestException('Court has no complex assigned');
+        }
         if (startTime < complex.open_time || endTime > complex.close_time) {
             throw new common_1.BadRequestException('Term must be within court working hours');
         }
-        const overlapingTerms = await this.termsRepository.createQueryBuilder('term')
-            .where('term.court = :court', { court })
+        const overlapingTerms = await this.termsRepository
+            .createQueryBuilder('term')
+            .where('term.court = :courtId', { courtId })
             .andWhere('term.date = :date', { date })
             .andWhere(':startTime < (term.time + (term.count || \' hours\')::interval)', { startTime })
             .andWhere(':endTime > term.time', { endTime })
             .getMany();
-        if (overlapingTerms.length > 0)
+        if (overlapingTerms.length > 0) {
             throw new common_1.BadRequestException('Terms are intercepted');
+        }
+        return true;
     }
     async delete(id) {
         const terms = await this.termsRepository.findOneBy({ id });
@@ -83,6 +100,7 @@ exports.TermsService = TermsService;
 exports.TermsService = TermsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(term_entity_1.Term)),
+    __param(2, (0, common_1.Inject)((0, common_1.forwardRef)(() => complex_service_1.ComplexService))),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         courts_service_1.CourtsService,
         complex_service_1.ComplexService])

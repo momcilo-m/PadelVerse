@@ -22,8 +22,11 @@ let ComplexController = class ComplexController {
     constructor(service) {
         this.service = service;
     }
+    getFreeCourts(complex, startTime, date, count) {
+        const dateQ = new Date(date);
+        return this.service.freeCourts(complex, startTime, count, dateQ);
+    }
     getAllComplex(query) {
-        console.log(query);
         return this.service.getAll(query);
     }
     getById(id) {
@@ -39,6 +42,16 @@ let ComplexController = class ComplexController {
     }
 };
 exports.ComplexController = ComplexController;
+__decorate([
+    (0, common_1.Get)('free/:complex'),
+    __param(0, (0, common_1.Param)('complex', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Query)('time')),
+    __param(2, (0, common_1.Query)('date')),
+    __param(3, (0, common_1.Query)('count', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String, String, Number]),
+    __metadata("design:returntype", void 0)
+], ComplexController.prototype, "getFreeCourts", null);
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)()),

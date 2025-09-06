@@ -20,4 +20,10 @@ export class ComplexService {
   {
     return this.http.get<ComplexInterface[]>(`http://localhost:3000/complex/${id}`,{withCredentials:true})
   }
+
+  getAvailableCourt(id:number,date:string,time:string,count:number)
+  {
+    console.log(id,date,time,count)
+    return this.http.get<AvalaibleCourtsInterface>(`http://localhost:3000/complex/free/${id}?date=${date}&time=${time}&count=${count}`)
+  }
 }

@@ -3,6 +3,10 @@ import { ComplexDTO } from 'src/models/complex.dto';
 export declare class ComplexController {
     private readonly service;
     constructor(service: ComplexService);
+    getFreeCourts(complex: number, startTime: string, date: string, count: number): Promise<never[] | {
+        all: import("../models/court.entity").Court[];
+        available: number[];
+    }>;
     getAllComplex(query: Record<string, any>): Promise<any>;
     getById(id: number): Promise<import("../models/complex.entity").Complex | null>;
     createCourt(req: any, complexDTO: ComplexDTO): Promise<import("../models/complex.entity").Complex>;

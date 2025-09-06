@@ -1,8 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException, Req, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { ComplexDTO } from 'src/models/complex.dto';
 import { Complex } from 'src/models/complex.entity';
+import { Court } from 'src/models/court.entity';
+import { TermsService } from 'src/terms/terms.service';
 import { QueryFeature } from 'src/Utils/QueryFeature';
 import { In, Repository } from 'typeorm';
 
@@ -11,6 +13,8 @@ export class ComplexService {
 
     constructor(
         @InjectRepository(Complex) private readonly complexRepository:Repository<Complex>,
+        @InjectRepository(Court) private readonly courtRepository:Repository<Court>,
+        @Inject(forwardRef(() => TermsService)) private readonly termsService: TermsService
     ){}
 
     async getAll(query:Record<string,any>)
@@ -61,5 +65,42 @@ export class ComplexService {
 
         return { success: true, message: 'Court updated successfully' };
 
+    }
+
+    async freeCourts(id:number,start:string,count:number,date:Date,)
+    {
+        date.setHours(0,0,0,0);
+        const startTime = start;
+        const endTime = (count + parseInt(start.split(":")[0])).toString().padStart(2,'0')+":00:00";
+
+        const res: { all: Court[]; available: number[] } = {
+            all: [],
+            available: []
+        };
+
+
+        const courts = await this.courtRepository.find({
+            where: { complex: { id } },
+        });
+
+        if(courts.length == 0)
+            return [];
+
+        res.all = courts;
+
+        for(const court of courts)
+        {
+            try
+            {
+                await this.termsService.isTermFree(startTime,endTime,date,court.id)
+                res.available.push(court.id)
+            }
+            catch(e)
+            {
+
+            }
+        }
+
+        return res;
     }
 }

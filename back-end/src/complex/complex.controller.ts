@@ -8,10 +8,21 @@ export class ComplexController {
 
     constructor(private readonly service: ComplexService) {}
 
+    @Get('free/:complex')
+    getFreeCourts(
+        @Param('complex',ParseIntPipe)complex:number,
+        @Query('time') startTime: string,
+        @Query('date') date: string,
+        @Query('count', ParseIntPipe) count: number,
+    )
+    {
+        const dateQ = new Date(date);
+        return this.service.freeCourts(complex,startTime,count,dateQ);
+    }
+
     @Get()
     getAllComplex(@Query()query:Record<string,any>)
     {
-        console.log(query);
         return this.service.getAll(query);
     }
 
@@ -36,4 +47,6 @@ export class ComplexController {
         complexDTO.owner = req.user.id;
         return this.service.edit(id,complexDTO);
     }
+
+
 }

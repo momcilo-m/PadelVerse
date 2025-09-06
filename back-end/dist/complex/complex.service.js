@@ -17,12 +17,18 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const class_transformer_1 = require("class-transformer");
 const complex_entity_1 = require("../models/complex.entity");
+const court_entity_1 = require("../models/court.entity");
+const terms_service_1 = require("../terms/terms.service");
 const QueryFeature_1 = require("../Utils/QueryFeature");
 const typeorm_2 = require("typeorm");
 let ComplexService = class ComplexService {
     complexRepository;
-    constructor(complexRepository) {
+    courtRepository;
+    termsService;
+    constructor(complexRepository, courtRepository, termsService) {
         this.complexRepository = complexRepository;
+        this.courtRepository = courtRepository;
+        this.termsService = termsService;
     }
     async getAll(query) {
         return await new QueryFeature_1.QueryFeature(this.complexRepository, query).filter().query;
@@ -62,11 +68,39 @@ let ComplexService = class ComplexService {
             throw new common_1.NotFoundException('Court not found');
         return { success: true, message: 'Court updated successfully' };
     }
+    async freeCourts(id, start, count, date) {
+        date.setHours(0, 0, 0, 0);
+        const startTime = start;
+        const endTime = (count + parseInt(start.split(":")[0])).toString().padStart(2, '0') + ":00:00";
+        const res = {
+            all: [],
+            available: []
+        };
+        const courts = await this.courtRepository.find({
+            where: { complex: { id } },
+        });
+        if (courts.length == 0)
+            return [];
+        res.all = courts;
+        for (const court of courts) {
+            try {
+                await this.termsService.isTermFree(startTime, endTime, date, court.id);
+                res.available.push(court.id);
+            }
+            catch (e) {
+            }
+        }
+        return res;
+    }
 };
 exports.ComplexService = ComplexService;
 exports.ComplexService = ComplexService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(complex_entity_1.Complex)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(court_entity_1.Court)),
+    __param(2, (0, common_1.Inject)((0, common_1.forwardRef)(() => terms_service_1.TermsService))),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
+        terms_service_1.TermsService])
 ], ComplexService);
 //# sourceMappingURL=complex.service.js.map
