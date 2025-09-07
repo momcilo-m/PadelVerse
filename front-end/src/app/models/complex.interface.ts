@@ -2,7 +2,10 @@ export interface ComplexInterface
 {
     id:number,
     owner:number,
-    location:string,
+    location:{
+        x:number,
+        y:number
+    },
     name:string,
     open_time:string,
     close_time:string,

@@ -37,3 +37,16 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.map-container
+{
+  position: static !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.mat-drawer-content.mat-sidenav-content
+{
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+}
