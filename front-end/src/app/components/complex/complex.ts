@@ -9,13 +9,17 @@ import {MatTimepickerModule} from '@angular/material/timepicker';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { loadCourts } from '../../store/actions/complex.action';
-import { selectCourts } from '../../store/selectors/complex.selector';
+import { loadCourts, selectComplex } from '../../store/actions/complex.action';
+import { selectAvailable, selectComplexes, selectCourts } from '../../store/selectors/complex.selector';
+import { combineLatest, defaultIfEmpty, distinctUntilChanged, filter, last, map, Observable, startWith, take } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @Component({
   selector: 'app-complex',
   imports: [
-    MatIconModule,MatFormFieldModule, MatInputModule, MatDatepickerModule,MatTimepickerModule,ReactiveFormsModule
+    MatIconModule,MatFormFieldModule, MatInputModule, MatDatepickerModule,MatTimepickerModule,ReactiveFormsModule,
+    AsyncPipe,GoogleMapsModule
   ],
   providers:[provideNativeDateAdapter()],
   templateUrl: './complex.html',
@@ -38,6 +42,25 @@ export class Complex {
   store = inject<Store<AppState>>(Store)
 
   courts$ = this.store.select(selectCourts);
+  available$ = this.store.select(selectAvailable)
+  
+  location$: Observable<{lat: number, lng: number}> = this.store.select(selectComplexes).pipe(
+    map(complexes => complexes.find(complex => complex.id === Number(this.id))),
+    map(complex => complex ? {lat: complex.location.x, lng: complex.location.y} : {lat: 42, lng: 23})
+  );
+
+  courtsWithStatus$ = combineLatest([this.courts$, this.available$]).pipe(
+    map(([courts$,available$])=>{
+      if(!courts$) return []
+
+      return courts$.map(el=>
+        ({
+          ...el,
+          isAvailable:available$.includes(el.id)
+        })
+      )
+    })
+  )
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || "";
@@ -50,8 +73,6 @@ export class Complex {
     this.form.get('startTime')?.setValue(start)
     this.form.get('endTime')?.setValue(end)
     this.form.get('date')?.setValue(start)
-
-    
     
     const day = start.getDate().toString().padStart(2, '0');
     const month = (start.getMonth() + 1).toString().padStart(2, '0');
@@ -61,12 +82,11 @@ export class Complex {
     this.store.dispatch(loadCourts({
       complex:+this.id,
       date:dateToSend,
-      time:start.getHours().toString().padStart(2,"0")+":00", count:2}
+      time:start.getHours().toString().padStart(2,"0")+":00", count:1}
     ))
 
+    this.store.dispatch(selectComplex({id:Number(this.id)}))
   };
-
-  player = 2;
 
   increment() {
     const current = this.form.get('player')?.value ?? 1;
@@ -79,4 +99,5 @@ export class Complex {
       this.form.get('player')?.setValue(current - 1);
     }
   }
+
 }

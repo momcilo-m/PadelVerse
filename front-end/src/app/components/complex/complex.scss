@@ -39,10 +39,37 @@
 .courts
 {
   max-height: 300px;
+  max-width: 300px;
   display: grid;
-  
+  grid-template-columns: repeat(3,1fr);
+  gap:10px;
 }
 
+.court-class
+{
+  max-width: 100px;
+  min-height: 80px;
+  padding: 0 5px;
+  text-align: center;
+}
+
+.court-class.court-unavailable
+{
+  background-color: #2e2e2e;
+  color: #606060;
+  cursor: not-allowed;
+}
+
+::ng-deep .map-container
+{
+  width: 250px !important;  
+  height: 250px !important;
+}
+
+.contents
+{
+  display: flex;
+}
 
 //   ::ng-deep .mat-datepicker-content .mat-calendar {
 //       width: 200px !important;

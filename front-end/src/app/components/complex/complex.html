@@ -6,8 +6,6 @@
             <p>McGilvra, Seatle, WA</p>
         </div>
     </div>
-
-
         <div class="date-picker">
         <mat-form-field appearance="outline" class="date">
         <mat-label>Choose a date</mat-label>
@@ -51,9 +49,45 @@
     
 </div>
 
-<div class="courts">
     Choose a panel court
+    <div class="courts">
+        @if (courtsWithStatus$ | async; as courts) {
+            @for (court of courts; track court.id) {
+                <div [class]="court.isAvailable ? 'court-available court-class rounded-corner' : 'court-unavailable court-class rounded-corner'">
+                    
+                    <h3>{{ court.name }}</h3>
+                    
+                    <!-- <span class="status-badge">
+                        {{ court.isAvailable ? 'Dostupan' : 'Zauzet' }}
+                    </span> -->
+                    
+                </div>
+            }
+        }
+    </div>
     
-</div>
+    <div class="complex-location">
+        <google-map
+        height="200px"
+        witdh="200px"
+        [center]="(location$ | async)!"
+        [options]="{
+            mapTypeControl: false,streetViewControl: false, 
+            fullscreenControl: false,
+            zoomControl: false,
+            disableDoubleClickZoom: false,
+            scrollwheel: true,
+            draggable: true,
+            keyboardShortcuts: true,
+        }"
+        [zoom]="12">>
+        @if (location$ | async; as location) {
+            <map-marker 
+                [position]="location" 
+                [title]="'Moja lokacija'">
+            </map-marker>
+        }
+        </google-map>
+    </div>
 
 </form>
