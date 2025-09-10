@@ -5,3 +5,4 @@ export const selectedComplex = (state:AppState)=> state.complexStatus.selectedCo
 
 export const selectCourts = (state:AppState) => state.complexStatus.courts
 export const selectAvailable = (state:AppState)=> state.complexStatus.avalaibleCourts
+export const selectedCourt = (state:AppState)=>state.complexStatus.selectedCorut

@@ -78,7 +78,6 @@ export class ComplexService {
             available: []
         };
 
-
         const courts = await this.courtRepository.find({
             where: { complex: { id } },
         });

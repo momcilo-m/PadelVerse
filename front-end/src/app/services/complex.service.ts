@@ -26,4 +26,11 @@ export class ComplexService {
     console.log(id,date,time,count)
     return this.http.get<AvalaibleCourtsInterface>(`http://localhost:3000/complex/free/${id}?date=${date}&time=${time}&count=${count}`)
   }
+
+  getWeather(date:string, time:string,location:string)
+  {
+    let base = "http://api.weatherapi.com/v1";
+    let key = "29b677f206f94d6295a175818251009";
+    return this.http.get(`${base}/forecast.json?key=${key}&q=${location}&dt=${date}&hour=${time}`)
+  }
 }

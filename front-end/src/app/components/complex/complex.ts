@@ -9,11 +9,12 @@ import {MatTimepickerModule} from '@angular/material/timepicker';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { loadCourts, selectComplex } from '../../store/actions/complex.action';
-import { selectAvailable, selectComplexes, selectCourts } from '../../store/selectors/complex.selector';
-import { combineLatest, defaultIfEmpty, distinctUntilChanged, filter, last, map, Observable, startWith, take } from 'rxjs';
+import { loadCourts, selectComplex, selectCourt } from '../../store/actions/complex.action';
+import { selectAvailable, selectComplexes, selectCourts, selectedComplex, selectedCourt } from '../../store/selectors/complex.selector';
+import { combineLatest, defaultIfEmpty, distinctUntilChanged, filter, last, map, Observable, startWith, take, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { ComplexInterface } from '../../models/complex.interface';
 
 @Component({
   selector: 'app-complex',
@@ -31,23 +32,44 @@ export class Complex {
   constructor(private route: ActivatedRoute) {}
   
   private id:string = "";
-
+  
   form = new FormGroup({
     date: new FormControl<Date | null>(null),
     startTime: new FormControl<Date | null>(null),
-    endTime: new FormControl<Date | null>(null),
-    player: new FormControl<number>(1),
+    count: new FormControl<number>(1),
+    court : new FormControl<number>(-1),
   });
-
+  
   store = inject<Store<AppState>>(Store)
-
+  
   courts$ = this.store.select(selectCourts);
   available$ = this.store.select(selectAvailable)
+  selectedCourt:number=-1;
   
   location$: Observable<{lat: number, lng: number}> = this.store.select(selectComplexes).pipe(
     map(complexes => complexes.find(complex => complex.id === Number(this.id))),
     map(complex => complex ? {lat: complex.location.x, lng: complex.location.y} : {lat: 42, lng: 23})
   );
+
+  location : {lat:number, lng:number} = {lat: 42, lng: 23}
+  city:String="";
+  country:String = "";
+  price:number=1;
+
+  complex$ = combineLatest([
+      this.store.select(selectComplexes),
+      this.store.select(selectedComplex)])
+    .pipe(
+      map(([complexes, id]) => complexes.find(c => c.id === id))
+    )
+    .subscribe(complex=>{
+      this.location = {lat:complex?.location.x || 42, lng:complex?.location.y || 23};
+      this.city = complex?.city || ""
+      this.country = complex?.country || ""
+      this.price = complex?.price || 1;
+
+      console.log(this.location, this.city, this.country)
+    })
 
   courtsWithStatus$ = combineLatest([this.courts$, this.available$]).pipe(
     map(([courts$,available$])=>{
@@ -65,14 +87,13 @@ export class Complex {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || "";
     const start = new Date();
-    const end = new Date();
     start.setMinutes(0,0,0);
-    end.setHours(start.getHours()+1,0,0,0)
-
-    this.form.get('player')?.setValue(1)
+    start.setHours(start.getHours() + 1);
+    
+    this.form.get('count')?.setValue(1)
     this.form.get('startTime')?.setValue(start)
-    this.form.get('endTime')?.setValue(end)
     this.form.get('date')?.setValue(start)
+    this.form.get('court')?.setValue(-1);
     
     const day = start.getDate().toString().padStart(2, '0');
     const month = (start.getMonth() + 1).toString().padStart(2, '0');
@@ -89,15 +110,19 @@ export class Complex {
   };
 
   increment() {
-    const current = this.form.get('player')?.value ?? 1;
-    this.form.get('player')?.setValue(current + 1);
+    const current = this.form.get('count')?.value ?? 1;
+    this.form.get('count')?.setValue(current + 1);
   }
 
   decrement() {
-    const current = this.form.get('player')?.value ?? 1;
+    const current = this.form.get('count')?.value ?? 1;
     if (current > 1) {
-      this.form.get('player')?.setValue(current - 1);
+      this.form.get('count')?.setValue(current - 1);
     }
   }
 
+  onClickCourt(id:number)
+  {
+    this.form.get('court')?.setValue(id);
+  }
 }

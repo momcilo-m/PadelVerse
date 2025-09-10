@@ -1,13 +1,13 @@
-<form [formGroup]="form">
+<form [formGroup]="form" style=" display: grid; gap: 15px; height: 100%; justify-content: space-around; grid-template-rows: 1fr 2fr 1fr;">
 <div class="panel">
     <div class="location">
         <div class="rounded-corner panel">
             <mat-icon> location_on</mat-icon>
-            <p>McGilvra, Seatle, WA</p>
+            <p>{{city}} {{country}}</p>
         </div>
     </div>
         <div class="date-picker">
-        <mat-form-field appearance="outline" class="date">
+        <mat-form-field appearance="outline" class="date" style="width: 200px; height: 50px;">
         <mat-label>Choose a date</mat-label>
         <input matInput [matDatepicker]="datePicker" formControlName="date">
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
@@ -16,31 +16,22 @@
     </div>
     
     <div class="time-picker">
-        <mat-form-field class="time" appearance="outline">
+        <mat-form-field class="time" appearance="outline" style="width: 200px; height: 50px;">
         <mat-label>Start</mat-label>
         <input matInput [matTimepicker]="startPicker" formControlName="startTime">
         <mat-timepicker-toggle matIconSuffix [for]="startPicker"></mat-timepicker-toggle>
         <mat-timepicker #startPicker></mat-timepicker>
         </mat-form-field>
     </div>
-    
-    <div class="time-picker">
-        <mat-form-field class="time" appearance="outline">
-            <mat-label>End</mat-label>
-            <input matInput [matTimepicker]="endPicker" formControlName="endTime">
-            <mat-timepicker-toggle matIconSuffix [for]="endPicker"></mat-timepicker-toggle>
-            <mat-timepicker #endPicker></mat-timepicker>
-        </mat-form-field>
-    </div>
 
     <div class="counter">
-        <mat-icon>person</mat-icon>
+        <mat-icon>schedule</mat-icon>
 
         <button mat-icon-button (click)="decrement()">
             <mat-icon>remove</mat-icon>
         </button>
         
-        <span class="value">{{ form.get('player')?.value }}</span>
+        <span class="value">{{ form.get('count')?.value }}</span>
 
         <button mat-icon-button (click)="increment()">
             <mat-icon>add</mat-icon>
@@ -49,45 +40,82 @@
     
 </div>
 
-    Choose a panel court
-    <div class="courts">
-        @if (courtsWithStatus$ | async; as courts) {
-            @for (court of courts; track court.id) {
-                <div [class]="court.isAvailable ? 'court-available court-class rounded-corner' : 'court-unavailable court-class rounded-corner'">
-                    
-                    <h3>{{ court.name }}</h3>
-                    
-                    <!-- <span class="status-badge">
-                        {{ court.isAvailable ? 'Dostupan' : 'Zauzet' }}
-                    </span> -->
-                    
-                </div>
+    <div class="grid-content">
+        <div>
+
+            Choose a panel court
+            <div class="courts rounded-corner">
+                @if (courtsWithStatus$ | async; as courts) {
+                    @for (court of courts; track court.id) {
+                        <div 
+                        [class]="
+                        ' court rounded-corner ' + 
+                        (court.isAvailable ? 'court-available' : 'court-unavailable') + 
+                        
+                        (form.get('court')?.value === court.id ? ' selectedCourt' : '')
+                        "
+                        (click)="onClickCourt(court.id)"
+                        >
+                        
+                        <h3>{{ court.name }}</h3>
+                        
+                    </div>
+                }
             }
-        }
+        </div>
     </div>
+        
+        <div class="complex-location">
+            <google-map
+            height="200px"
+            witdh="200px"
+            [center]="(location$ | async)!"
+            [options]="{
+                mapTypeControl: false,streetViewControl: false, 
+                fullscreenControl: false,
+                zoomControl: false,
+                disableDoubleClickZoom: false,
+                scrollwheel: true,
+                draggable: true,
+                keyboardShortcuts: true,
+            }"
+            [zoom]="12">>
+            @if (location$ | async; as location) {
+                <map-marker 
+                    [position]="location" 
+                    [title]="'Moja lokacija'">
+                </map-marker>
+            }
+            </google-map>
+        </div>
     
-    <div class="complex-location">
-        <google-map
-        height="200px"
-        witdh="200px"
-        [center]="(location$ | async)!"
-        [options]="{
-            mapTypeControl: false,streetViewControl: false, 
-            fullscreenControl: false,
-            zoomControl: false,
-            disableDoubleClickZoom: false,
-            scrollwheel: true,
-            draggable: true,
-            keyboardShortcuts: true,
-        }"
-        [zoom]="12">>
-        @if (location$ | async; as location) {
-            <map-marker 
-                [position]="location" 
-                [title]="'Moja lokacija'">
-            </map-marker>
-        }
-        </google-map>
+        <div class="weather-container">
+            Weather Prediction
+            <div class="weather rounded-corner">
+                
+                <div class="weather-date">
+                    <p>2025-09-15</p>
+                    <p>High:27 Low:10</p>
+                </div>
+                
+                <div class="">14</div>
+                
+                <div class="weather-icon">
+                    <img src="https://cdn.weatherapi.com/weather/64x64/day/296.png" alt="weather-icon">
+                    <p>Cloudy</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="price">
+            <div style="display: flex; align-items: center;">    
+                <mat-icon>wallet</mat-icon>
+                <p>Total Price</p>
+            </div>
+            ${{price * (form.get('count')?.value || 1)}}
+        </div>
+
     </div>
 
 </form>
