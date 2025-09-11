@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store"
 import { RequestState } from "../states/request.state"
 import { isLogin, login, loginFailed, loginSuccessfully } from "../actions/user.action"
-import { failedComplex, loadComlpex, loadedComplex } from "../actions/complex.action"
+import { booking, bookingSuccess, failedComplex, loadComlpex, loadedComplex } from "../actions/complex.action"
 
 export const initRequestState : RequestState = 
 {
@@ -12,14 +12,14 @@ export const initRequestState : RequestState =
 
 export const requestReducer = createReducer(
     initRequestState,
-    on(loginSuccessfully,loginFailed,loadedComplex,failedComplex,(state)=>{
+    on(bookingSuccess,loginSuccessfully,loginFailed,loadedComplex,failedComplex,(state)=>{
         return {
             ...state,
             loading:false
         }
     }),
 
-    on(login,loadComlpex,()=>{
+    on(login,booking,loadComlpex,()=>{
         return {
             loading:true,
             error:false,
@@ -34,17 +34,11 @@ export const requestReducer = createReducer(
         }
     }),
 
-    // on(loginSuccessfully,loadedComplex,(state,{c})=>{
-    //     return {
-    //         ...state,
-    //     }
-    // }),
-
     on(isLogin,(state)=>{
         return{
             ...state,
             loading:true,
             // error:false,
         }
-    })
+    }),
 )

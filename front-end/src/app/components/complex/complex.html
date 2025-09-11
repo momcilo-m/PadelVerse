@@ -42,28 +42,24 @@
 
     <div class="grid-content">
         <div>
-
             Choose a panel court
             <div class="courts rounded-corner">
                 @if (courtsWithStatus$ | async; as courts) {
                     @for (court of courts; track court.id) {
                         <div 
-                        [class]="
-                        ' court rounded-corner ' + 
-                        (court.isAvailable ? 'court-available' : 'court-unavailable') + 
-                        
-                        (form.get('court')?.value === court.id ? ' selectedCourt' : '')
-                        "
-                        (click)="onClickCourt(court.id)"
-                        >
-                        
-                        <h3>{{ court.name }}</h3>
-                        
-                    </div>
+                            [class]="
+                            ' court rounded-corner ' + 
+                            (court.isAvailable ? 'court-available' : 'court-unavailable') + 
+                            (form.get('court')?.value === court.id ? ' selectedCourt' : '')
+                            "
+                            (click)="onClickCourt(court.id, court.isAvailable)"
+                            >                            
+                            <h3>{{ court.name }}</h3>
+                        </div>
                 }
             }
+            </div>
         </div>
-    </div>
         
         <div class="complex-location">
             <google-map
@@ -79,7 +75,7 @@
                 draggable: true,
                 keyboardShortcuts: true,
             }"
-            [zoom]="12">>
+            [zoom]="16">>
             @if (location$ | async; as location) {
                 <map-marker 
                     [position]="location" 
@@ -113,7 +109,20 @@
                 <mat-icon>wallet</mat-icon>
                 <p>Total Price</p>
             </div>
-            ${{price * (form.get('count')?.value || 1)}}
+            ${{ (price * (form.get('count')?.value || 1)).toFixed(2) }}
+        </div>
+
+        <div class="checkout">
+            <button
+            class="submit-btn rounded-corner"
+            mat-icon-button
+            color="primary"
+            type="submit"
+            (click)="checkout()"
+            >
+            Proceed Checkout 
+            <mat-icon>input</mat-icon>
+            </button>
         </div>
 
     </div>

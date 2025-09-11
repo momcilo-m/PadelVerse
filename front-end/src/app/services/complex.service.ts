@@ -33,4 +33,9 @@ export class ComplexService {
     let key = "29b677f206f94d6295a175818251009";
     return this.http.get(`${base}/forecast.json?key=${key}&q=${location}&dt=${date}&hour=${time}`)
   }
+
+  checkout(complex:number,court:number,count:number)
+  { 
+    return this.http.get<{id:string}>(`http://localhost:3000/booking/checkout-session?complex=${complex}&court=${court}&count=${count}`,{withCredentials:true})
+  }
 }

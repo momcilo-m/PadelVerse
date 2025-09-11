@@ -13,9 +13,9 @@ export const routes: Routes = [
   { path: '', component: SideNav, children:[
     { path: 'home', component:Home, canActivate:[login]},
     { path: 'tours', component:Tournament, canActivate:[login]},
-    { path:'maps', component:Maps},
-    { path: 'complex', component:Complexes, canActivate:[login]},
-    { path: 'complex/:id', component: Complex },
+    { path:'maps', component:Maps,canActivate:[login]},
+    { path: 'complex', component:Complexes},
+    { path: 'complex/:id', component: Complex,canActivate:[login] },
   ] },
   { path: 'login', component: Login},
 ];

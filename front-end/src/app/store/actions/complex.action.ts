@@ -11,3 +11,6 @@ export const loadedCourts = createAction('loadedCourts',props<{courts:CourtInter
 export const failedCourts = createAction('failedCourts',props<{message:string}>())
 export const selectCourt = createAction('selectCourt',props<{id:number}>())
 
+export const booking = createAction("booking",props<{complex:number,court:number,count:number}>())
+export const bookingSuccess = createAction("bookingSuccess",props<{id:string}>());
+export const bookingFailed = createAction('bookingFailed',props<{message:string}>())

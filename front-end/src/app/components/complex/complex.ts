@@ -9,7 +9,7 @@ import {MatTimepickerModule} from '@angular/material/timepicker';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { loadCourts, selectComplex, selectCourt } from '../../store/actions/complex.action';
+import { booking, loadCourts, selectComplex, selectCourt } from '../../store/actions/complex.action';
 import { selectAvailable, selectComplexes, selectCourts, selectedComplex, selectedCourt } from '../../store/selectors/complex.selector';
 import { combineLatest, defaultIfEmpty, distinctUntilChanged, filter, last, map, Observable, startWith, take, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
@@ -121,8 +121,24 @@ export class Complex {
     }
   }
 
-  onClickCourt(id:number)
+  onClickCourt(id:number,isAvailable:boolean)
   {
-    this.form.get('court')?.setValue(id);
+    if(isAvailable)
+      this.form.get('court')?.setValue(id);
+  }
+
+  checkout()
+  {
+    let complex = Number(this.id);
+    let court = this.form.get("court")?.value || -1;
+    let count = this.form.get('count')?.value || -1;
+
+    if(complex==-1 || court==-1 || count==-1)
+    {
+      console.log("AJDE KOMSO POTRUDI SE");
+      return;
+    }
+    console.log(complex,court,count)
+    this.store.dispatch(booking({complex,court,count}))
   }
 }
