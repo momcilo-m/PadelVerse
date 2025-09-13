@@ -1,0 +1,53 @@
+.profile-header
+{
+    display: flex;
+    align-items: flex-start;
+    gap:20px;
+}
+
+.profile-header img
+{
+    height: 100px;
+    width: 100px;
+    border-radius: 20px;
+    object-fit:cover
+}
+
+.form-row img
+{
+    height: 100px;
+    width: 100px;
+    border-radius: 20px;
+    object-fit:cover
+}
+
+.form-row.form-image
+{
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.profile-header p
+{
+    font-size: 24px;
+}
+
+.info-row
+{
+    display: flex;
+    align-items: center;
+    gap:20px;
+}
+
+.form-row
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:20px;
+}
+
+.info-row span
+{
+    color: #444444
+}

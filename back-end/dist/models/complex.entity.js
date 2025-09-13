@@ -51,7 +51,7 @@ __decorate([
     __metadata("design:type", String)
 ], Complex.prototype, "close_time", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: "decimal" }),
     __metadata("design:type", Number)
 ], Complex.prototype, "price", void 0);
 __decorate([

@@ -34,8 +34,8 @@ export class Complex {
   private id:string = "";
   
   form = new FormGroup({
-    date: new FormControl<Date | null>(null),
-    startTime: new FormControl<Date | null>(null),
+    date: new FormControl<Date>(new Date()),
+    startTime: new FormControl<Date>(new Date()),
     count: new FormControl<number>(1),
     court : new FormControl<number>(-1),
   });
@@ -44,7 +44,7 @@ export class Complex {
   
   courts$ = this.store.select(selectCourts);
   available$ = this.store.select(selectAvailable)
-  selectedCourt:number=-1;
+  //selectedCourt:number=-1;
   
   location$: Observable<{lat: number, lng: number}> = this.store.select(selectComplexes).pipe(
     map(complexes => complexes.find(complex => complex.id === Number(this.id))),
@@ -87,27 +87,27 @@ export class Complex {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || "";
     const start = new Date();
-    start.setMinutes(0,0,0);
-    start.setHours(start.getHours() + 1);
     
     this.form.get('count')?.setValue(1)
     this.form.get('startTime')?.setValue(start)
     this.form.get('date')?.setValue(start)
     this.form.get('court')?.setValue(-1);
     
-    const day = start.getDate().toString().padStart(2, '0');
-    const month = (start.getMonth() + 1).toString().padStart(2, '0');
-    const year = start.getFullYear(); 
-    const dateToSend = `${year}-${month}-${day}`;
-    
     this.store.dispatch(loadCourts({
       complex:+this.id,
-      date:dateToSend,
-      time:start.getHours().toString().padStart(2,"0")+":00", count:1}
-    ))
+      date:this.transformDate(start),
+      time:this.transformTime(start,1), 
+      count:1
+    }))
 
     this.store.dispatch(selectComplex({id:Number(this.id)}))
   };
+
+   ngAfterViewInit(): void {
+    this.form.valueChanges.subscribe(() => {
+     this.checkAvailable();
+    });
+  }
 
   increment() {
     const current = this.form.get('count')?.value ?? 1;
@@ -121,6 +121,31 @@ export class Complex {
     }
   }
 
+  checkAvailable()
+  {
+    let complex =+this.id;
+    let count = this.form.get('count')?.value || -1;
+    let time = this.form.get('startTime')?.value || new Date();
+    let date = this.form.get('date')?.value || new Date();
+    
+    console.log(this.transformTime(time,0),this.transformDate(date),complex,count)
+
+    let xx = this.transformDate(date);
+    console.log(xx);
+
+    if(complex==-1 || count==-1)
+    {
+      return;
+    }
+
+    this.store.dispatch(loadCourts({
+      complex:+this.id,
+      date:this.transformDate(date),
+      time:this.transformTime(time,0),
+      count,
+    }))
+  }
+
   onClickCourt(id:number,isAvailable:boolean)
   {
     if(isAvailable)
@@ -129,16 +154,34 @@ export class Complex {
 
   checkout()
   {
-    let complex = Number(this.id);
+    let complex = +this.id;
     let court = this.form.get("court")?.value || -1;
     let count = this.form.get('count')?.value || -1;
 
     if(complex==-1 || court==-1 || count==-1)
     {
-      console.log("AJDE KOMSO POTRUDI SE");
       return;
     }
-    console.log(complex,court,count)
     this.store.dispatch(booking({complex,court,count}))
   }
+
+  transformDate(start:Date):string
+  {
+    const day = start.getDate().toString().padStart(2, '0');
+    const month = (start.getMonth() + 1).toString().padStart(2, '0');
+    const year = start.getFullYear(); 
+    return  `${year}-${month}-${day}`;
+  }
+
+  private transformTime(start:Date,offset:number):string
+  {
+    start.setMinutes(0,0,0);
+    start.setHours(start.getHours() + offset);
+    return start.getHours().toString().padStart(2,"0")+":00";
+  }
+
+onAnyEvent(event: any, type: string) {
+  console.log(type, event);
+}
+
 }

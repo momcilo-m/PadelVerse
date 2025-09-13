@@ -26,6 +26,9 @@ import { TournamentsService } from './tournaments/tournaments.service';
 import { Court } from './models/court.entity';
 import { CourtsService } from './courts/courts.service';
 import { CourtsModule } from './courts/courts.module';
+import { ConfigModule } from '@nestjs/config';
+import { BookingController } from './booking/booking.controller';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -39,6 +42,12 @@ import { CourtsModule } from './courts/courts.module';
       entities: [User,Complex,Court,Term,Tournament],
       synchronize: false,
     }),
+    ConfigModule.forRoot(
+      {
+        envFilePath:"./../.env",
+        isGlobal:true
+      }
+    ),
     UsersModule,
     MailerModule,
     ComplexModule,
@@ -46,8 +55,9 @@ import { CourtsModule } from './courts/courts.module';
     TermsModule,
     TournamentsModule,
     CourtsModule,
+    BookingModule,
   ],
-  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController,TournamentsController],
+  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController,TournamentsController, BookingController],
   providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService],
 })
 export class AppModule{}

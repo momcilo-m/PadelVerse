@@ -38,4 +38,9 @@ export class ComplexService {
   { 
     return this.http.get<{id:string}>(`http://localhost:3000/booking/checkout-session?complex=${complex}&court=${court}&count=${count}`,{withCredentials:true})
   }
+
+  getComplexByOwner(owner:number)
+  {
+    return this.http.get<Complex[]>(`http://localhost:3000/complex?owner=${owner}`)
+  }
 }

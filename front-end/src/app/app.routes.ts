@@ -8,6 +8,7 @@ import { SideNav } from './components/side-nav/side-nav';
 import { Complexes } from './components/complexes/complexes';
 import { Complex } from './components/complex/complex';
 import { Maps } from './components/maps/maps';
+import { Profile } from './components/profile/profile';
 
 export const routes: Routes = [
   { path: '', component: SideNav, children:[
@@ -16,6 +17,8 @@ export const routes: Routes = [
     { path:'maps', component:Maps,canActivate:[login]},
     { path: 'complex', component:Complexes},
     { path: 'complex/:id', component: Complex,canActivate:[login] },
+    { path: 'profile', component: Profile },
+    
   ] },
   { path: 'login', component: Login},
 ];

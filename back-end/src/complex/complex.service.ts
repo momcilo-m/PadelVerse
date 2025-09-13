@@ -24,7 +24,7 @@ export class ComplexService {
 
     async getById(id:number)
     {
-        return this.complexRepository
+        return await this.complexRepository
                 .createQueryBuilder('complex')
                 .leftJoin('complex.owner','users')
                 .addSelect(['users.phone', 'users.email'])
@@ -34,7 +34,7 @@ export class ComplexService {
 
     async getByIds(id:number[])
     {
-        return this.complexRepository.find({
+        return await this.complexRepository.find({
             where:{
                 id:In(id)
             }
@@ -43,7 +43,7 @@ export class ComplexService {
 
     async create(complexDTO:ComplexDTO)
     {
-        return this.complexRepository.save(plainToClass(Complex,complexDTO));
+        return await this.complexRepository.save(plainToClass(Complex,complexDTO));
     }
 
     async edit(id:number,complexDTO:ComplexDTO)

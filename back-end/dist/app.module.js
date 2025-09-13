@@ -35,6 +35,9 @@ const tournaments_service_1 = require("./tournaments/tournaments.service");
 const court_entity_1 = require("./models/court.entity");
 const courts_service_1 = require("./courts/courts.service");
 const courts_module_1 = require("./courts/courts.module");
+const config_1 = require("@nestjs/config");
+const booking_controller_1 = require("./booking/booking.controller");
+const booking_module_1 = require("./booking/booking.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -51,6 +54,10 @@ exports.AppModule = AppModule = __decorate([
                 entities: [user_entity_1.User, complex_entity_1.Complex, court_entity_1.Court, term_entity_1.Term, tournament_entity_1.Tournament],
                 synchronize: false,
             }),
+            config_1.ConfigModule.forRoot({
+                envFilePath: "./../.env",
+                isGlobal: true
+            }),
             users_module_1.UsersModule,
             mailer_module_1.MailerModule,
             complex_module_1.ComplexModule,
@@ -58,8 +65,9 @@ exports.AppModule = AppModule = __decorate([
             terms_module_1.TermsModule,
             tournaments_module_1.TournamentsModule,
             courts_module_1.CourtsModule,
+            booking_module_1.BookingModule,
         ],
-        controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController],
+        controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController, booking_controller_1.BookingController],
         providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, complex_service_1.ComplexService, terms_service_1.TermsService, tournaments_service_1.TournamentsService, courts_service_1.CourtsService],
     })
 ], AppModule);

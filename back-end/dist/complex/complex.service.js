@@ -34,7 +34,7 @@ let ComplexService = class ComplexService {
         return await new QueryFeature_1.QueryFeature(this.complexRepository, query).filter().query;
     }
     async getById(id) {
-        return this.complexRepository
+        return await this.complexRepository
             .createQueryBuilder('complex')
             .leftJoin('complex.owner', 'users')
             .addSelect(['users.phone', 'users.email'])
@@ -42,14 +42,14 @@ let ComplexService = class ComplexService {
             .getOne();
     }
     async getByIds(id) {
-        return this.complexRepository.find({
+        return await this.complexRepository.find({
             where: {
                 id: (0, typeorm_2.In)(id)
             }
         });
     }
     async create(complexDTO) {
-        return this.complexRepository.save((0, class_transformer_1.plainToClass)(complex_entity_1.Complex, complexDTO));
+        return await this.complexRepository.save((0, class_transformer_1.plainToClass)(complex_entity_1.Complex, complexDTO));
     }
     async edit(id, complexDTO) {
         if (!complexDTO)

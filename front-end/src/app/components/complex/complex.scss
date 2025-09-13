@@ -90,6 +90,11 @@
   background-repeat: no-repeat;
 }
 
+.submit-btn:disabled
+{
+  cursor: not-allowed;
+}
+
 // .courts::after {
 //   content: "";
 //   position: absolute;

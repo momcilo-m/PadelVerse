@@ -36,7 +36,6 @@ export class AuthController {
                 secure: true,
                 expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             });
-            res.token = ""
         }
         return res 
     }

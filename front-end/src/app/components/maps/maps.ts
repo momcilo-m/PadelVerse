@@ -44,11 +44,10 @@ export class Maps {
 
   ngAfterViewInit() {
     if (typeof google !== 'undefined' && google.maps) {
-      
       this.map = new google.maps.Map(this.mapElement.nativeElement, {
         center: this.center,
         zoom: this.zoom,
-        mapId: '3373fb5d8ce72adeb7c0cd49'
+        mapId: '8da2e5ef598c94e14d6d7495'
       });
 
        this.store.select(selectComplexes).pipe(
@@ -91,8 +90,8 @@ export class Maps {
     // Popup iznad markera
     const popup = document.createElement('div');
     popup.style.position = 'absolute';
-    popup.style.bottom = '25px';  // iznad markera
-    popup.style.left = '-50px';   // centriranje
+    popup.style.bottom = '25px';
+    popup.style.left = '-50px';
     popup.style.width = '150px';
     popup.style.padding = '5px';
     popup.style.backgroundColor = 'white';
