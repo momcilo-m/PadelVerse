@@ -8,7 +8,7 @@ export const initComplexState : ComplexState =
     complex:[],
     courts:[],
     avalaibleCourts:[],
-    selectedCorut:-1
+    selectedCorut:-1,
 }
 
 export const complexReducer = createReducer(

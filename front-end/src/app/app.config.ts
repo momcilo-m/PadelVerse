@@ -11,6 +11,8 @@ import { userReducer } from './store/reducers/user.reducer';
 import { requestReducer } from './store/reducers/request.reducer';
 import { complexReducer } from './store/reducers/complex.reducers';
 import { ComplexEffect } from './store/effects/complex.effect';
+import { weatherReducer } from './store/reducers/weather.reducer';
+import { WeatherEffect } from './store/effects/weather.effect';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,9 +23,10 @@ export const appConfig: ApplicationConfig = {
     provideStore({
       userStatus:userReducer,
       requestStatus:requestReducer,
-      complexStatus:complexReducer
+      complexStatus:complexReducer,
+      weatherStatus:weatherReducer
     }),
     provideStoreDevtools({maxAge:25,logOnly:!isDevMode()}),
-    provideEffects(UserEffect,ComplexEffect),
+    provideEffects(UserEffect,ComplexEffect,WeatherEffect),
 ]
 };

@@ -15,6 +15,8 @@ import { combineLatest, defaultIfEmpty, distinctUntilChanged, filter, last, map,
 import { AsyncPipe } from '@angular/common';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ComplexInterface } from '../../models/complex.interface';
+import { selectError } from '../../store/selectors/request.selector';
+import { selectWeather } from '../../store/selectors/weather.selector';
 
 @Component({
   selector: 'app-complex',
@@ -84,6 +86,9 @@ export class Complex {
     })
   )
 
+  weather$ = this.store.select(selectWeather);
+  messageError$ = this.store.select(selectError);
+
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || "";
     const start = new Date();
@@ -97,7 +102,7 @@ export class Complex {
       complex:+this.id,
       date:this.transformDate(start),
       time:this.transformTime(start,1), 
-      count:1
+      count:1,
     }))
 
     this.store.dispatch(selectComplex({id:Number(this.id)}))

@@ -1,4 +1,4 @@
-<form [formGroup]="form" style=" display: grid; gap: 15px; height: 100%; justify-content: space-around; grid-template-rows: 1fr 2fr 1fr;">
+<form [formGroup]="form" style=" display: grid; gap: 15px; height: 100%; justify-content: space-around; grid-template-rows: 1fr 5fr 1fr;">
 <div class="panel">
     <div class="location">
         <div class="rounded-corner panel">
@@ -42,7 +42,7 @@
 
     <div class="grid-content">
         <div>
-            Choose a panel court
+            <!-- Choose a panel court -->
             <div class="courts rounded-corner">
                 @if (courtsWithStatus$ | async; as courts) {
                     @for (court of courts; track court.id) {
@@ -63,7 +63,7 @@
         
         <div class="complex-location">
             <google-map
-            height="200px"
+            height="100%"
             witdh="200px"
             [center]="(location$ | async)!"
             [options]="{
@@ -75,7 +75,7 @@
                 draggable: true,
                 keyboardShortcuts: true,
             }"
-            [zoom]="16">>
+            [zoom]="16">
             @if (location$ | async; as location) {
                 <map-marker 
                     [position]="location" 
@@ -88,18 +88,25 @@
         <div class="weather-container">
             Weather Prediction
             <div class="weather rounded-corner">
-                
+
                 <div class="weather-date">
-                    <p>{{transformDate(form.get('date')?.value!)}}</p>
-                    <p>High:27 Low:10</p>
+                @if (weather$ | async; as weather) {
+                    <p>{{ transformDate(form.get('date')?.value!) }}</p>
+                    <p>High: {{ weather.max_temp }} Low: {{ weather.min_temp }}</p>
+                }
                 </div>
-                
-                <div class="">14</div>
-                
+
+                @if (weather$ | async; as weather) {
+                <div class="">Temp: {{ weather.temp }}</div>
+                }
+
+                @if (weather$ | async; as weather) {
                 <div class="weather-icon">
-                    <img src="https://cdn.weatherapi.com/weather/64x64/day/296.png" alt="weather-icon">
-                    <p>Cloudy</p>
+                    <img [src]="weather.icon" alt="weather-icon">
+                    <p>Condition: {{ weather.text }}</p>
                 </div>
+                }
+
             </div>
         </div>
 

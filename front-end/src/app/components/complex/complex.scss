@@ -4,7 +4,8 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    gap:10px,
+    gap:10px;
+    background-color: rgb(229, 248, 248);
 }
 
 .location
@@ -24,7 +25,7 @@
   justify-content: center;
   gap: 8px;
   border: 1px solid #ccc;
-  border-radius: 9999px; // za zaobljene ivice kao na slici
+  border-radius: 9999px;
   padding: 4px 12px;
   background-color: #fff;
 
@@ -43,7 +44,8 @@
 
 .courts
 {
-  max-height: 300px;
+  // max-height: 300px;
+  height: 100%;
   max-width: 300px;
   display: grid;
   grid-template-columns: repeat(3,1fr);
@@ -68,7 +70,6 @@
 ::ng-deep .map-container
 {
   width: 250px !important;  
-  height: 250px !important;
 }
 
 .contents
@@ -85,7 +86,7 @@
   border: 1px solid black;
   padding: 5px;
   background-image: url("./../../../../public/court.jpg");
-  background-size: cover;
+  background-size:auto;
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -95,6 +96,11 @@
   cursor: not-allowed;
 }
 
+.price
+{
+  font-size: 32px;
+  margin: 0 auto;
+}
 // .courts::after {
 //   content: "";
 //   position: absolute;
@@ -125,7 +131,8 @@
 
 .complex-location
 {
-  margin: auto;
+  margin: 0 auto;
+  height: 100%;
 }
 
 .weather-container
@@ -136,8 +143,12 @@
 .grid-content
 {
   display: grid;
-  align-items: start;
-  grid-template-columns: repeat(4, 1fr);
+  align-items:stretch;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: rgb(237, 252, 252);
+  padding: 20px;
+  row-gap: 30px;
+
 }
 
 .weather
@@ -164,7 +175,7 @@
 {
   display: flex;
   align-items: center;
-  background-color: #fbf860;
+  background-color: #fdfbad;
   gap: 10px;
   padding: 20px 40px;
   border: none;

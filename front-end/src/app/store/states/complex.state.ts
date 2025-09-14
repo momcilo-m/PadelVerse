@@ -6,5 +6,5 @@ export interface ComplexState
     complex:ComplexInterface[]
     courts:CourtInterface[],
     avalaibleCourts:number[]
-    selectedCorut:number
+    selectedCorut:number,
 }
