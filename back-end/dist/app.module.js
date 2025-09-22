@@ -38,6 +38,7 @@ const courts_module_1 = require("./courts/courts.module");
 const config_1 = require("@nestjs/config");
 const booking_controller_1 = require("./booking/booking.controller");
 const booking_module_1 = require("./booking/booking.module");
+const profile_module_1 = require("./profile/profile.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -66,6 +67,7 @@ exports.AppModule = AppModule = __decorate([
             tournaments_module_1.TournamentsModule,
             courts_module_1.CourtsModule,
             booking_module_1.BookingModule,
+            profile_module_1.ProfileModule,
         ],
         controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController, booking_controller_1.BookingController],
         providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, complex_service_1.ComplexService, terms_service_1.TermsService, tournaments_service_1.TournamentsService, courts_service_1.CourtsService],

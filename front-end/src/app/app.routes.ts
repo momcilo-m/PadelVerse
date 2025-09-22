@@ -9,6 +9,7 @@ import { Complexes } from './components/complexes/complexes';
 import { Complex } from './components/complex/complex';
 import { Maps } from './components/maps/maps';
 import { Profile } from './components/profile/profile';
+import { Management } from './components/management/management';
 
 export const routes: Routes = [
   { path: '', component: SideNav, children:[
@@ -17,7 +18,8 @@ export const routes: Routes = [
     { path:'maps', component:Maps,canActivate:[login]},
     { path: 'complex', component:Complexes},
     { path: 'complex/:id', component: Complex,canActivate:[login] },
-    { path: 'profile', component: Profile },
+    { path: 'profile', component: Profile,canActivate:[login] },
+    {path:'management',component:Management}
     
   ] },
   { path: 'login', component: Login},

@@ -29,6 +29,7 @@ import { CourtsModule } from './courts/courts.module';
 import { ConfigModule } from '@nestjs/config';
 import { BookingController } from './booking/booking.controller';
 import { BookingModule } from './booking/booking.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { BookingModule } from './booking/booking.module';
     TournamentsModule,
     CourtsModule,
     BookingModule,
+    ProfileModule,
   ],
   controllers: [AppController, UsersController, AuthController, ComplexController, TermsController,TournamentsController, BookingController],
   providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService],

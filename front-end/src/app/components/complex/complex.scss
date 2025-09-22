@@ -42,15 +42,7 @@
   }
 }
 
-.courts
-{
-  // max-height: 300px;
-  height: 100%;
-  max-width: 300px;
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap:10px;
-}
+
 
 .court-class
 {
@@ -77,15 +69,25 @@
   display: flex;
 }
 
+// .courts
+// {
+//   // max-height: 300px;
+//   height: 100%;
+//   max-width: 300px;
+//   display: grid;
+//   gap:10px;
+// }
+
 .courts
 {
   display: grid;
+  grid-template-columns: repeat(3,1fr);
   justify-items: center;
   min-height: 200px;
-  min-width: 200px;
+  min-width: 350px;
   border: 1px solid black;
   padding: 5px;
-  background-image: url("./../../../../public/court.jpg");
+  //background-image: url("./../../../../public/court.jpg");
   background-size:auto;
   background-position: center;
   background-repeat: no-repeat;
@@ -143,12 +145,16 @@
 .grid-content
 {
   display: grid;
-  align-items:stretch;
+  justify-items:center;
   grid-template-columns: repeat(3, 1fr);
   background-color: rgb(237, 252, 252);
   padding: 20px;
   row-gap: 30px;
+}
 
+.checkout
+{
+  align-self: center;
 }
 
 .weather

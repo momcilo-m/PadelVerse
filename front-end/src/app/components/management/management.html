@@ -1,0 +1,89 @@
+<div class="container" style="padding: 2rem; max-width: 900px; margin: auto;">
+
+  <h1 style="text-align:center; margin-bottom: 2rem;">Upravljanje Kompleksima</h1>
+
+  <mat-tab-group>
+
+    <!-- Tab 1: Pregled kompleksa -->
+    <mat-tab label="Pregled kompleksa">
+      <div style="margin-top: 1rem;">
+        <mat-card class="kompleks-card" style="margin-bottom: 1rem;">
+          <mat-card-title>Kompleks Aqua</mat-card-title>
+          <mat-card-subtitle>Lokacija: Beograd</mat-card-subtitle>
+          <mat-card-content>Bazeni: Bazen 1, Bazen 2</mat-card-content>
+        </mat-card>
+
+        <mat-card class="kompleks-card" style="margin-bottom: 1rem;">
+          <mat-card-title>Kompleks Blue</mat-card-title>
+          <mat-card-subtitle>Lokacija: Novi Sad</mat-card-subtitle>
+          <mat-card-content>Bazeni: Bazen 3</mat-card-content>
+        </mat-card>
+
+        <mat-card class="kompleks-card" style="margin-bottom: 1rem;">
+          <mat-card-title>Kompleks Wave</mat-card-title>
+          <mat-card-subtitle>Lokacija: Niš</mat-card-subtitle>
+          <mat-card-content>Bazeni: Nema bazena</mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Tab 2: Registracija kompleksa -->
+    <mat-tab label="Registracija kompleksa">
+      <div style="margin-top: 1rem;">
+        <mat-card style="padding: 1rem;">
+          <mat-card-title>Registracija novog kompleksa</mat-card-title>
+          <mat-form-field appearance="fill" style="width: 100%; margin-top: 1rem;">
+            <mat-label>Naziv kompleksa</mat-label>
+            <input matInput placeholder="Unesite naziv">
+          </mat-form-field>
+          <mat-form-field appearance="fill" style="width: 100%; margin-top: 1rem;">
+            <mat-label>Lokacija</mat-label>
+            <mat-select>
+              <mat-option value="Beograd">Beograd</mat-option>
+              <mat-option value="Novi Sad">Novi Sad</mat-option>
+              <mat-option value="Niš">Niš</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-raised-button color="primary" style="margin-top: 1rem;">Registruj kompleks</button>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Tab 3: Registracija bazena -->
+    <mat-tab label="Registracija bazena">
+      <div style="margin-top: 1rem;">
+        <mat-card style="padding: 1rem;">
+          <mat-card-title>Registracija bazena na kompleksu</mat-card-title>
+          <mat-form-field appearance="fill" style="width: 100%; margin-top: 1rem;">
+            <mat-label>Izaberite kompleks</mat-label>
+            <mat-select>
+              <mat-option value="Aqua">Kompleks Aqua</mat-option>
+              <mat-option value="Blue">Kompleks Blue</mat-option>
+              <mat-option value="Wave">Kompleks Wave</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" style="width: 100%; margin-top: 1rem;">
+            <mat-label>Naziv bazena</mat-label>
+            <input matInput placeholder="Unesite naziv bazena">
+          </mat-form-field>
+          <button mat-raised-button color="accent" style="margin-top: 1rem;">Dodaj bazen</button>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Tab 4: Statistika po lokaciji -->
+    <mat-tab label="Statistika po lokaciji">
+      <div style="margin-top: 1rem;">
+        <mat-card style="padding: 1rem;">
+          <mat-card-title>Statistika po lokaciji</mat-card-title>
+          <mat-list>
+            <mat-list-item>Beograd - 2 bazena</mat-list-item>
+            <mat-list-item>Novi Sad - 1 bazen</mat-list-item>
+            <mat-list-item>Niš - 0 bazena</mat-list-item>
+          </mat-list>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
