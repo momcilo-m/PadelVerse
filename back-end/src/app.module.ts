@@ -30,6 +30,9 @@ import { ConfigModule } from '@nestjs/config';
 import { BookingController } from './booking/booking.controller';
 import { BookingModule } from './booking/booking.module';
 import { ProfileModule } from './profile/profile.module';
+import { ProfileController } from './profile/profile.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -49,6 +52,10 @@ import { ProfileModule } from './profile/profile.module';
         isGlobal:true
       }
     ),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/',
+    }),
     UsersModule,
     MailerModule,
     ComplexModule,
@@ -59,7 +66,7 @@ import { ProfileModule } from './profile/profile.module';
     BookingModule,
     ProfileModule,
   ],
-  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController,TournamentsController, BookingController],
-  providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService],
+  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController,TournamentsController, BookingController,ProfileController],
+  providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService,ProfileController],
 })
 export class AppModule{}

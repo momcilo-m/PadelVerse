@@ -10,13 +10,16 @@ exports.ProfileModule = void 0;
 const common_1 = require("@nestjs/common");
 const profile_controller_1 = require("./profile.controller");
 const profile_service_1 = require("./profile.service");
+const users_module_1 = require("../users/users.module");
 let ProfileModule = class ProfileModule {
 };
 exports.ProfileModule = ProfileModule;
 exports.ProfileModule = ProfileModule = __decorate([
     (0, common_1.Module)({
         controllers: [profile_controller_1.ProfileController],
-        providers: [profile_service_1.ProfileService]
+        providers: [profile_service_1.ProfileService],
+        imports: [users_module_1.UsersModule],
+        exports: [profile_service_1.ProfileService]
     })
 ], ProfileModule);
 //# sourceMappingURL=profile.module.js.map

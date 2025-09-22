@@ -34,4 +34,7 @@ export class User {
 
     @Column()
     token_registration:string
+
+    @Column()
+    photo:string
 }

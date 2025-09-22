@@ -23,6 +23,7 @@ let User = class User {
     is_active;
     date_created;
     token_registration;
+    photo;
 };
 exports.User = User;
 __decorate([
@@ -69,6 +70,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "token_registration", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], User.prototype, "photo", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)('users')
 ], User);
