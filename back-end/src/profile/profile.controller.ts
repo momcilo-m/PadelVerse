@@ -1,10 +1,11 @@
-import { Body, Controller, ParseFilePipeBuilder, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, ParseFilePipeBuilder, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import path from 'path';
 import { SampleDto } from 'src/models/sample.dto';
 import { ProfileService } from './profile.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UpdateUserDTO } from 'src/models/update.user.dto';
 
 @Controller('profile')
 export class ProfileController {
@@ -20,7 +21,7 @@ export class ProfileController {
     //     };
     // }
 
-    constructor(private readonly uploadService: ProfileService) {}
+    constructor(private readonly profileService: ProfileService) {}
 
     @Post("photo")
     @UseGuards(JwtAuthGuard)
@@ -34,9 +35,15 @@ export class ProfileController {
         }),
     }))
     uploadProfile(@Req() req:any,@UploadedFile() file: Express.Multer.File) {
-        return this.uploadService.saveFileInfo(file,req.user.id);
+        return this.profileService.profilePhoto(file,req.user.id);
     }
 
+    @Patch("")
+    @UseGuards(JwtAuthGuard)
+    editProfile(@Req() req:any, @Body(new ValidationPipe({whitelist:true})) user:UpdateUserDTO)
+    {
+        return this.profileService.editProfile(req.user.id,user);
+    }
 
     // @UseInterceptors(FileInterceptor('file'))
     // @Post('file/pass-validation')

@@ -1,6 +1,7 @@
 import type { Response } from 'express';
 import { UserDTO } from 'src/models/user.dto';
 import { AuthService } from './auth.service';
+import { PasswordUserDTO } from 'src/models/password.user.dto';
 export declare class AuthController {
     private readonly service;
     constructor(service: AuthService);
@@ -15,4 +16,5 @@ export declare class AuthController {
         status: string;
         user: Express.User;
     }>;
+    changePassword(req: any, user: PasswordUserDTO): Promise<import("../models/user.entity").User | import("@nestjs/common").BadRequestException>;
 }

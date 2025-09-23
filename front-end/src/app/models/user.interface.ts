@@ -19,4 +19,6 @@ export interface User
     date_created: Date;
 
     token_registration:string
+
+    photo:string
 }

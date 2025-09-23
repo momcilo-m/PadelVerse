@@ -1,9 +1,11 @@
+import { BadRequestException } from '@nestjs/common';
 import { UserDTO } from 'src/models/user.dto';
 import { User } from 'src/models/user.entity';
 import { Repository } from 'typeorm';
 import { MailerService } from 'src/mailer/mailer.service';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { PasswordUserDTO } from 'src/models/password.user.dto';
 export declare class AuthService {
     private readonly userRepository;
     private readonly mail;
@@ -20,4 +22,7 @@ export declare class AuthService {
         status: string;
         user: Express.User;
     }>;
+    changePassword(data: PasswordUserDTO): Promise<User | BadRequestException>;
+    forgotPassword(): Promise<void>;
+    resetPassword(): Promise<void>;
 }

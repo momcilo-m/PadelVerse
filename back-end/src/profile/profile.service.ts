@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { BadRequestException, Injectable, NotFoundException, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdateUserDTO } from 'src/models/update.user.dto';
+import { UserDTO } from 'src/models/user.dto';
 import { User } from 'src/models/user.entity';
 import { Repository } from 'typeorm';
 
@@ -11,10 +12,10 @@ export class ProfileService {
         @InjectRepository(User) private readonly userRepository:Repository<User>
     ){}
     
-    async saveFileInfo(file: Express.Multer.File, id:number) {
+    async profilePhoto(file: Express.Multer.File, id:number) {
         
         const updateData: Partial<User> = {};
-        updateData.photo = "public/"+file.filename;
+        updateData.photo = "profile/"+file.filename;
 
         const update = await this.userRepository.update({id}, updateData);
 
@@ -22,10 +23,24 @@ export class ProfileService {
             throw new NotFoundException("User photo doesn't changed");
         
         return {
-            message: 'Upload uspešan!',
+            message: 'You are successfully uploaded profile photo',
             filename: file.filename,
             path: file.path,
         };
-  }
+    }
+
+    async editProfile(id:number,user:UpdateUserDTO)
+    {    
+        console.log(user);
+
+        const update = await this.userRepository.update({id},user);
+
+        if(update.affected == 0)
+        {
+            throw new BadRequestException("Nothing has been changed!");
+        }
+
+        return update;
+    }
 
 }

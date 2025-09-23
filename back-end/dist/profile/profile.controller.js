@@ -22,13 +22,17 @@ const multer_1 = require("multer");
 const path_1 = __importDefault(require("path"));
 const profile_service_1 = require("./profile.service");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const update_user_dto_1 = require("../models/update.user.dto");
 let ProfileController = class ProfileController {
-    uploadService;
-    constructor(uploadService) {
-        this.uploadService = uploadService;
+    profileService;
+    constructor(profileService) {
+        this.profileService = profileService;
     }
     uploadProfile(req, file) {
-        return this.uploadService.saveFileInfo(file, req.user.id);
+        return this.profileService.profilePhoto(file, req.user.id);
+    }
+    editProfile(req, user) {
+        return this.profileService.editProfile(req.user.id, user);
     }
 };
 exports.ProfileController = ProfileController;
@@ -50,6 +54,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], ProfileController.prototype, "uploadProfile", null);
+__decorate([
+    (0, common_1.Patch)(""),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)(new common_1.ValidationPipe({ whitelist: true }))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, update_user_dto_1.UpdateUserDTO]),
+    __metadata("design:returntype", void 0)
+], ProfileController.prototype, "editProfile", null);
 exports.ProfileController = ProfileController = __decorate([
     (0, common_1.Controller)('profile'),
     __metadata("design:paramtypes", [profile_service_1.ProfileService])

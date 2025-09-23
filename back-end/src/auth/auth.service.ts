@@ -1,4 +1,4 @@
-import { Injectable, Next, NotFoundException, Req, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, Next, NotFoundException, Req, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserDTO } from 'src/models/user.dto';
 import { User } from 'src/models/user.entity';
@@ -9,6 +9,7 @@ import { plainToClass } from 'class-transformer';
 import { MailerService } from 'src/mailer/mailer.service';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { PasswordUserDTO } from 'src/models/password.user.dto';
 
 
 @Injectable()
@@ -34,7 +35,6 @@ export class AuthService {
         user.password = hash;
 
         //Upis u bazu
-        //const userRes = this.userRepository.create(user)
         const res = await this.userRepository.save(user);
 
         //Slanje mejla
@@ -100,5 +100,40 @@ export class AuthService {
             'status':'success',
             'user':req.user
         }
+    }
+
+    async changePassword(data:PasswordUserDTO)
+    {
+        const {email,password,newPassword,confirmPassword} = data;
+        
+        if(newPassword != confirmPassword)
+            return new BadRequestException("Password don't same")
+        
+        const user = await this.userRepository.findOneBy({email});
+        
+        if(!user)
+            return new BadRequestException("Incorrect email or password");
+        
+        const verify = await argon2.verify(user.password,password);
+        console.log(password,verify,user.password);
+        
+        if(!verify)
+            return new BadRequestException("Incorrect email or password");
+        
+        let pass = await argon2.hash(newPassword);    
+
+        user.password = pass;
+
+        return await this.userRepository.save(user);
+    }
+
+    async forgotPassword()
+    {
+
+    }
+
+    async resetPassword()
+    {
+
     }
 }

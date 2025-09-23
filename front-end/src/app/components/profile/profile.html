@@ -2,8 +2,8 @@
   <mat-tab label="Overview" style="margin: auto;">
     <div class="profile"> 
       <div class="profile-header">
-        <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D" alt="profile-photo" />
-        <p>Momcilo Marjanovic</p>
+        <img src="{{form.get('photo')?.value}}" alt="profile-photo" />
+        <p>{{form.get('first_name')?.value}} {{form.get('last_name')?.value}}</p>
       </div>
       
       <div>
@@ -11,13 +11,13 @@
         <div class="info-row">
           <mat-icon>phone</mat-icon>
         <span>Phone:</span>
-        <p>+381648568734</p>
+        <p>{{form.get('phone')?.value}}</p>
         </div>
 
         <div class="info-row">
         <mat-icon>email</mat-icon>
           <span>Email:</span>
-          <p>momcilo@momcilo.rs</p>
+          <p>{{form.get('email')?.value}}</p>
         </div>
 
         <div class="info-row">
@@ -25,16 +25,12 @@
           <span>Address:</span>
           <p>Nis, Serbia</p>
         </div>
-
-        <button mat-button (click)="editMode = true">Edit</button> 
       </div>
     </div>
   </mat-tab>
 
   <mat-tab label="Update Profile">
     <div class="profile">
-
-    
           <form (ngSubmit)="saveProfile()" [formGroup]="form"
             [ngStyle]="{
               display: 'flex',
@@ -50,9 +46,17 @@
 
             <div class="form-row">
               <mat-icon>person</mat-icon>
-              <span>Name:</span>
+              <span>First Name:</span>
               <mat-form-field appearance="outline">
-                <input matInput placeholder="Name" name="name" formControlName="name">
+                <input matInput placeholder="Name" name="name" formControlName="first_name">
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-icon>person</mat-icon>
+              <span>Last Name:</span>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Name" name="name" formControlName="last_name">
               </mat-form-field>
             </div>
 
@@ -73,10 +77,8 @@
             </div>
             <div class="actions">
               <button mat-button color="primary" type="submit">Save</button>
-              <button mat-button type="button" (click)="editMode = false">Cancel</button>
             </div>
           </form>
-          <button (click)="editMode= false" [ngStyle]="{display: editMode ? 'block' : 'none'}">X</button>
           </div>  
   </mat-tab>
 

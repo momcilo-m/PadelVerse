@@ -1,8 +1,9 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import type { Response } from 'express';
 import { UserDTO } from 'src/models/user.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { PasswordUserDTO } from 'src/models/password.user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -47,4 +48,13 @@ export class AuthController {
     {
         return this.service.isLogin(req);
     }
+
+    @HttpCode(200)
+    @Patch("change-password")
+    @UseGuards(JwtAuthGuard)
+    changePassword(@Req()req:any, @Body(new ValidationPipe({whitelist:true}))user:PasswordUserDTO)
+    {
+        user.email = req.user.email;
+        return this.service.changePassword(user);
+    }   
 }

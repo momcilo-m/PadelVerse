@@ -27,10 +27,12 @@ export class Profile {
   user$ = this.store.select(selectUser);
 
   form = new FormGroup({
-    name: new FormControl<String>(""),
+    first_name: new FormControl<String>(""),
+    last_name: new FormControl<String>(""),
     email: new FormControl<String>(""),
     phone: new FormControl<String>(""),
-    photo: new FormControl<String>("https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D")
+    photo: new FormControl<String>("")
+    //https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D
   });
   
   formPassword = new FormGroup({
@@ -44,15 +46,19 @@ export class Profile {
       filter(el=>el!=null),
       take(1)).subscribe(user => {
         this.form.patchValue({
-          name: user.first_name,
+          first_name: user.first_name,
+          last_name: user.last_name,
           phone: user.phone,
           email: user.email,
+          photo:user.photo
         });
     });
   }
 
   saveProfile()
-  {}
+  {
+    //this.store.dispatch()  
+  }
 
   onFileSelected(){}
 

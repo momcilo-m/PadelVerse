@@ -22,17 +22,25 @@ let ProfileService = class ProfileService {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
-    async saveFileInfo(file, id) {
+    async profilePhoto(file, id) {
         const updateData = {};
-        updateData.photo = "public/" + file.filename;
+        updateData.photo = "profile/" + file.filename;
         const update = await this.userRepository.update({ id }, updateData);
         if (update.affected == 0)
             throw new common_1.NotFoundException("User photo doesn't changed");
         return {
-            message: 'Upload uspešan!',
+            message: 'You are successfully uploaded profile photo',
             filename: file.filename,
             path: file.path,
         };
+    }
+    async editProfile(id, user) {
+        console.log(user);
+        const update = await this.userRepository.update({ id }, user);
+        if (update.affected == 0) {
+            throw new common_1.BadRequestException("Nothing has been changed!");
+        }
+        return update;
     }
 };
 exports.ProfileService = ProfileService;

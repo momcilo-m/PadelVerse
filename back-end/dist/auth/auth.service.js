@@ -114,6 +114,25 @@ let AuthService = class AuthService {
             'user': req.user
         };
     }
+    async changePassword(data) {
+        const { email, password, newPassword, confirmPassword } = data;
+        if (newPassword != confirmPassword)
+            return new common_1.BadRequestException("Password don't same");
+        const user = await this.userRepository.findOneBy({ email });
+        if (!user)
+            return new common_1.BadRequestException("Incorrect email or password");
+        const verify = await argon2.verify(user.password, password);
+        console.log(password, verify, user.password);
+        if (!verify)
+            return new common_1.BadRequestException("Incorrect email or password");
+        let pass = await argon2.hash(newPassword);
+        user.password = pass;
+        return await this.userRepository.save(user);
+    }
+    async forgotPassword() {
+    }
+    async resetPassword() {
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
