@@ -19,7 +19,6 @@ let Complex = class Complex {
     owner;
     open_time;
     close_time;
-    price;
     country;
     city;
 };
@@ -50,10 +49,6 @@ __decorate([
     (0, typeorm_1.Column)({ type: "time" }),
     __metadata("design:type", String)
 ], Complex.prototype, "close_time", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: "decimal" }),
-    __metadata("design:type", Number)
-], Complex.prototype, "price", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)

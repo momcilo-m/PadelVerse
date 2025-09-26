@@ -13,4 +13,8 @@ export class Court
 
     @Column()
     name:string
+
+    
+    @Column({type:"decimal"})
+    price:number
 }

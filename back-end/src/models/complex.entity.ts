@@ -25,8 +25,8 @@ export class Complex
     @Column({type:"time"})
     close_time:string
 
-    @Column({type:"decimal"})
-    price:number
+    // @Column({type:"decimal"})
+    // price:number
 
     @Column()
     country:string

@@ -16,6 +16,7 @@ let Court = class Court {
     id;
     complex;
     name;
+    price;
 };
 exports.Court = Court;
 __decorate([
@@ -31,6 +32,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Court.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "decimal" }),
+    __metadata("design:type", Number)
+], Court.prototype, "price", void 0);
 exports.Court = Court = __decorate([
     (0, typeorm_1.Entity)("courts")
 ], Court);

@@ -19,19 +19,24 @@ exports.BookingService = void 0;
 const common_1 = require("@nestjs/common");
 const stripe_1 = __importDefault(require("stripe"));
 const typeorm_1 = require("@nestjs/typeorm");
-const complex_entity_1 = require("../models/complex.entity");
 const typeorm_2 = require("typeorm");
+const court_entity_1 = require("../models/court.entity");
 let BookingService = class BookingService {
-    complexRepository;
+    courtRepository;
     stripe;
-    constructor(complexRepository) {
-        this.complexRepository = complexRepository;
+    constructor(courtRepository) {
+        this.courtRepository = courtRepository;
         this.stripe = new stripe_1.default("sk_test_51S6EVACq02uHmIrCR176zUcaEW3j9OH0GZCIEBF0wA7eBtBQemofOtsvHsQjsyOjxWwXV0hhVhrawyoGj2Q93h8b00eg9IZGxz");
     }
     async checkout(complexID, courtID, count, email) {
-        let complex = await this.complexRepository.findOneBy({ id: complexID });
-        if (complex == null) {
-            return new common_1.BadRequestException("Complex not found");
+        let court = await this.courtRepository.manager
+            .getRepository(court_entity_1.Court)
+            .createQueryBuilder('court')
+            .leftJoinAndSelect('court.complex', 'complex')
+            .where('complex.id := complexID', { complexID })
+            .getOne();
+        if (court == null) {
+            return new common_1.BadRequestException("Court not found");
         }
         return await this.stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -45,10 +50,10 @@ let BookingService = class BookingService {
                     price_data: {
                         currency: "EUR",
                         product_data: {
-                            name: complex.name,
+                            name: court.complex.name,
                             images: ["image.png"],
                         },
-                        unit_amount: complex.price * count * 100,
+                        unit_amount: court.price * count * 100,
                     },
                     quantity: count
                 }
@@ -63,7 +68,7 @@ let BookingService = class BookingService {
 exports.BookingService = BookingService;
 exports.BookingService = BookingService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(complex_entity_1.Complex)),
+    __param(0, (0, typeorm_1.InjectRepository)(court_entity_1.Court)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], BookingService);
 //# sourceMappingURL=booking.service.js.map

@@ -21,9 +21,9 @@
         </div>
 
         <div class="info-row">
-          <mat-icon>home</mat-icon>
-          <span>Address:</span>
-          <p>Nis, Serbia</p>
+          <mat-icon>person</mat-icon>
+          <span>Gender:</span>
+          <p>{{form.get('gender')?.value ? 'Male': 'Female'}}</p>
         </div>
       </div>
     </div>

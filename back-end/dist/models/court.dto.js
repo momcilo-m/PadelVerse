@@ -14,6 +14,7 @@ const class_validator_1 = require("class-validator");
 class CourtDTO {
     complex;
     name;
+    price;
 }
 exports.CourtDTO = CourtDTO;
 __decorate([
@@ -25,4 +26,9 @@ __decorate([
     (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], CourtDTO.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsPositive)(),
+    (0, class_validator_1.Min)(1),
+    __metadata("design:type", Number)
+], CourtDTO.prototype, "price", void 0);
 //# sourceMappingURL=court.dto.js.map

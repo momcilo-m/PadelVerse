@@ -1,4 +1,4 @@
-import { IsDefined, IsPositive, MAX, MaxLength } from "class-validator";
+import { IsDefined, IsPositive, MAX, MaxLength, Min } from "class-validator";
 
 export class CourtDTO
 {
@@ -8,4 +8,8 @@ export class CourtDTO
 
     @MaxLength(100)
     name:string
+    
+    @IsPositive()
+    @Min(1)
+    price:number
 }

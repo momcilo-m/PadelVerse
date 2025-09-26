@@ -33,6 +33,7 @@ import { ProfileModule } from './profile/profile.module';
 import { ProfileController } from './profile/profile.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { join } from 'path';
     CourtsModule,
     BookingModule,
     ProfileModule,
+    StatsModule,
   ],
   controllers: [AppController, UsersController, AuthController, ComplexController, TermsController,TournamentsController, BookingController,ProfileController],
   providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService,ProfileController],

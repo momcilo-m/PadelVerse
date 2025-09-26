@@ -4,7 +4,6 @@ export declare class ComplexDTO {
     owner: number;
     open_time: string;
     close_time: string;
-    price: number;
     country: string;
     city: string;
 }

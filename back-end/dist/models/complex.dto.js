@@ -17,7 +17,6 @@ class ComplexDTO {
     owner;
     open_time;
     close_time;
-    price;
     country;
     city;
 }
@@ -43,11 +42,6 @@ __decorate([
     (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "end_time must be in HH:mm:ss format" }),
     __metadata("design:type", String)
 ], ComplexDTO.prototype, "close_time", void 0);
-__decorate([
-    (0, class_validator_1.IsPositive)(),
-    (0, class_validator_1.Min)(1),
-    __metadata("design:type", Number)
-], ComplexDTO.prototype, "price", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)

@@ -6,21 +6,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BookingModule = void 0;
+exports.StatsModule = void 0;
 const common_1 = require("@nestjs/common");
-const booking_service_1 = require("./booking.service");
-const auth_module_1 = require("../auth/auth.module");
-const booking_controller_1 = require("./booking.controller");
-const courts_module_1 = require("../courts/courts.module");
-let BookingModule = class BookingModule {
+const stats_controller_1 = require("./stats.controller");
+const stats_service_1 = require("./stats.service");
+const terms_module_1 = require("../terms/terms.module");
+let StatsModule = class StatsModule {
 };
-exports.BookingModule = BookingModule;
-exports.BookingModule = BookingModule = __decorate([
+exports.StatsModule = StatsModule;
+exports.StatsModule = StatsModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, courts_module_1.CourtsModule],
-        providers: [booking_service_1.BookingService],
-        exports: [booking_service_1.BookingService],
-        controllers: [booking_controller_1.BookingController]
+        controllers: [stats_controller_1.StatsController],
+        providers: [stats_service_1.StatsService],
+        imports: [terms_module_1.TermsModule]
     })
-], BookingModule);
-//# sourceMappingURL=booking.module.js.map
+], StatsModule);
+//# sourceMappingURL=stats.module.js.map
