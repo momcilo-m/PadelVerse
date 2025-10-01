@@ -1,44 +1,52 @@
 import { createReducer, on } from "@ngrx/store"
 import { RequestState } from "../states/request.state"
-import { isLogin, login, loginFailed, loginSuccessfully } from "../actions/user.action"
+import { isLogin, login, loginFailed, loginSuccessfully, updateProfile, updateProfileFailed, updateProfileImage, updateProfileImageFailed, updateProfileImageSuccessfully, updateProfileSuccessfully } from "../actions/user.action"
 import { booking, bookingFailed, bookingSuccess, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts } from "../actions/complex.action"
 import { weather, weatherFailed, weatherSuccess } from "../actions/weather.action"
 
-export const initRequestState : RequestState = 
+export const initRequestState: RequestState =
 {
-    loading:true,
-    error:false,
-    message:'Init'
+    loading: true,
+    error: false,
+    message: 'Init'
 }
 
 export const requestReducer = createReducer(
     initRequestState,
-    on(weatherSuccess,weatherFailed,loadedCourts,bookingSuccess,bookingFailed,loginSuccessfully,loginFailed,loadedComplex,failedComplex,(state)=>{
+    on(
+        updateProfileSuccessfully, updateProfileFailed,
+        weatherSuccess, weatherFailed,
+        loadedCourts,
+        bookingSuccess, bookingFailed,
+        loginSuccessfully, loginFailed,
+        loadedComplex, failedComplex,
+        updateProfileImageSuccessfully, updateProfileImageFailed,
+        (state) => {
+            return {
+                ...state,
+                loading: false
+            }
+        }),
+
+    on(updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
         return {
-            ...state,
-            loading:false
+            loading: true,
+            error: false,
+            message: ""
         }
     }),
 
-    on(weather,loadCourts,login,booking,loadComlpex,()=>{
-        return {
-            loading:true,
-            error:false,
-            message:""
-        }
-    }),
-
-    on(weatherFailed,loginFailed,failedComplex,(state,{message})=>{
+    on(updateProfileImageFailed, updateProfileFailed, weatherFailed, loginFailed, failedComplex, (state, { message }) => {
         return {
             ...state,
             message
         }
     }),
 
-    on(isLogin,(state)=>{
-        return{
+    on(isLogin, (state) => {
+        return {
             ...state,
-            loading:true,
+            loading: true,
         }
     }),
 )

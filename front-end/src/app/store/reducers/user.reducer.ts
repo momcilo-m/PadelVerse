@@ -1,38 +1,52 @@
 import { createReducer, on } from "@ngrx/store";
-import { isLogin, login, loginFailed, loginSuccessfully } from "../actions/user.action"; 
+import { isLogin, login, loginFailed, loginSuccessfully, updateProfileImageSuccessfully, updateProfileSuccessfully } from "../actions/user.action";
 import { UserState } from "../states/user.state";
 
-export const initUserState : UserState = 
+export const initUserState: UserState =
 {
-    user:null
+    user: null
 }
 
 export const userReducer = createReducer(
     initUserState,
-    on(loginSuccessfully,(_,{user})=>{
+    on(loginSuccessfully, (_, { user }) => {
         return {
             user,
         }
     }),
-    on(login,()=>{
+    on(login, () => {
         return {
-            user:null,
+            user: null,
             // loading:true,
             // error:false,
             // message:""
         }
     }),
-    on(loginFailed,()=>{
+    on(loginFailed, () => {
         return {
-            user:null,
+            user: null,
         }
     }),
-    on(isLogin,()=>{
-        return{
+    on(isLogin, () => {
+        return {
             // ...state,
-            user:null,
+            user: null,
             // loading:true,
             // error:false,
+        }
+    }),
+
+    on(updateProfileSuccessfully, (state, payload) => {
+        return {
+            ...state,
+            user: payload.user
+        }
+    }),
+
+    on(updateProfileImageSuccessfully, (state, payload) => {
+        return {
+            ...state,
+            user: state?.user ? { ...state.user, photo: payload.path } : state.user
         }
     })
 

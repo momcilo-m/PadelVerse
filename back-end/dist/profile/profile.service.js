@@ -31,16 +31,17 @@ let ProfileService = class ProfileService {
         return {
             message: 'You are successfully uploaded profile photo',
             filename: file.filename,
-            path: file.path,
+            path: `profile/${file.filename}`,
         };
     }
-    async editProfile(id, user) {
-        console.log(user);
-        const update = await this.userRepository.update({ id }, user);
-        if (update.affected == 0) {
-            throw new common_1.BadRequestException("Nothing has been changed!");
+    async editProfile(id, userData) {
+        const existingUser = await this.userRepository.findOneBy({ id });
+        if (!existingUser) {
+            throw new common_1.NotFoundException("User not found");
         }
-        return update;
+        const updatedUser = this.userRepository.merge(existingUser, userData);
+        const savedUser = await this.userRepository.save(updatedUser);
+        return savedUser;
     }
 };
 exports.ProfileService = ProfileService;

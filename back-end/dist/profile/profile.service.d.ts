@@ -9,5 +9,5 @@ export declare class ProfileService {
         filename: string;
         path: string;
     }>;
-    editProfile(id: number, user: UpdateUserDTO): Promise<import("typeorm").UpdateResult>;
+    editProfile(id: number, userData: UpdateUserDTO): Promise<User>;
 }

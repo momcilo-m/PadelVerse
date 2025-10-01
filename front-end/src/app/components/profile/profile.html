@@ -1,21 +1,21 @@
 <mat-tab-group>
   <mat-tab label="Overview" style="margin: auto;">
-    <div class="profile"> 
+    <div class="profile">
       <div class="profile-header">
-        <img src="{{form.get('photo')?.value}}" alt="profile-photo" />
+        <img src="http://localhost:3000/{{form.get('photo')?.value}}" alt="profile-photo" />
         <p>{{form.get('first_name')?.value}} {{form.get('last_name')?.value}}</p>
       </div>
-      
+
       <div>
         <p>About: </p>
         <div class="info-row">
           <mat-icon>phone</mat-icon>
-        <span>Phone:</span>
-        <p>{{form.get('phone')?.value}}</p>
+          <span>Phone:</span>
+          <p>{{form.get('phone')?.value}}</p>
         </div>
 
         <div class="info-row">
-        <mat-icon>email</mat-icon>
+          <mat-icon>email</mat-icon>
           <span>Email:</span>
           <p>{{form.get('email')?.value}}</p>
         </div>
@@ -31,100 +31,97 @@
 
   <mat-tab label="Update Profile">
     <div class="profile">
-          <form (ngSubmit)="saveProfile()" [formGroup]="form"
-            [ngStyle]="{
+      <form (ngSubmit)="updateProfile()" [formGroup]="form" [ngStyle]="{
               display: 'flex',
               flexDirection: 'column',
               maxWidth: '350px'
             }">
 
-            <div class="form-row form-image">
-              <img [src]="form.get('photo')?.value ? form.get('photo')?.value : ''" alt="Profile Photo" class="profile-photo" (click)="fileInput.click()">
-              <input type="file" #fileInput style="display: none" (change)="onFileSelected()">
-            </div>
+        <div class="form-row form-image">
+          <img src="http://localhost:3000/{{form.get('photo')?.value}}" alt="Profile Photo" class="profile-photo"
+            (click)="fileInput.click()">
+          <input type="file" #fileInput style="display: none" (change)="onFileSelected()">
+        </div>
 
 
-            <div class="form-row">
-              <mat-icon>person</mat-icon>
-              <span>First Name:</span>
-              <mat-form-field appearance="outline">
-                <input matInput placeholder="Name" name="name" formControlName="first_name">
-              </mat-form-field>
-            </div>
+        <div class="form-row">
+          <mat-icon>person</mat-icon>
+          <span>First Name:</span>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Name" name="name" formControlName="first_name">
+          </mat-form-field>
+        </div>
 
-            <div class="form-row">
-              <mat-icon>person</mat-icon>
-              <span>Last Name:</span>
-              <mat-form-field appearance="outline">
-                <input matInput placeholder="Name" name="name" formControlName="last_name">
-              </mat-form-field>
-            </div>
+        <div class="form-row">
+          <mat-icon>person</mat-icon>
+          <span>Last Name:</span>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Name" name="name" formControlName="last_name">
+          </mat-form-field>
+        </div>
 
-            <div class="form-row">
-              <mat-icon>phone</mat-icon>
-              <span>Phone:</span>
-              <mat-form-field appearance="outline">
-                <input matInput matInput placeholder="Phone" name="phone" formControlName="phone">
-              </mat-form-field>
-            </div>
+        <div class="form-row">
+          <mat-icon>phone</mat-icon>
+          <span>Phone:</span>
+          <mat-form-field appearance="outline">
+            <input matInput matInput placeholder="Phone" name="phone" formControlName="phone">
+          </mat-form-field>
+        </div>
 
-            <div class="form-row">
-              <mat-icon>email</mat-icon>
-              <span>Email:</span>
-              <mat-form-field appearance="outline">
-                <input matInput placeholder="Email" name="email" formControlName="email" >
-              </mat-form-field>
-            </div>
-            <div class="actions">
-              <button mat-button color="primary" type="submit">Save</button>
-            </div>
-          </form>
-          </div>  
+        <div class="form-row">
+          <mat-icon>email</mat-icon>
+          <span>Email:</span>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Email" name="email" formControlName="email">
+          </mat-form-field>
+        </div>
+        <div class="actions">
+          <button mat-button color="primary" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
   </mat-tab>
 
   <mat-tab label="Change password">
     <div class="profile">
 
-    <form (ngSubmit)="updatePassword()" [formGroup]="formPassword"
-            [ngStyle]="{
+      <form (ngSubmit)="updatePassword()" [formGroup]="formPassword" [ngStyle]="{
               display: 'flex',
               flexDirection: 'column',
               maxWidth: '350px'
             }">
 
-              <div class="form-row">
-                <mat-icon>password</mat-icon>
-                <span>Password:</span>
-                <mat-form-field appearance="outline">
-                  <input matInput placeholder="Password" name="password" formControlName="password" type="password">
-                </mat-form-field>
-              </div>
+        <div class="form-row">
+          <mat-icon>password</mat-icon>
+          <span>Password:</span>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Password" name="password" formControlName="password" type="password">
+          </mat-form-field>
+        </div>
 
-              <div class="form-row">
-                <mat-icon>password</mat-icon>
-                <span>Password:</span>
-                <mat-form-field appearance="outline">
-                  <input matInput placeholder="New Password" name="newPassword" formControlName="newPassword" type="password">
-                </mat-form-field>
-              </div>
+        <div class="form-row">
+          <mat-icon>password</mat-icon>
+          <span>Password:</span>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="New Password" name="newPassword" formControlName="newPassword" type="password">
+          </mat-form-field>
+        </div>
 
-              <div class="form-row">
-                <mat-icon>password</mat-icon>
-                <span>Password:</span>
-                <mat-form-field appearance="outline">
-                  <input matInput placeholder="Confirm New Password" name="confirmPassword" formControlName="confirmPassword" type="password">
-                </mat-form-field>
-              </div>
+        <div class="form-row">
+          <mat-icon>password</mat-icon>
+          <span>Password:</span>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Confirm New Password" name="confirmPassword" formControlName="confirmPassword"
+              type="password">
+          </mat-form-field>
+        </div>
 
-              <div class="actions">
-                <button mat-button color="primary" type="submit">Change Password</button>
-            </div>
-          </form>
-              </div>
+        <div class="actions">
+          <button mat-button color="primary" type="submit">Change Password</button>
+        </div>
+      </form>
+    </div>
 
   </mat-tab>
 
-  <mat-tab label="Player  ">
-    <p>Sadržaj treće tab-a</p>
-  </mat-tab>
 </mat-tab-group>

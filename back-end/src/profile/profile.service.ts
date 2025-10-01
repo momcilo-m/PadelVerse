@@ -1,46 +1,47 @@
-import { BadRequestException, Injectable, NotFoundException, UseInterceptors } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDTO } from 'src/models/update.user.dto';
-import { UserDTO } from 'src/models/user.dto';
 import { User } from 'src/models/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProfileService {
-    
+
     constructor(
-        @InjectRepository(User) private readonly userRepository:Repository<User>
-    ){}
-    
-    async profilePhoto(file: Express.Multer.File, id:number) {
-        
+        @InjectRepository(User) private readonly userRepository: Repository<User>
+    ) { }
+
+    async profilePhoto(file: Express.Multer.File, id: number) {
+
         const updateData: Partial<User> = {};
-        updateData.photo = "profile/"+file.filename;
+        updateData.photo = "profile/" + file.filename;
 
-        const update = await this.userRepository.update({id}, updateData);
+        const update = await this.userRepository.update({ id }, updateData);
 
-        if(update.affected == 0)
+        if (update.affected == 0)
             throw new NotFoundException("User photo doesn't changed");
-        
+
         return {
             message: 'You are successfully uploaded profile photo',
             filename: file.filename,
-            path: file.path,
+            path: `profile/${file.filename}`,
         };
     }
 
-    async editProfile(id:number,user:UpdateUserDTO)
-    {    
-        console.log(user);
+    async editProfile(id: number, userData: UpdateUserDTO) {
 
-        const update = await this.userRepository.update({id},user);
+        const existingUser = await this.userRepository.findOneBy({ id });
 
-        if(update.affected == 0)
-        {
-            throw new BadRequestException("Nothing has been changed!");
+        if (!existingUser) {
+            throw new NotFoundException("User not found");
         }
 
-        return update;
+        const updatedUser = this.userRepository.merge(existingUser, userData);
+
+        const savedUser = await this.userRepository.save(updatedUser);
+
+        return savedUser;
     }
+
 
 }

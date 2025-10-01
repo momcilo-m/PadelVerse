@@ -8,5 +8,5 @@ export declare class ProfileController {
         filename: string;
         path: string;
     }>;
-    editProfile(req: any, user: UpdateUserDTO): Promise<import("typeorm").UpdateResult>;
+    editProfile(req: any, user: UpdateUserDTO): Promise<import("../models/user.entity").User>;
 }
