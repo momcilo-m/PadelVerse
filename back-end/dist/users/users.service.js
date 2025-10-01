@@ -26,7 +26,11 @@ let UsersService = class UsersService {
         return this.userRepository.find();
     }
     getById(id) {
-        return this.userRepository.findBy({ id });
+        return this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.email', 'user.photo', 'user.first_name', 'user.last_name'])
+            .where('user.id = :id', { id })
+            .getOne();
     }
 };
 exports.UsersService = UsersService;

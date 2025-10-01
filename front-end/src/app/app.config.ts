@@ -26,7 +26,7 @@ export const appConfig: ApplicationConfig = {
       complexStatus:complexReducer,
       weatherStatus:weatherReducer
     }),
-    provideStoreDevtools({maxAge:25,logOnly:!isDevMode()}),
+    provideStoreDevtools({maxAge:25,logOnly:!isDevMode(),trace:true}),
     provideEffects(UserEffect,ComplexEffect,WeatherEffect),
 ]
 };

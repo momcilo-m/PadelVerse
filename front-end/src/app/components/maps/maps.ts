@@ -20,7 +20,7 @@ export class Maps {
   center: google.maps.LatLngLiteral = { lat: 40.73061, lng: -73.935242 };
   zoom = 13;
 
-  private subscription!: Subscription;
+  //private subscription!: Subscription;
 
   store = inject<Store<AppState>>(Store)
 

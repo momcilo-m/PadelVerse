@@ -4,5 +4,5 @@ export declare class UsersService {
     private readonly userRepository;
     constructor(userRepository: Repository<User>);
     getAll(): Promise<User[]>;
-    getById(id: number): Promise<User[]>;
+    getById(id: number): Promise<User | null>;
 }

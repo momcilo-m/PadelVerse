@@ -42,6 +42,12 @@ export class Complex {
     court : new FormControl<number>(-1),
   });
   
+
+  location : {lat:number, lng:number} = {lat: 42, lng: 23}
+  city:String="";
+  country:String = "";
+  price:number=1;
+
   store = inject<Store<AppState>>(Store)
   
   courts$ = this.store.select(selectCourts);
@@ -53,10 +59,6 @@ export class Complex {
     map(complex => complex ? {lat: complex.location.x, lng: complex.location.y} : {lat: 42, lng: 23})
   );
 
-  location : {lat:number, lng:number} = {lat: 42, lng: 23}
-  city:String="";
-  country:String = "";
-  price:number=1;
 
   complex$ = combineLatest([
       this.store.select(selectComplexes),
@@ -68,8 +70,6 @@ export class Complex {
       this.location = {lat:complex?.location.x || 42, lng:complex?.location.y || 23};
       this.city = complex?.city || ""
       this.country = complex?.country || ""
-      this.price = complex?.price || 1;
-
       console.log(this.location, this.city, this.country)
     })
 
@@ -80,11 +80,25 @@ export class Complex {
       return courts$.map(el=>
         ({
           ...el,
-          isAvailable:available$.includes(el.id)
+          // isAvailable:available$.includes(el.id),
+          isAvailable:true
         })
       )
     })
   )
+
+  selectedCourtId$ = this.store.select(selectedCourt)
+
+  selectedCourt$ = combineLatest([this.courts$,this.selectedCourtId$]).pipe(
+    map(([courts, id]) => courts.find(c => c.id === id) ?? null),
+  );
+
+  price$ = this.selectedCourt$.pipe(
+    map(court => court ? court.price : 0),
+  )
+
+
+  //price$ = 1;
 
   weather$ = this.store.select(selectWeather);
   messageError$ = this.store.select(selectError);
@@ -151,10 +165,15 @@ export class Complex {
     }))
   }
 
-  onClickCourt(id:number,isAvailable:boolean)
+  onClickCourt(id:number,isAvailable:boolean, event?:Event)
   {
+    event?.preventDefault();
     if(isAvailable)
+    {
       this.form.get('court')?.setValue(id);
+      this.store.dispatch(selectCourt({id}))
+    }
+
   }
 
   checkout()
@@ -185,8 +204,8 @@ export class Complex {
     return start.getHours().toString().padStart(2,"0")+":00";
   }
 
-onAnyEvent(event: any, type: string) {
-  console.log(type, event);
-}
+  onAnyEvent(event: any, type: string) {
+    console.log(type, event);
+  }
 
 }

@@ -16,18 +16,16 @@ exports.StatsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const term_entity_1 = require("../models/term.entity");
+const users_service_1 = require("../users/users.service");
 const typeorm_2 = require("typeorm");
 let StatsService = class StatsService {
     termsRepository;
-    constructor(termsRepository) {
+    userService;
+    constructor(termsRepository, userService) {
         this.termsRepository = termsRepository;
+        this.userService = userService;
     }
-    async getTermsByMonth(complex) {
-        const startOfMonth = new Date();
-        startOfMonth.setDate(1);
-        startOfMonth.setHours(0, 0, 0, 0);
-        const endOfMonth = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth() + 1, 0);
-        endOfMonth.setHours(23, 59, 59, 999);
+    async getTermsByDateRange(complex, startOfMonth, endOfMonth) {
         let res = await this.termsRepository.manager
             .getRepository(term_entity_1.Term)
             .createQueryBuilder('term')
@@ -39,8 +37,29 @@ let StatsService = class StatsService {
             .getRawMany();
         return res;
     }
+    thisMonth() {
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+        const endOfMonth = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth() + 1, 0);
+        endOfMonth.setHours(23, 59, 59, 999);
+        return [startOfMonth, endOfMonth];
+    }
+    thisWeek() {
+        const date = new Date();
+        const day = date.getDay();
+        const offsetDay = (day === 0 ? -6 : 1) - day;
+        const monday = new Date();
+        monday.setDate(date.getDate() + offsetDay);
+        monday.setHours(0, 0, 0, 0);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        sunday.setHours(23, 59, 59, 999);
+        return [monday, sunday];
+    }
     async monthStats(complex) {
-        var res = await this.getTermsByMonth(complex);
+        const [start, end] = this.thisMonth();
+        var res = await this.getTermsByDateRange(complex, start, end);
         let totalCount = 0;
         let courtsCount = {};
         let players = {};
@@ -55,18 +74,24 @@ let StatsService = class StatsService {
             amountPerWeek[week - 1] += el.term_count * el.price;
         });
         let topPlayer = Object.entries(players).reduce((max, [id, count]) => count > max.count ? { id: Number(id), count } : max, { id: 0, count: 0 });
+        let topUser = await this.userService.getById(topPlayer.id);
         return {
             status: 'success',
             data: {
                 totalCount,
                 courtsCount,
                 totalAmount,
-                amountPerWeek
+                amountPerWeek,
+                user: {
+                    topUser,
+                    count: topPlayer.count
+                }
             }
         };
     }
     async weekStats(complex) {
-        var res = await this.getTermsByMonth(complex);
+        const [start, end] = this.thisWeek();
+        var res = await this.getTermsByDateRange(complex, start, end);
         let totalCount = 0;
         let totalAmount = 0;
         let courtsCount = {};
@@ -102,6 +127,7 @@ exports.StatsService = StatsService;
 exports.StatsService = StatsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(term_entity_1.Term)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        users_service_1.UsersService])
 ], StatsService);
 //# sourceMappingURL=stats.service.js.map

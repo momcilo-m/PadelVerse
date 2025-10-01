@@ -9,6 +9,10 @@ export declare class StatsController {
             courtsCount: Record<string, number>;
             totalAmount: number;
             amountPerWeek: number[];
+            user: {
+                topUser: import("../models/user.entity").User | null;
+                count: number;
+            };
         };
     }>;
     getWeekStats(id: number): Promise<{

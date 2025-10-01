@@ -1,10 +1,12 @@
 import { createAction, props } from "@ngrx/store";
 import { ComplexInterface } from "../../models/complex.interface";
+import { Complex } from "../../components/complex/complex";
 
 export const loadComlpex = createAction("loadComplex")
 export const loadedComplex = createAction('loadedComplex',props<{complexes:ComplexInterface[]}>());
 export const failedComplex = createAction('failedComplex',props<{message:string}>());
 export const selectComplex = createAction('selectComplex',props<{id:number}>())
+export const addComplex = createAction('addComplex',props<{complex:ComplexInterface}>())
 
 export const loadCourts = createAction('loadCourts',props<{complex:number, date:string, time:string, count:number}>());
 export const loadedCourts = createAction('loadedCourts',props<{courts:CourtInterface[],avalaible:number[]}>())

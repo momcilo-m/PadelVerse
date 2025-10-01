@@ -17,8 +17,8 @@ export declare class ComplexService {
         success: boolean;
         message: string;
     }>;
-    freeCourts(id: number, start: string, count: number, date: Date): Promise<{
+    freeCourts(id: number, start: string, count: number, date: Date): Promise<never[] | {
         all: Court[];
         available: number[];
-    } | never[]>;
+    }>;
 }

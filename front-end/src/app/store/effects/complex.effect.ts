@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { ComplexService } from "../../services/complex.service";
 import { catchError, filter, from, map, of, switchMap, tap, withLatestFrom } from "rxjs";
-import { booking, bookingFailed, bookingSuccess, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex } from "../actions/complex.action";
+import { addComplex, booking, bookingFailed, bookingSuccess, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex } from "../actions/complex.action";
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { weather, weatherFailed } from "../actions/weather.action";
 import { Store } from "@ngrx/store";
@@ -28,7 +28,8 @@ export class ComplexEffect
             withLatestFrom(this.store.select(selectedLocation)),
             filter(([id, location]) => !location),
             switchMap(([{id},location])=>this.complexService.getComplexById(id).pipe(
-              map((res)=>loadedComplex({complexes:[res]})),
+              //map((res)=>loadedComplex({complexes:[res]})),
+              map((complex)=>addComplex({complex})),
               catchError((err)=>of(failedComplex({message:err.message || "Failed while fetch complex"})))  
             ))
         )
@@ -52,7 +53,7 @@ export class ComplexEffect
                 switchMap((res)=>
                     from([
                         loadedCourts({courts:res.all, avalaible:res.available}),
-                        weather({date:param.date,hour:param.time})
+                        //weather({date:param.date,hour:param.time})
                     ]
                 )),
                 catchError(err=>

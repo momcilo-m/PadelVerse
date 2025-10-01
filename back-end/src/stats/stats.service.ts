@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { max } from 'class-validator';
 import { Term } from 'src/models/term.entity';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -9,20 +9,13 @@ export class StatsService {
 
     constructor(
         @InjectRepository(Term) private readonly termsRepository: Repository<Term>,
-        //private readonly courtService:CourtsService,
+        private readonly userService: UsersService,
         //@Inject(forwardRef(() => ComplexService)) private readonly complexService: ComplexService
     ){}
 
 
-    private async getTermsByMonth(complex:number)
+    private async getTermsByDateRange(complex:number,startOfMonth:Date, endOfMonth:Date)
     {
-        const startOfMonth = new Date();
-        startOfMonth.setDate(1);
-        startOfMonth.setHours(0, 0, 0, 0);
-
-        const endOfMonth = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth() + 1, 0);
-        endOfMonth.setHours(23, 59, 59, 999);
-
         let res = await this.termsRepository.manager
         .getRepository(Term)
         .createQueryBuilder('term')
@@ -36,10 +29,41 @@ export class StatsService {
         return res;
     }
 
+    private thisMonth()
+    {
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        const endOfMonth = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth() + 1, 0);
+        endOfMonth.setHours(23, 59, 59, 999); 
+        
+        return [startOfMonth,endOfMonth];
+    }
+
+    private thisWeek()
+    {
+        const date = new Date();
+
+        const day = date.getDay();
+        const offsetDay = (day === 0 ? -6 : 1) - day 
+
+        const monday = new Date();
+        monday.setDate(date.getDate() + offsetDay);
+        monday.setHours(0, 0, 0, 0);
+
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        sunday.setHours(23, 59, 59, 999);
+
+        return [monday,sunday];
+    }
+
     async monthStats(complex:number)
     {
+        const [start,end] = this.thisMonth()
 
-        var res = await this.getTermsByMonth(complex)
+        var res = await this.getTermsByDateRange(complex,start,end)
 
         let totalCount = 0;
         let courtsCount:Record<string,number>={} 
@@ -63,21 +87,29 @@ export class StatsService {
 
         // console.log(totalCount,courtsCount,totalAmount,topPlayer,amountPerWeek)
 
+        let topUser = await this.userService.getById(topPlayer.id);
+
         return {
             status:'success',
             data:{
                 totalCount,
                 courtsCount,
                 totalAmount,
-                amountPerWeek
+                amountPerWeek,
+                user:
+                {
+                    topUser,
+                    count:topPlayer.count
+                }
             }
         }
     }
 
-
     async weekStats(complex:number)
     {
-        var res = await this.getTermsByMonth(complex)
+        const [start,end] = this.thisWeek();
+
+        var res = await this.getTermsByDateRange(complex,start,end)
 
         let totalCount = 0;
         let totalAmount = 0;
@@ -86,6 +118,7 @@ export class StatsService {
         let todayAmount = 0;
 
         res.forEach(el=>{
+
             totalCount += el.term_court;
             totalAmount += el.term_count * el.price
             courtsCount[el.name] = (courtsCount[el.name] || 0) + 1;
@@ -97,7 +130,6 @@ export class StatsService {
             }
         })
 
-        // console.log(totalCount,courtsCount,totalAmount,todayCount,todayAmount)
 
         return {
             status:'success',

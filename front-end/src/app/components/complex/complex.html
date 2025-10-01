@@ -116,7 +116,7 @@
                 <mat-icon>wallet</mat-icon>
                 <p>Total Price</p>
             </div>
-            ${{ (price * (form.get('count')?.value || 1)).toFixed(2) }}
+            ${{ (((price$ | async) || 0) * (form.get('count')?.value || 1)).toFixed(2) }}
         </div>
 
         <div class="checkout">
