@@ -15,3 +15,7 @@ export const selectCourt = createAction('selectCourt', props<{ id: number }>())
 export const booking = createAction("booking", props<{ complex: number, court: number, count: number }>())
 export const bookingSuccess = createAction("bookingSuccess", props<{ id: string }>());
 export const bookingFailed = createAction('bookingFailed', props<{ message: string }>())
+
+export const userComplex = createAction("userComplex", props<{ id: number }>())
+export const userComplexSuccessfully = createAction("userComplexSuccessfully", props<{ complex: ComplexInterface[] }>())
+export const userComplexFailed = createAction("userComplexFailed", props<{ message: string }>())

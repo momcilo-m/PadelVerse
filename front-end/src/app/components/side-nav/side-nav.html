@@ -5,8 +5,8 @@
   <span>My App</span>
 </mat-toolbar>
 
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav mode="side" class="sidenav">
+<mat-sidenav-container class="sidenav-container">
+  <!-- <mat-sidenav #sidenav mode="side" class="sidenav">
       <mat-nav-list>
         <a mat-list-item routerLink="/complex" routerLinkActive="active">
           <mat-icon>travel_explore</mat-icon>
@@ -26,11 +26,59 @@
           <span>Management</span>
         </a>
       </mat-nav-list>
-    </mat-sidenav>
+    </mat-sidenav> -->
 
-    <mat-sidenav-content>
-      <main style="max-width: 1400px; margin: auto; height: 100%;">
-        <router-outlet></router-outlet>
-      </main>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" class="sidenav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/complex" routerLinkActive="active">
+        <mat-icon>travel_explore</mat-icon>
+        <span>Complex</span>
+      </a>
+      <a mat-list-item routerLink="/maps" routerLinkActive="active">
+        <mat-icon>map</mat-icon>
+        <span>Map</span>
+      </a>
+      <a mat-list-item routerLink="/profile" routerLinkActive="active">
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </a>
+
+      <a mat-list-item routerLink="/management" routerLinkActive="active">
+        <mat-icon>book</mat-icon>
+        <span>Management</span>
+      </a>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+
+  <mat-sidenav-content>
+    <main style="max-width: 1400px; margin: auto; height: 100%;">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
+<!-- Management with sub-items -->
+<!-- <mat-expansion-panel class="sidenav-expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>book</mat-icon>
+            <span>Management</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-nav-list>
+          <a mat-list-item routerLink="/management/complex" routerLinkActive="active">
+            <span>Complex</span>
+          </a>
+          <a mat-list-item routerLink="/management/courts" routerLinkActive="active">
+            <span>Courts</span>
+          </a>
+          <a mat-list-item routerLink="/management/stats" routerLinkActive="active">
+            <span>Stats</span>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel> -->

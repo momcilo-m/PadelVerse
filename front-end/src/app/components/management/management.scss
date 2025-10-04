@@ -1,0 +1,44 @@
+.complex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.complex img {
+    width: 140px;
+    height: 70px;
+}
+
+.complex-list {
+    border: 1px solid black;
+    border-radius: 20px;
+    max-width: 400px;
+    max-height: 440px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: 0;
+    padding: 10px;
+}
+
+.complex:hover {
+    cursor: pointer;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+}
+
+.complex h3 {
+    text-align: center;
+}
+
+#edit {
+    color: rgb(0, 38, 255);
+}
+
+#delete {
+    color: rgb(253, 49, 49);
+}

@@ -4,51 +4,47 @@ import { UserState } from "../states/user.state";
 
 export const initUserState: UserState =
 {
-    user: null
+    user: null,
+    complex: [],
+    courts: []
 }
 
 export const userReducer = createReducer(
     initUserState,
-    on(loginSuccessfully, (_, { user }) => {
+    on(loginSuccessfully, (state, { user }) => {
         return {
+            ...state,
             user,
         }
     }),
-    on(login, () => {
+    on(login, (state) => {
         return {
-            user: null,
-            // loading:true,
-            // error:false,
-            // message:""
-        }
-    }),
-    on(loginFailed, () => {
-        return {
+            ...state,
             user: null,
         }
     }),
-    on(isLogin, () => {
+    on(loginFailed, (state) => {
         return {
-            // ...state,
+            ...state,
             user: null,
-            // loading:true,
-            // error:false,
         }
     }),
-
+    on(isLogin, (state) => {
+        return {
+            ...state,
+            user: null,
+        }
+    }),
     on(updateProfileSuccessfully, (state, payload) => {
         return {
             ...state,
             user: payload.user
         }
     }),
-
     on(updateProfileImageSuccessfully, (state, payload) => {
         return {
             ...state,
             user: state?.user ? { ...state.user, photo: payload.path } : state.user
         }
     })
-
-
 )
