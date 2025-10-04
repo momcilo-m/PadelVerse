@@ -3,26 +3,26 @@ export declare class StatsController {
     private readonly service;
     constructor(service: StatsService);
     getMonthStats(id: number): Promise<{
-        status: string;
-        data: {
-            totalCount: number;
-            courtsCount: Record<string, number>;
-            totalAmount: number;
-            amountPerWeek: number[];
-            user: {
-                topUser: import("../models/user.entity").User | null;
-                count: number;
-            };
+        totalCount: number;
+        courtsCount: Record<string, number>;
+        totalAmount: number;
+        amountPerWeek: number[];
+        user: {
+            topUser: import("../models/user.entity").User | null;
+            count: number;
         };
     }>;
     getWeekStats(id: number): Promise<{
-        status: string;
-        data: {
-            totalCount: number;
-            courtsCount: Record<string, number>;
-            totalAmount: number;
-            todayCount: number;
-            todayAmount: number;
-        };
+        totalCount: number;
+        courtsCount: Record<string, number>;
+        totalAmount: number;
+        todayCount: number;
+        todayAmount: number;
+    }>;
+    getGlobalStats(id: number): Promise<{
+        noOfComplex: number;
+        noOfCourts: number;
+        noOfTerms: number;
+        totalAmount: number;
     }>;
 }

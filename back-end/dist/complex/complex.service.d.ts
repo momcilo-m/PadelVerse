@@ -12,13 +12,14 @@ export declare class ComplexService {
     getAll(query: Record<string, any>): Promise<any>;
     getById(id: number): Promise<Complex | null>;
     getByIds(id: number[]): Promise<Complex[]>;
+    getByUser(owner: number): Promise<Complex[]>;
     create(complexDTO: ComplexDTO): Promise<Complex>;
     edit(id: number, complexDTO: ComplexDTO): Promise<BadRequestException | {
         success: boolean;
         message: string;
     }>;
-    freeCourts(id: number, start: string, count: number, date: Date): Promise<never[] | {
+    freeCourts(id: number, start: string, count: number, date: Date): Promise<{
         all: Court[];
         available: number[];
-    }>;
+    } | never[]>;
 }

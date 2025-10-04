@@ -15,22 +15,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StatsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const complex_service_1 = require("../complex/complex.service");
+const courts_service_1 = require("../courts/courts.service");
 const term_entity_1 = require("../models/term.entity");
 const users_service_1 = require("../users/users.service");
 const typeorm_2 = require("typeorm");
 let StatsService = class StatsService {
     termsRepository;
     userService;
-    constructor(termsRepository, userService) {
+    complexService;
+    courtsService;
+    constructor(termsRepository, userService, complexService, courtsService) {
         this.termsRepository = termsRepository;
         this.userService = userService;
+        this.complexService = complexService;
+        this.courtsService = courtsService;
     }
-    async getTermsByDateRange(complex, startOfMonth, endOfMonth) {
+    async getTermsByDateRange(complexes, startOfMonth, endOfMonth) {
+        if (!complexes || complexes.length === 0) {
+            return [];
+        }
         let res = await this.termsRepository.manager
             .getRepository(term_entity_1.Term)
             .createQueryBuilder('term')
             .leftJoinAndSelect('term.court', 'court')
-            .where('court.complex = :complex', { complex })
+            .where('court.complex IN (:...complexes)', { complexes })
             .andWhere('term.date BETWEEN :start AND :end', { start: startOfMonth, end: endOfMonth })
             .addSelect('court.price', 'price')
             .addSelect('court.name', 'name')
@@ -59,7 +68,7 @@ let StatsService = class StatsService {
     }
     async monthStats(complex) {
         const [start, end] = this.thisMonth();
-        var res = await this.getTermsByDateRange(complex, start, end);
+        let res = await this.getTermsByDateRange([complex], start, end);
         let totalCount = 0;
         let courtsCount = {};
         let players = {};
@@ -76,22 +85,19 @@ let StatsService = class StatsService {
         let topPlayer = Object.entries(players).reduce((max, [id, count]) => count > max.count ? { id: Number(id), count } : max, { id: 0, count: 0 });
         let topUser = await this.userService.getById(topPlayer.id);
         return {
-            status: 'success',
-            data: {
-                totalCount,
-                courtsCount,
-                totalAmount,
-                amountPerWeek,
-                user: {
-                    topUser,
-                    count: topPlayer.count
-                }
+            totalCount,
+            courtsCount,
+            totalAmount,
+            amountPerWeek,
+            user: {
+                topUser,
+                count: topPlayer.count
             }
         };
     }
     async weekStats(complex) {
         const [start, end] = this.thisWeek();
-        var res = await this.getTermsByDateRange(complex, start, end);
+        var res = await this.getTermsByDateRange([complex], start, end);
         let totalCount = 0;
         let totalAmount = 0;
         let courtsCount = {};
@@ -107,14 +113,11 @@ let StatsService = class StatsService {
             }
         });
         return {
-            status: 'success',
-            data: {
-                totalCount,
-                courtsCount,
-                totalAmount,
-                todayCount,
-                todayAmount
-            }
+            totalCount,
+            courtsCount,
+            totalAmount,
+            todayCount,
+            todayAmount
         };
     }
     getWeekInMonth(date) {
@@ -122,12 +125,33 @@ let StatsService = class StatsService {
         const start = new Date(dt.getFullYear(), dt.getMonth(), 1);
         return Math.ceil((dt.getDate() + start.getDay()) / 7);
     }
+    async globalStats(id) {
+        let userComplexs = await this.complexService.getByUser(id);
+        let ids = userComplexs.map(el => el.id);
+        let noOfComplex = ids.length;
+        let noOfCourts = (await this.courtsService.countCourtsByComplex(ids))[1];
+        const now = new Date();
+        const startOfYear = new Date(now.getFullYear(), 0, 1);
+        const endOfYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+        let res = await this.getTermsByDateRange(ids, startOfYear, endOfYear);
+        let noOfTerms = res.length;
+        let totalAmount = 0;
+        res.forEach(el => totalAmount += el.term_count * el.price);
+        return {
+            noOfComplex,
+            noOfCourts,
+            noOfTerms,
+            totalAmount
+        };
+    }
 };
 exports.StatsService = StatsService;
 exports.StatsService = StatsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(term_entity_1.Term)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        users_service_1.UsersService])
+        users_service_1.UsersService,
+        complex_service_1.ComplexService,
+        courts_service_1.CourtsService])
 ], StatsService);
 //# sourceMappingURL=stats.service.js.map

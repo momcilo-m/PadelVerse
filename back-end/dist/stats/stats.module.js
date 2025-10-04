@@ -12,6 +12,8 @@ const stats_controller_1 = require("./stats.controller");
 const stats_service_1 = require("./stats.service");
 const terms_module_1 = require("../terms/terms.module");
 const users_module_1 = require("../users/users.module");
+const complex_module_1 = require("../complex/complex.module");
+const courts_module_1 = require("../courts/courts.module");
 let StatsModule = class StatsModule {
 };
 exports.StatsModule = StatsModule;
@@ -19,7 +21,7 @@ exports.StatsModule = StatsModule = __decorate([
     (0, common_1.Module)({
         controllers: [stats_controller_1.StatsController],
         providers: [stats_service_1.StatsService],
-        imports: [terms_module_1.TermsModule, users_module_1.UsersModule]
+        imports: [terms_module_1.TermsModule, users_module_1.UsersModule, complex_module_1.ComplexModule, courts_module_1.CourtsModule]
     })
 ], StatsModule);
 //# sourceMappingURL=stats.module.js.map

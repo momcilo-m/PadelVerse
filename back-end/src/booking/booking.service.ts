@@ -9,64 +9,55 @@ import { Court } from 'src/models/court.entity';
 @Injectable()
 export class BookingService {
 
-    private stripe :Stripe;
+    private stripe: Stripe;
 
     constructor(
         //@InjectRepository(Complex) private readonly complexRepository:Repository<Complex>,
-        @InjectRepository(Court) private readonly courtRepository:Repository<Court>
-    )
-    {
+        @InjectRepository(Court) private readonly courtRepository: Repository<Court>
+    ) {
         this.stripe = new Stripe("sk_test_51S6EVACq02uHmIrCR176zUcaEW3j9OH0GZCIEBF0wA7eBtBQemofOtsvHsQjsyOjxWwXV0hhVhrawyoGj2Q93h8b00eg9IZGxz");
     }
-    
-    async checkout(complexID:number, courtID:number, count:number,email:string)
-    {
-    //     let complex = await this.complexRepository.manager
-    //     .getRepository(Complex)
-    //     .createQueryBuilder('complex')
-    //     .leftJoinAndSelect('')
 
+    async checkout(complexID: number, courtID: number, count: number, email: string) {
 
         let court = await this.courtRepository.manager
-        .getRepository(Court)
-        .createQueryBuilder('court')
-        .leftJoinAndSelect('court.complex','complex')
-        .where('complex.id := complexID',{complexID})
-        .getOne()
-        //.findOneBy({id:complexID})
-        
-        if(court == null)
-        {
+            .getRepository(Court)
+            .createQueryBuilder('court')
+            .leftJoinAndSelect('court.complex', 'complex')
+            .where('complex.id = :complexID', { complexID })
+            .getOne()
+
+        if (court == null) {
             return new BadRequestException("Court not found");
         }
-    
+
         return await this.stripe.checkout.sessions.create({
-            payment_method_types:['card'],
-            success_url:"http://localhost:4200/complex",
-            cancel_url:"http://localhost:4200/maps",
-            customer_email:email,
-            client_reference_id:complexID.toString(),
-            mode:"payment",
-            line_items:[
+            payment_method_types: ['card'],
+            success_url: "http://localhost:4200/complex",
+            cancel_url: "http://localhost:4200/maps",
+            customer_email: email,
+            client_reference_id: complexID.toString(),
+            mode: "payment",
+            line_items: [
                 {
                     price_data:
                     {
-                        currency:"EUR",
+                        currency: "EUR",
                         product_data:
                         {
-                            name:court.complex.name,
-                            images:["image.png"],
+                            name: court.complex.name,
+                            images: ["image.png"],
                         },
-                        unit_amount:court.price * count * 100,
-                        
+                        unit_amount: court.price * count * 100,
+
                     },
-                    quantity:count
+                    quantity: count
                 }
             ],
             metadata:
             {
-                court:courtID.toString(),
-                complex:complexID.toString()
+                court: courtID.toString(),
+                complex: complexID.toString()
             }
         })
     }

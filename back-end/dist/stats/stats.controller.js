@@ -26,6 +26,9 @@ let StatsController = class StatsController {
     getWeekStats(id) {
         return this.service.weekStats(id);
     }
+    getGlobalStats(id) {
+        return this.service.globalStats(id);
+    }
 };
 exports.StatsController = StatsController;
 __decorate([
@@ -42,6 +45,13 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], StatsController.prototype, "getWeekStats", null);
+__decorate([
+    (0, common_1.Get)("/:id"),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], StatsController.prototype, "getGlobalStats", null);
 exports.StatsController = StatsController = __decorate([
     (0, common_1.Controller)('stats'),
     __metadata("design:paramtypes", [stats_service_1.StatsService])

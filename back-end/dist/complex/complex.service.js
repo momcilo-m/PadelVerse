@@ -48,6 +48,9 @@ let ComplexService = class ComplexService {
             }
         });
     }
+    async getByUser(owner) {
+        return await this.complexRepository.findBy({ owner });
+    }
     async create(complexDTO) {
         return await this.complexRepository.save((0, class_transformer_1.plainToClass)(complex_entity_1.Complex, complexDTO));
     }

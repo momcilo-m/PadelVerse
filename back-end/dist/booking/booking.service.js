@@ -33,7 +33,7 @@ let BookingService = class BookingService {
             .getRepository(court_entity_1.Court)
             .createQueryBuilder('court')
             .leftJoinAndSelect('court.complex', 'complex')
-            .where('complex.id := complexID', { complexID })
+            .where('complex.id = :complexID', { complexID })
             .getOne();
         if (court == null) {
             return new common_1.BadRequestException("Court not found");

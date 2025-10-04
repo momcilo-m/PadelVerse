@@ -12,43 +12,42 @@ import { In, Repository } from 'typeorm';
 export class ComplexService {
 
     constructor(
-        @InjectRepository(Complex) private readonly complexRepository:Repository<Complex>,
-        @InjectRepository(Court) private readonly courtRepository:Repository<Court>,
+        @InjectRepository(Complex) private readonly complexRepository: Repository<Complex>,
+        @InjectRepository(Court) private readonly courtRepository: Repository<Court>,
         @Inject(forwardRef(() => TermsService)) private readonly termsService: TermsService
-    ){}
+    ) { }
 
-    async getAll(query:Record<string,any>)
-    {
-        return await new QueryFeature(this.complexRepository,query).filter().query
+    async getAll(query: Record<string, any>) {
+        return await new QueryFeature(this.complexRepository, query).filter().query
     }
 
-    async getById(id:number)
-    {
+    async getById(id: number) {
         return await this.complexRepository
-                .createQueryBuilder('complex')
-                .leftJoin('complex.owner','users')
-                .addSelect(['users.phone', 'users.email'])
-                .where('complex.id=:id',{id})
-                .getOne();
+            .createQueryBuilder('complex')
+            .leftJoin('complex.owner', 'users')
+            .addSelect(['users.phone', 'users.email'])
+            .where('complex.id=:id', { id })
+            .getOne();
     }
 
-    async getByIds(id:number[])
-    {
+    async getByIds(id: number[]) {
         return await this.complexRepository.find({
-            where:{
-                id:In(id)
+            where: {
+                id: In(id)
             }
         })
     }
 
-    async create(complexDTO:ComplexDTO)
-    {
-        return await this.complexRepository.save(plainToClass(Complex,complexDTO));
+    async getByUser(owner: number) {
+        return await this.complexRepository.findBy({ owner })
     }
 
-    async edit(id:number,complexDTO:ComplexDTO)
-    {
-        if(!complexDTO)
+    async create(complexDTO: ComplexDTO) {
+        return await this.complexRepository.save(plainToClass(Complex, complexDTO));
+    }
+
+    async edit(id: number, complexDTO: ComplexDTO) {
+        if (!complexDTO)
             return new BadRequestException('Please insert a valid data to edit');
 
         const updateData: Partial<Complex> = {};
@@ -60,18 +59,17 @@ export class ComplexService {
 
         const court = await this.complexRepository.update({ id, owner: complexDTO.owner }, updateData);
 
-        if(court.affected == 0)
+        if (court.affected == 0)
             throw new NotFoundException('Court not found');
 
         return { success: true, message: 'Court updated successfully' };
 
     }
 
-    async freeCourts(id:number,start:string,count:number,date:Date,)
-    {
-        date.setHours(0,0,0,0);
+    async freeCourts(id: number, start: string, count: number, date: Date,) {
+        date.setHours(0, 0, 0, 0);
         const startTime = start;
-        const endTime = (count + parseInt(start.split(":")[0])).toString().padStart(2,'0')+":00:00";
+        const endTime = (count + parseInt(start.split(":")[0])).toString().padStart(2, '0') + ":00:00";
 
         const res: { all: Court[]; available: number[] } = {
             all: [],
@@ -82,20 +80,17 @@ export class ComplexService {
             where: { complex: { id } },
         });
 
-        if(courts.length == 0)
+        if (courts.length == 0)
             return [];
 
         res.all = courts;
 
-        for(const court of courts)
-        {
-            try
-            {
-                await this.termsService.isTermFree(startTime,endTime,date,court.id)
+        for (const court of courts) {
+            try {
+                await this.termsService.isTermFree(startTime, endTime, date, court.id)
                 res.available.push(court.id)
             }
-            catch(e)
-            {
+            catch (e) {
 
             }
         }

@@ -32,6 +32,9 @@ let CourtsService = class CourtsService {
             .where('court.id = :id', { id })
             .getOne();
     }
+    countCourtsByComplex(complexes) {
+        return this.courtRepository.findAndCountBy({ complex: (0, typeorm_2.In)(complexes) });
+    }
 };
 exports.CourtsService = CourtsService;
 exports.CourtsService = CourtsService = __decorate([

@@ -5,4 +5,5 @@ export declare class CourtsService {
     constructor(courtRepository: Repository<Court>);
     getById(id: number): Promise<Court | null>;
     getByIdWithCourt(id: number): Promise<Court | null>;
+    countCourtsByComplex(complexes: number[]): Promise<[Court[], number]>;
 }
