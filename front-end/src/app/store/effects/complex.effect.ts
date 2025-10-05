@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { ComplexService } from "../../services/complex.service";
 import { catchError, filter, from, map, of, switchMap, tap, withLatestFrom } from "rxjs";
-import { addComplex, booking, bookingFailed, bookingSuccess, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, userComplex, userComplexFailed, userComplexSuccessfully } from "../actions/complex.action";
+import { addComplex, addCourt, booking, bookingFailed, bookingSuccess, createComplex, createCourt, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, userComplex, userComplexFailed, userComplexSuccessfully } from "../actions/complex.action";
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { weather, weatherFailed } from "../actions/weather.action";
 import { Store } from "@ngrx/store";
@@ -89,6 +89,26 @@ export class ComplexEffect {
             switchMap((owner) => this.complexService.getComplexByOwner(owner.id).pipe(
                 map(complex => userComplexSuccessfully({ complex })),
                 catchError((err) => of(userComplexFailed({ message: err.message || "Failed when load message" })))
+            ))
+        )
+    })
+
+    createComplex$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(createComplex),
+            switchMap(({ complex }) => this.complexService.createComplex(complex).pipe(
+                map(complex => addComplex({ complex })),
+                catchError((err) => of(failedComplex({ message: err.message || "Failed when create complex" })))
+            ))
+        )
+    })
+
+    createCourt$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(createCourt),
+            switchMap(({ court }) => this.complexService.createCourt(court).pipe(
+                map(court => addCourt({ court })),
+                catchError((err) => of(failedCourts({ message: err.message || "Failed when create courts" })))
             ))
         )
     })

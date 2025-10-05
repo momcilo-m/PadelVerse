@@ -1,3 +1,4 @@
+import { CourtDTO } from 'src/models/court.dto';
 import { Court } from 'src/models/court.entity';
 import { Repository } from 'typeorm';
 export declare class CourtsService {
@@ -6,4 +7,5 @@ export declare class CourtsService {
     getById(id: number): Promise<Court | null>;
     getByIdWithCourt(id: number): Promise<Court | null>;
     countCourtsByComplex(complexes: number[]): Promise<[Court[], number]>;
+    createCourt(courtDTO: CourtDTO): Promise<Court>;
 }

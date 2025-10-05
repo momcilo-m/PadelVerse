@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToClass } from 'class-transformer';
+import { CourtDTO } from 'src/models/court.dto';
 import { Court } from 'src/models/court.entity';
 import { In, Repository } from 'typeorm';
 
@@ -24,5 +26,9 @@ export class CourtsService {
 
     countCourtsByComplex(complexes: number[]) {
         return this.courtRepository.findAndCountBy({ complex: In(complexes) })
+    }
+
+    async createCourt(courtDTO: CourtDTO) {
+        return await this.courtRepository.save(plainToClass(Court, courtDTO));
     }
 }

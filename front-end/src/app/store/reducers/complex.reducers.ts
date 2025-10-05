@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store"
 import { ComplexState } from "../states/complex.state"
-import { addComplex, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, selectCourt, userComplexSuccessfully } from "../actions/complex.action"
+import { addComplex, addCourt, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, selectCourt, userComplexSuccessfully } from "../actions/complex.action"
 
 export const initComplexState: ComplexState =
 {
@@ -20,9 +20,10 @@ export const complexReducer = createReducer(
         }
     }),
     on(loadedComplex, (state, payload) => {
+        let notInList = payload.complexes.filter((complex) => !state.complex.find(c => c.id === complex.id))
         return {
             ...state,
-            complex: payload.complexes
+            complex: [...state.complex, ...notInList]
         }
     }),
     on(selectComplex, (state, payload) => {
@@ -59,9 +60,18 @@ export const complexReducer = createReducer(
         }
     }),
     on(userComplexSuccessfully, (state, payload) => {
+
+        let notInList = payload.complex.filter((complex) => !state.complex.find(c => c.id === complex.id))
         return {
             ...state,
-            complex: [...state.complex, ...payload.complex]
+            complex: [...state.complex, ...notInList]
+        }
+    }),
+    on(addCourt, (state, payload) => {
+        let finded = state.courts.find(el => el.id === payload.court.id);
+        return {
+            ...state,
+            courts: finded ? [...state.courts] : [...state.courts, payload.court]
         }
     })
 )

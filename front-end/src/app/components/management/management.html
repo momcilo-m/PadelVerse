@@ -20,7 +20,7 @@
       <img src="https://picsum.photos/300/200">
       <h3>{{complex.name}}</h3>
       <div class="actions">
-        <h2 id="edit">🖋</h2>
+        <h2 id="edit" (click)="openDialogAddCourt(complex.id)">🖋</h2>
         <h2 id="delete">🗑</h2>
       </div>
     </div>
@@ -29,7 +29,7 @@
     @empty {
     <h2>No complex found</h2>
     }
-
   </div>
+  <button (click)=openDialogAddComplex()>Add Complex</button>
 
 </div>

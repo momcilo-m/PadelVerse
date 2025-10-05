@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourtsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const class_transformer_1 = require("class-transformer");
 const court_entity_1 = require("../models/court.entity");
 const typeorm_2 = require("typeorm");
 let CourtsService = class CourtsService {
@@ -34,6 +35,9 @@ let CourtsService = class CourtsService {
     }
     countCourtsByComplex(complexes) {
         return this.courtRepository.findAndCountBy({ complex: (0, typeorm_2.In)(complexes) });
+    }
+    async createCourt(courtDTO) {
+        return await this.courtRepository.save((0, class_transformer_1.plainToClass)(court_entity_1.Court, courtDTO));
     }
 };
 exports.CourtsService = CourtsService;

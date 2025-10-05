@@ -14,13 +14,28 @@ import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { selectComplex, userComplex } from '../../store/actions/complex.action';
+import { createComplex, createCourt, selectComplex, userComplex } from '../../store/actions/complex.action';
 import { selectUser } from '../../store/selectors/user.selector';
 import { myComplexes, selectedComplex } from '../../store/selectors/complex.selector';
-import { filter, Observable } from 'rxjs';
+import { filter, Observable, Subscription } from 'rxjs';
 import { ComplexGlobalStats, ComplexStatsMonth, ComplexStatsWeek } from '../../models/complex.stats';
 import { ManagementService } from '../../services/management.service';
 
+import { ChangeDetectionStrategy, model, signal } from '@angular/core';
+
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { AddComplex } from '../add-complex/add-complex';
+import { CreateComplex } from '../../models/create.complex.interface';
+import { AddCourts } from '../add-courts/add-courts';
+import { CreateCourt } from '../../models/create.court.interface';
 
 @Component({
   selector: 'app-management',
@@ -28,7 +43,8 @@ import { ManagementService } from '../../services/management.service';
     CommonModule,
     MatIconModule,
     MatToolbarModule,
-    AsyncPipe
+    AsyncPipe,
+    MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule
   ],
   templateUrl: './management.html',
   styleUrl: './management.scss'
@@ -36,8 +52,21 @@ import { ManagementService } from '../../services/management.service';
 export class Management {
 
   store = inject<Store<AppState>>(Store)
+  user$: Subscription;
+  private userId: number = -1;
 
-  constructor(private managementService: ManagementService) { }
+  constructor(private managementService: ManagementService) {
+    this.user$ = this.store.select(selectUser)
+      .subscribe((user) => {
+
+        if (!user || user?.id == -1)
+          return;
+
+        this.userId = user.id
+        this.store.dispatch(userComplex({ id: user.id }))
+        this.globalStats$ = this.managementService.getGlobalStats(user.id)
+      })
+  }
 
   private prevId: number = -1;
 
@@ -47,14 +76,7 @@ export class Management {
 
   globalStats$!: Observable<ComplexGlobalStats>
 
-  user$ = this.store.select(selectUser)
-    .subscribe((user) => {
-      if (!user || user?.id == -1)
-        return;
-
-      this.store.dispatch(userComplex({ id: user.id }))
-      this.globalStats$ = this.managementService.getGlobalStats(user.id)
-    })
+  modalAddComplex: Boolean = false;
 
   selected$ = this.store.select(selectedComplex).pipe(
     filter(id => id != -1 && id != this.prevId)
@@ -73,12 +95,43 @@ export class Management {
     this.store.dispatch(selectComplex({ id }))
   }
 
-  // ngAfterContentInit() {
-  //   console.log("AAA", this.userId)
-  //   if (this.userId == -1)
-  //     return;
+  readonly dialog = inject(MatDialog);
 
-  // }
+  openDialogAddComplex() {
+    const dialogRef = this.dialog.open(AddComplex, {
+      data: { open_time: Date, close_time: Date, name: String },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      if (result !== undefined && this.userId != -1) {
+        let complex: CreateComplex = result;
+
+        complex.owner = this.userId
+        this.store.dispatch(createComplex({ complex }))
+      }
+    });
+  }
+
+
+  openDialogAddCourt(id: number) {
+
+    this.store.dispatch(selectComplex({ id }))
+
+    const dialogReff = this.dialog.open(AddCourts, {
+      data: { name: null, complex: null, price: null },
+    });
+
+    dialogReff.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      if (result !== undefined && this.userId != -1) {
+        let court: CreateCourt = result;
+
+        court.complex = id;
+        this.store.dispatch(createCourt({ court }))
+      }
+    });
+  }
 
 }
 

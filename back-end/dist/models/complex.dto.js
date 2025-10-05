@@ -33,8 +33,7 @@ __decorate([
 ], ComplexDTO.prototype, "owner", void 0);
 __decorate([
     (0, class_validator_1.IsDefined)(),
-    (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "start_time must be in HH:mm:ss format" }),
-    (0, class_validator_1.IsDate)(),
+    (0, class_validator_1.Matches)(/^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, { message: "open_time must be in HH:mm:ss format" }),
     __metadata("design:type", String)
 ], ComplexDTO.prototype, "open_time", void 0);
 __decorate([

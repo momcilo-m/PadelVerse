@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable, throwError } from 'rxjs';
 import { ComplexInterface } from '../models/complex.interface';
 import { Complex } from '../components/complex/complex';
+import { CreateComplex } from '../models/create.complex.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,13 @@ export class ComplexService {
 
   getComplexByOwner(owner: number) {
     return this.http.get<ComplexInterface[]>(`http://localhost:3000/complex?owner=${owner}`)
+  }
+
+  createComplex(complex: CreateComplex): Observable<ComplexInterface> {
+    return this.http.post<ComplexInterface>(`http://localhost:3000/complex`, complex, { withCredentials: true })
+  }
+
+  createCourt(court: CourtInterface): Observable<CourtInterface> {
+    return this.http.post<CourtInterface>(`http://localhost:3000/complex/courts`, court, { withCredentials: true })
   }
 }

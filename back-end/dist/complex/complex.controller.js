@@ -17,10 +17,14 @@ const common_1 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const complex_service_1 = require("./complex.service");
 const complex_dto_1 = require("../models/complex.dto");
+const court_dto_1 = require("../models/court.dto");
+const courts_service_1 = require("../courts/courts.service");
 let ComplexController = class ComplexController {
     service;
-    constructor(service) {
+    courtService;
+    constructor(service, courtService) {
         this.service = service;
+        this.courtService = courtService;
     }
     getFreeCourts(complex, startTime, date, count) {
         const dateQ = new Date(date);
@@ -32,13 +36,16 @@ let ComplexController = class ComplexController {
     getById(id) {
         return this.service.getById(id);
     }
-    createCourt(req, complexDTO) {
+    createComplex(req, complexDTO) {
         complexDTO.owner = req.user.id;
         return this.service.create(complexDTO);
     }
     editCourt(req, complexDTO, id) {
         complexDTO.owner = req.user.id;
         return this.service.edit(id, complexDTO);
+    }
+    createCourt(req, courtDTO) {
+        return this.courtService.createCourt(courtDTO);
     }
 };
 exports.ComplexController = ComplexController;
@@ -74,7 +81,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, complex_dto_1.ComplexDTO]),
     __metadata("design:returntype", void 0)
-], ComplexController.prototype, "createCourt", null);
+], ComplexController.prototype, "createComplex", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
@@ -85,8 +92,18 @@ __decorate([
     __metadata("design:paramtypes", [Object, complex_dto_1.ComplexDTO, Number]),
     __metadata("design:returntype", void 0)
 ], ComplexController.prototype, "editCourt", null);
+__decorate([
+    (0, common_1.Post)("/courts"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, court_dto_1.CourtDTO]),
+    __metadata("design:returntype", void 0)
+], ComplexController.prototype, "createCourt", null);
 exports.ComplexController = ComplexController = __decorate([
     (0, common_1.Controller)('complex'),
-    __metadata("design:paramtypes", [complex_service_1.ComplexService])
+    __metadata("design:paramtypes", [complex_service_1.ComplexService,
+        courts_service_1.CourtsService])
 ], ComplexController);
 //# sourceMappingURL=complex.controller.js.map
