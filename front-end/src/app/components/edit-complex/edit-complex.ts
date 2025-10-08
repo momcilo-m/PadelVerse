@@ -1,33 +1,41 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogActions, MatDialogContent, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { ComplexInterface } from '../../models/complex.interface';
 
 @Component({
-  selector: 'app-add-courts',
+  selector: 'app-edit-complex',
   imports: [CommonModule,
     MatIconModule, MatDialogModule,
     MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatDialogContent, MatDialogActions, MatButton],
-  templateUrl: './add-courts.html',
-  styleUrl: './add-courts.scss'
+  templateUrl: './edit-complex.html',
+  styleUrl: './edit-complex.scss'
 })
-export class AddCourts {
+export class EditComplex {
 
-  name: string = ""
-  price: number = 0
+  constructor(
+    public dialogRef: MatDialogRef<ComplexInterface>,
+  ) { }
 
-  constructor(public dialogRef: MatDialogRef<AddCourts>) { }
+  complex: ComplexInterface =
+    {
+      city: "",
+      open_time: "",
+      close_time: "",
+      country: "",
+      id: -1,
+      location: { x: -1, y: -1 },
+      name: "",
+      owner: -1
+    }
 
-  addCourt() {
-    const result = {
-      name: this.name,
-      price: this.price,
-    };
-    this.dialogRef.close(result);
+  editComplex() {
+
   }
 
 }

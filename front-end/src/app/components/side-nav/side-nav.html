@@ -5,28 +5,7 @@
   <span>My App</span>
 </mat-toolbar>
 
-<mat-sidenav-container class="sidenav-container">
-  <!-- <mat-sidenav #sidenav mode="side" class="sidenav">
-      <mat-nav-list>
-        <a mat-list-item routerLink="/complex" routerLinkActive="active">
-          <mat-icon>travel_explore</mat-icon>
-          <span>Complex</span>
-        </a>
-        <a mat-list-item routerLink="/maps" routerLinkActive="active">
-          <mat-icon>map</mat-icon>
-          <span>Map</span>
-        </a>
-        <a mat-list-item routerLink="/profile" routerLinkActive="active">
-          <mat-icon>person</mat-icon>
-          <span>Profile</span>
-        </a>
-
-        <a mat-list-item routerLink="/management" routerLinkActive="active">
-          <mat-icon>book</mat-icon>
-          <span>Management</span>
-        </a>
-      </mat-nav-list>
-    </mat-sidenav> -->
+<mat-sidenav-container style="max-width: 1600px !important; margin: auto;" class="sidenav-container">
 
   <mat-sidenav #sidenav mode="side" class="sidenav">
     <mat-nav-list>
@@ -53,7 +32,7 @@
 
 
   <mat-sidenav-content>
-    <main style="max-width: 1400px; margin: auto; height: 100%;">
+    <main>
       <router-outlet></router-outlet>
     </main>
   </mat-sidenav-content>

@@ -92,15 +92,21 @@ export class StatsService {
         );
 
         // console.log(totalCount,courtsCount,totalAmount,topPlayer,amountPerWeek)
+        let formatted: { name: string, value: number }[] = [];
+        amountPerWeek.forEach((el, index) => {
+            formatted.push({ name: "Week " + (index + 1), value: el + index + 1 });
+        })
 
         let topUser = await this.userService.getById(topPlayer.id);
 
         return {
 
             totalCount,
-            courtsCount,
+            courtsCount: Object.entries(courtsCount).map(
+                ([name, value]) => ({ name, value })
+            ),
             totalAmount,
-            amountPerWeek,
+            amountPerWeek: formatted,
             user:
             {
                 topUser,
@@ -133,11 +139,12 @@ export class StatsService {
             }
         })
 
-
         return {
 
             totalCount,
-            courtsCount,
+            courtsCount: Object.entries(courtsCount).map(
+                ([name, value]) => ({ name, value })
+            ),
             totalAmount,
             todayCount,
             todayAmount

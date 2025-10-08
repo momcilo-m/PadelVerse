@@ -83,12 +83,16 @@ let StatsService = class StatsService {
             amountPerWeek[week - 1] += el.term_count * el.price;
         });
         let topPlayer = Object.entries(players).reduce((max, [id, count]) => count > max.count ? { id: Number(id), count } : max, { id: 0, count: 0 });
+        let formatted = [];
+        amountPerWeek.forEach((el, index) => {
+            formatted.push({ name: "Week " + (index + 1), value: el + index + 1 });
+        });
         let topUser = await this.userService.getById(topPlayer.id);
         return {
             totalCount,
-            courtsCount,
+            courtsCount: Object.entries(courtsCount).map(([name, value]) => ({ name, value })),
             totalAmount,
-            amountPerWeek,
+            amountPerWeek: formatted,
             user: {
                 topUser,
                 count: topPlayer.count
@@ -114,7 +118,7 @@ let StatsService = class StatsService {
         });
         return {
             totalCount,
-            courtsCount,
+            courtsCount: Object.entries(courtsCount).map(([name, value]) => ({ name, value })),
             totalAmount,
             todayCount,
             todayAmount

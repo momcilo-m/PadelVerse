@@ -16,8 +16,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { createComplex, createCourt, selectComplex, userComplex } from '../../store/actions/complex.action';
 import { selectUser } from '../../store/selectors/user.selector';
-import { myComplexes, selectedComplex } from '../../store/selectors/complex.selector';
-import { filter, Observable, Subscription } from 'rxjs';
+import { myComplexes, selectedComplex, selectedComplexx } from '../../store/selectors/complex.selector';
+import { filter, firstValueFrom, map, Observable, Subscription } from 'rxjs';
 import { ComplexGlobalStats, ComplexStatsMonth, ComplexStatsWeek } from '../../models/complex.stats';
 import { ManagementService } from '../../services/management.service';
 
@@ -36,6 +36,7 @@ import { AddComplex } from '../add-complex/add-complex';
 import { CreateComplex } from '../../models/create.complex.interface';
 import { AddCourts } from '../add-courts/add-courts';
 import { CreateCourt } from '../../models/create.court.interface';
+import { LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-management',
@@ -44,7 +45,8 @@ import { CreateCourt } from '../../models/create.court.interface';
     MatIconModule,
     MatToolbarModule,
     AsyncPipe,
-    MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule
+    MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule,
+    NgxChartsModule
   ],
   templateUrl: './management.html',
   styleUrl: './management.scss'
@@ -80,13 +82,17 @@ export class Management {
 
   selected$ = this.store.select(selectedComplex).pipe(
     filter(id => id != -1 && id != this.prevId)
-  ).subscribe((e) => {
-    this.prevId = e;
+  )
+    .subscribe((e) => {
+      this.prevId = e;
 
-    this.monthStats$ = this.managementService.getMonhtStats(e)
-    this.weekStats$ = this.managementService.getWeekStats(e)
+      this.monthStats$ = this.managementService.getMonhtStats(e)
+      this.weekStats$ = this.managementService.getWeekStats(e)
 
-  })
+      this.monthStats$.subscribe((e) => console.log(e))
+    })
+
+  selectedComplex$ = this.store.select(selectedComplexx)
 
 
   myComplex$ = this.store.select(myComplexes)
@@ -98,9 +104,7 @@ export class Management {
   readonly dialog = inject(MatDialog);
 
   openDialogAddComplex() {
-    const dialogRef = this.dialog.open(AddComplex, {
-      data: { open_time: Date, close_time: Date, name: String },
-    });
+    const dialogRef = this.dialog.open(AddComplex);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
@@ -114,12 +118,21 @@ export class Management {
   }
 
 
-  openDialogAddCourt(id: number) {
 
-    this.store.dispatch(selectComplex({ id }))
+  async openDialogEditComplex(id: number) {
+    this.selectComplex(id);
 
-    const dialogReff = this.dialog.open(AddCourts, {
-      data: { name: null, complex: null, price: null },
+    const cmp = await firstValueFrom(this.selectedComplex$);
+
+    const dialogReff = this.dialog.open(AddComplex, {
+      data: {
+        name: cmp!.name,
+        location: `(${cmp!.location.x},${cmp!.location.y})`,
+        open_time: cmp!.open_time,
+        close_time: cmp!.close_time,
+        city: cmp!.city,
+        country: cmp!.country
+      },
     });
 
     dialogReff.afterClosed().subscribe(result => {
@@ -133,28 +146,36 @@ export class Management {
     });
   }
 
+  openDialogAddCourt(id: number) {
+
+    this.selectComplex(id);
+
+    const dialogReff = this.dialog.open(AddCourts);
+
+    dialogReff.afterClosed().subscribe(result => {
+      if (result !== undefined && this.userId != -1) {
+        let court: CreateCourt = result;
+
+        court.complex = id;
+        this.store.dispatch(createCourt({ court }))
+      }
+    });
+  }
+
+
+  //stats
+
+  view: [number, number] = [400, 400];
+  gradient: boolean = true;
+  showLegend: boolean = true;
+  showLabels: boolean = true;
+  isDoughnut: boolean = false;
+  legendPosition: LegendPosition = LegendPosition.Below;
+  colorScheme = {
+    name: 'customScheme',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#9e64fdff']
+  };
+
 }
-
-
-
-//  monthStats: ComplexStatsMonth =
-//     {
-//       totalCount: -1,
-//       totalAmount: -1,
-//       amountPerWeek: [],
-//       courtsCount: {},
-//       user: {
-//         topUser: -1,
-//         count: -1
-//       }
-//     }
-
-//   weekStats: ComplexStatsWeek =
-//     {
-//       courtsCount: {},
-//       todayAmount: -1,
-//       todayCount: -1,
-//       totalAmount: -1,
-//       totalCount: -1
-//     }
-

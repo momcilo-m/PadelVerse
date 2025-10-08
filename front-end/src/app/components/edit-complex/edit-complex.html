@@ -1,0 +1,12 @@
+<!-- <h2 mat-dialog-title>Hi {{data.name}}</h2> -->
+<mat-dialog-content>
+    <h3>Edit your complex</h3>
+    <mat-form-field>
+        <mat-label>Court Name</mat-label>
+        <input matInput id="name" name="name" [(ngModel)]="complex.name" />
+    </mat-form-field>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton (click)="editComplex()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

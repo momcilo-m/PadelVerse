@@ -1,35 +1,89 @@
-<div class="container" style="padding: 2rem; max-width: 1400px; margin: auto;">
+<!-- <div style="padding: 2rem"> -->
 
+<div>
   <h1 style="text-align:center; margin-bottom: 2rem;">Complex Management</h1>
   <div class="bar">
     @if (globalStats$ | async; as global) {
-    <p>Total Complex:{{global.noOfComplex}}</p>
-    <p>Total Courts: {{global.noOfCourts}}</p>
-    <p>Total Amount: {{global.totalAmount}}$</p>
-    <p>Total Terms: {{global.noOfTerms}}</p>
+    <p>Total Complex: <span>{{global.noOfComplex}}</span></p>
+    <p>Total Courts: <span>{{global.noOfCourts}}</span></p>
+    <p>Total Amount: <span>{{global.totalAmount}}$</span></p>
+    <p>Total Terms: <span>{{global.noOfTerms}}</span></p>
     }
     @else {
     <h3>Stats are unrachable</h3>
     }
   </div>
 
-  <div class="complex-list">
-    @for (complex of myComplex$ | async; track complex.id) {
+  <div style="display: flex; justify-content: space-between;">
+    <div>
+      <div class="complex-list">
+        @for (complex of myComplex$ | async; track complex.id) {
+        <div class="complex" (click)=selectComplex(complex.id)>
+          <img src="https://picsum.photos/300/200">
+          <h3>{{complex.name}}</h3>
+          <div class="actions">
+            <mat-icon (click)="openDialogEditComplex(complex.id)">edit icon</mat-icon>
+            <mat-icon>delete outline icon</mat-icon>
+            <mat-icon (click)="openDialogAddCourt(complex.id)">sports_tennis</mat-icon>
+          </div>
+        </div>
 
-    <div class="complex" (click)=selectComplex(complex.id)>
-      <img src="https://picsum.photos/300/200">
-      <h3>{{complex.name}}</h3>
-      <div class="actions">
-        <h2 id="edit" (click)="openDialogAddCourt(complex.id)">🖋</h2>
-        <h2 id="delete">🗑</h2>
+        }
+        @empty {
+        <h2>No complex found</h2>
+        }
       </div>
+      <button (click)=openDialogAddComplex()>Add Complex</button>
     </div>
 
+    @if (monthStats$ | async; as stats)
+    {
+    <div class="stats">
+      <div class="stats-header">
+        <h3>Count:{{stats.totalCount}}</h3>
+        <h3>Count:{{stats.totalAmount}}</h3>
+      </div>
+      @if (stats.user.count != 0) {
+      <div class="charts">
+        <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="stats.amountPerWeek" [gradient]="gradient"
+          [legend]="showLegend" [legendPosition]="legendPosition" [labels]="showLabels" [doughnut]="isDoughnut">
+          >
+        </ngx-charts-pie-chart>
+
+        <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="stats.courtsCount" [gradient]="gradient"
+          [legend]="showLegend" [legendPosition]="legendPosition" [labels]="showLabels" [doughnut]="isDoughnut">
+          >
+        </ngx-charts-pie-chart>
+
+
+        <div class="profile">
+          <img src="http://localhost:3000/{{stats.user.topUser.photo}}" alt="profile photo">
+          <h4>First Name: {{stats.user.topUser.first_name}}</h4>
+          <h4>Last Name: {{stats.user.topUser.last_name}}</h4>
+          <h4>Email: {{stats.user.topUser.email}}</h4>
+          <h4>Terms: {{stats.user.count}}</h4>
+        </div>
+      </div>
+      }
+      @else
+      {
+      <h3>No valuable info &#58;&#40;</h3>
+      }
+
+    </div>
     }
-    @empty {
-    <h2>No complex found</h2>
+    @else
+    {
+    <h3>Select complex</h3>
     }
   </div>
-  <button (click)=openDialogAddComplex()>Add Complex</button>
 
 </div>
+
+<!-- [legendPosition]="legendPosition"
+
+(select)="onSelect($event)"
+(activate)="onActivate($event)"
+      (deactivate)="onDeactivate($event)"
+      
+      -->

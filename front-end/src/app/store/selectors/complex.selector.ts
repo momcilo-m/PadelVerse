@@ -10,4 +10,6 @@ export const selectedCourt = (state: AppState) => state.complexStatus.selectedCo
 
 export const selectedLocation = (state: AppState) => state.complexStatus.complex.find(el => el.id === state.complexStatus.selectedComplexId)?.location;
 
+export const selectedComplexx = (state: AppState) => state.complexStatus.complex.find(el => el.id === state.complexStatus.selectedComplexId)
+
 export const myComplexes = (state: AppState) => state.complexStatus.complex.filter(el => el.owner === state.userStatus.user?.id)

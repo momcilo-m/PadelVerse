@@ -4,9 +4,15 @@ export declare class StatsController {
     constructor(service: StatsService);
     getMonthStats(id: number): Promise<{
         totalCount: number;
-        courtsCount: Record<string, number>;
+        courtsCount: {
+            name: string;
+            value: number;
+        }[];
         totalAmount: number;
-        amountPerWeek: number[];
+        amountPerWeek: {
+            name: string;
+            value: number;
+        }[];
         user: {
             topUser: import("../models/user.entity").User | null;
             count: number;
@@ -14,7 +20,10 @@ export declare class StatsController {
     }>;
     getWeekStats(id: number): Promise<{
         totalCount: number;
-        courtsCount: Record<string, number>;
+        courtsCount: {
+            name: string;
+            value: number;
+        }[];
         totalAmount: number;
         todayCount: number;
         todayAmount: number;
