@@ -1,8 +1,8 @@
-<mat-tab-group>
+<mat-tab-group class="profile-container">
   <mat-tab label="Overview" style="margin: auto;">
     <div class="profile">
       <div class="profile-header">
-        <img src="http://localhost:3000/{{form.get('photo')?.value}}" alt="profile-photo" />
+        <img src="http://localhost:3000/photo/{{form.get('photo')?.value}}" alt="profile-photo" />
         <p>{{form.get('first_name')?.value}} {{form.get('last_name')?.value}}</p>
       </div>
 
@@ -38,7 +38,7 @@
             }">
 
         <div class="form-row form-image">
-          <img src="http://localhost:3000/{{form.get('photo')?.value}}" alt="Profile Photo" class="profile-photo"
+          <img src="http://localhost:3000/photo/{{form.get('photo')?.value}}" alt="Profile Photo" class="profile-photo"
             (click)="fileInput.click()">
           <input type="file" #fileInput style="display: none" (change)="onFileSelected()">
         </div>

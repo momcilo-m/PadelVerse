@@ -11,6 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ComplexController = void 0;
 const common_1 = require("@nestjs/common");
@@ -19,6 +22,9 @@ const complex_service_1 = require("./complex.service");
 const complex_dto_1 = require("../models/complex.dto");
 const court_dto_1 = require("../models/court.dto");
 const courts_service_1 = require("../courts/courts.service");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
+const path_1 = __importDefault(require("path"));
 let ComplexController = class ComplexController {
     service;
     courtService;
@@ -46,6 +52,9 @@ let ComplexController = class ComplexController {
     }
     createCourt(req, courtDTO) {
         return this.courtService.createCourt(courtDTO);
+    }
+    uploadComplex(req, file, id) {
+        return this.service.complexPhoto(file, id);
     }
 };
 exports.ComplexController = ComplexController;
@@ -101,6 +110,25 @@ __decorate([
     __metadata("design:paramtypes", [Object, court_dto_1.CourtDTO]),
     __metadata("design:returntype", void 0)
 ], ComplexController.prototype, "createCourt", null);
+__decorate([
+    (0, common_1.Post)("/photo/:id"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './public/photo/complex',
+            filename: (req, file, cb) => {
+                const uniqueName = req.user.first_name + '-' + Date.now() + path_1.default.extname(file.originalname);
+                cb(null, uniqueName);
+            },
+        }),
+    })),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Number]),
+    __metadata("design:returntype", void 0)
+], ComplexController.prototype, "uploadComplex", null);
 exports.ComplexController = ComplexController = __decorate([
     (0, common_1.Controller)('complex'),
     __metadata("design:paramtypes", [complex_service_1.ComplexService,

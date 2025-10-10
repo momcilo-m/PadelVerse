@@ -21,28 +21,27 @@ export class ProfileController {
     //     };
     // }
 
-    constructor(private readonly profileService: ProfileService) {}
+    constructor(private readonly profileService: ProfileService) { }
 
     @Post("photo")
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
-        destination: './public/profile',
-        filename: (req:any, file, cb) => {
-            const uniqueName = req.user.first_name+ '-' +Date.now() + path.extname(file.originalname);
-            cb(null, uniqueName);
-        },
+            destination: './public/photo/profile',
+            filename: (req: any, file, cb) => {
+                const uniqueName = req.user.first_name + '-' + Date.now() + path.extname(file.originalname);
+                cb(null, uniqueName);
+            },
         }),
     }))
-    uploadProfile(@Req() req:any,@UploadedFile() file: Express.Multer.File) {
-        return this.profileService.profilePhoto(file,req.user.id);
+    uploadProfile(@Req() req: any, @UploadedFile() file: Express.Multer.File) {
+        return this.profileService.profilePhoto(file, req.user.id);
     }
 
     @Patch("")
     @UseGuards(JwtAuthGuard)
-    editProfile(@Req() req:any, @Body(new ValidationPipe({whitelist:true})) user:UpdateUserDTO)
-    {
-        return this.profileService.editProfile(req.user.id,user);
+    editProfile(@Req() req: any, @Body(new ValidationPipe({ whitelist: true })) user: UpdateUserDTO) {
+        return this.profileService.editProfile(req.user.id, user);
     }
 
     // @UseInterceptors(FileInterceptor('file'))

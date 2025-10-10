@@ -1,7 +1,7 @@
 import { AppState } from "../states/app.state";
 
 export const selectComplexes = (state: AppState) => state.complexStatus.complex
-export const selectedComplex = (state: AppState) => state.complexStatus.selectedComplexId
+export const selectedComplexID = (state: AppState) => state.complexStatus.selectedComplexId
 
 
 export const selectCourts = (state: AppState) => state.complexStatus.courts
@@ -9,7 +9,6 @@ export const selectAvailable = (state: AppState) => state.complexStatus.avalaibl
 export const selectedCourt = (state: AppState) => state.complexStatus.selectedCorut
 
 export const selectedLocation = (state: AppState) => state.complexStatus.complex.find(el => el.id === state.complexStatus.selectedComplexId)?.location;
-
-export const selectedComplexx = (state: AppState) => state.complexStatus.complex.find(el => el.id === state.complexStatus.selectedComplexId)
+export const selectedComplex = (state: AppState) => state.complexStatus.complex.find(el => el.id === state.complexStatus.selectedComplexId)
 
 export const myComplexes = (state: AppState) => state.complexStatus.complex.filter(el => el.owner === state.userStatus.user?.id)

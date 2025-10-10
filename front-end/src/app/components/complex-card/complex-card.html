@@ -1,10 +1,10 @@
 <mat-card class="complex-card">
-<!-- Gornja polovina -->
-<div class="card-header">
-  <img [src]="imageUrl" alt="{{ name }}" class="card-image" />
-  <div class="overlay"></div>
-  <h2 class="place-name">{{ name }}</h2>
-</div>
+  <!-- Gornja polovina -->
+  <div class="card-header">
+    <img [src]="'http://localhost:3000/photo/' + photo" alt="{{ name }}" class="card-image" />
+    <div class="overlay"></div>
+    <h2 class="place-name">{{ name }}</h2>
+  </div>
 
   <!-- Donja polovina -->
   <div class="card-content">

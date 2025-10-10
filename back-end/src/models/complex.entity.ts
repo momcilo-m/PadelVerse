@@ -3,34 +3,36 @@ import { User } from "./user.entity";
 import { Tournament } from "./tournament.entity";
 
 @Entity('complex')
-export class Complex
-{
+export class Complex {
     @PrimaryGeneratedColumn()
-    id:number;
+    id: number;
 
     @Column()
-    name:string
+    name: string
 
-    @Column({type:'point'})
-    location:string
+    @Column({ type: 'point' })
+    location: string
 
     @Column()
     @ManyToOne(() => User)
     @JoinColumn({ name: 'owner' })
-    owner:number
+    owner: number
 
-    @Column({type:"time"})
-    open_time:string
+    @Column({ type: "time" })
+    open_time: string
 
-    @Column({type:"time"})
-    close_time:string
+    @Column({ type: "time" })
+    close_time: string
 
     // @Column({type:"decimal"})
     // price:number
 
     @Column()
-    country:string
+    country: string
 
     @Column()
-    city:string
+    city: string
+
+    @Column()
+    photo: string
 }

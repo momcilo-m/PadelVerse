@@ -41,7 +41,7 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
-            destination: './public/profile',
+            destination: './public/photo/profile',
             filename: (req, file, cb) => {
                 const uniqueName = req.user.first_name + '-' + Date.now() + path_1.default.extname(file.originalname);
                 cb(null, uniqueName);

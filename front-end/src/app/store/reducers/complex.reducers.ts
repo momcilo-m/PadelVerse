@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store"
 import { ComplexState } from "../states/complex.state"
-import { addComplex, addCourt, editComplexSuccessFully, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, selectCourt, userComplexSuccessfully } from "../actions/complex.action"
+import { addComplex, addCourt, editComplexSuccess, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, selectCourt, uploadComplexImageSuccess, userComplexSuccess } from "../actions/complex.action"
 
 export const initComplexState: ComplexState =
 {
@@ -32,13 +32,13 @@ export const complexReducer = createReducer(
             selectedComplexId: payload.id
         }
     }),
-    on(loadCourts, failedCourts, (state) => {
-        return {
-            ...state,
-            courts: [],
-            avalaibleCourts: []
-        }
-    }),
+    // on(loadCourts, failedCourts, (state) => {
+    //     return {
+    //         ...state,
+    //         courts: [],
+    //         avalaibleCourts: []
+    //     }
+    // }),
     on(loadedCourts, (state, payload) => {
         console.log(payload)
         return {
@@ -59,7 +59,7 @@ export const complexReducer = createReducer(
             complex: [...state.complex, payload.complex]
         }
     }),
-    on(userComplexSuccessfully, (state, payload) => {
+    on(userComplexSuccess, (state, payload) => {
 
         let notInList = payload.complex.filter((complex) => !state.complex.find(c => c.id === complex.id))
         return {
@@ -74,7 +74,7 @@ export const complexReducer = createReducer(
             courts: finded ? [...state.courts] : [...state.courts, payload.court]
         }
     }),
-    on(editComplexSuccessFully, (state, { complex, id }) => {
+    on(editComplexSuccess, (state, { complex, id }) => {
 
         const [x, y] = complex.location.slice(1, -1).split(",").map(Number);
 
@@ -87,9 +87,13 @@ export const complexReducer = createReducer(
             )
         };
     }),
-
-
-
-
+    on(uploadComplexImageSuccess, (state, { id, path }) => {
+        return {
+            ...state,
+            complex: state.complex.map(cmp =>
+                cmp.id === id ? { ...cmp, photo: path } : cmp
+            )
+        };
+    })
 
 )

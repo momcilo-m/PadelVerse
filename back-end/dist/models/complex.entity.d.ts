@@ -7,4 +7,5 @@ export declare class Complex {
     close_time: string;
     country: string;
     city: string;
+    photo: string;
 }

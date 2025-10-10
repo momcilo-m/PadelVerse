@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -14,9 +14,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { createComplex, createCourt, editComplex, selectComplex, userComplex } from '../../store/actions/complex.action';
+import { createComplex, createCourt, editComplex, selectComplex, uploadComplexImage, userComplex } from '../../store/actions/complex.action';
 import { selectUser } from '../../store/selectors/user.selector';
-import { myComplexes, selectedComplex, selectedComplexx } from '../../store/selectors/complex.selector';
+import { myComplexes, selectedComplexID, selectedComplex } from '../../store/selectors/complex.selector';
 import { combineLatest, combineLatestAll, filter, firstValueFrom, map, Observable, Subscription } from 'rxjs';
 import { ComplexGlobalStats, ComplexStatsMonth, ComplexStatsWeek } from '../../models/complex.stats';
 import { ManagementService } from '../../services/management.service';
@@ -24,13 +24,7 @@ import { ManagementService } from '../../services/management.service';
 import { ChangeDetectionStrategy, model, signal } from '@angular/core';
 
 import {
-  MAT_DIALOG_DATA,
   MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 import { AddComplex } from '../add-complex/add-complex';
 import { CreateComplex } from '../../models/create.complex.interface';
@@ -59,6 +53,8 @@ export class Management {
   user$: Subscription;
   private userId: number = -1;
 
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   constructor(private managementService: ManagementService) {
     this.user$ = this.store.select(selectUser)
       .subscribe((user) => {
@@ -86,7 +82,7 @@ export class Management {
 
   modalAddComplex: Boolean = false;
 
-  selected$ = this.store.select(selectedComplex).pipe(
+  selected$ = this.store.select(selectedComplexID).pipe(
     filter(id => id != -1 && id != this.prevId)
   )
     .subscribe((e) => {
@@ -106,7 +102,7 @@ export class Management {
       this.monthStats$.subscribe((e) => console.log(e))
     })
 
-  selectedComplex$ = this.store.select(selectedComplexx)
+  selectedComplex$ = this.store.select(selectedComplex)
 
 
   myComplex$ = this.store.select(myComplexes)
@@ -196,5 +192,15 @@ export class Management {
     group: ScaleType.Ordinal,
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#9e64fdff']
   };
+
+  onFileSelected(event: Event, id: number) {
+
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (file) {
+      this.store.dispatch(uploadComplexImage({ file, id }));
+    }
+  }
 
 }

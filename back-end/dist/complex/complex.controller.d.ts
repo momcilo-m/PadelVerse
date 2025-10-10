@@ -15,4 +15,9 @@ export declare class ComplexController {
     createComplex(req: any, complexDTO: ComplexDTO): Promise<import("../models/complex.entity").Complex>;
     editCourt(req: any, complexDTO: ComplexDTO, id: number): Promise<import("@nestjs/common").BadRequestException | Partial<import("../models/complex.entity").Complex>>;
     createCourt(req: any, courtDTO: CourtDTO): Promise<import("../models/court.entity").Court>;
+    uploadComplex(req: any, file: Express.Multer.File, id: number): Promise<{
+        message: string;
+        filename: string;
+        path: string;
+    }>;
 }

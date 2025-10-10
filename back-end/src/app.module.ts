@@ -10,10 +10,10 @@ import { User } from './models/user.entity';
 import { UsersModule } from './users/users.module';
 import { MailerService } from './mailer/mailer.service';
 import { MailerModule } from './mailer/mailer.module';
-import { ComplexController} from './complex/complex.controller';
+import { ComplexController } from './complex/complex.controller';
 import { Complex } from './models/complex.entity';
-import { ComplexService} from './complex/complex.service';
-import { ComplexModule} from './complex/complex.module';
+import { ComplexService } from './complex/complex.service';
+import { ComplexModule } from './complex/complex.module';
 import { AuthModule } from './auth/auth.module';
 import { TermsController } from './terms/terms.controller';
 import { TermsService } from './terms/terms.service';
@@ -37,20 +37,20 @@ import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
-     TypeOrmModule.forRoot({
+    TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
       port: 5432,
       username: 'momcilo',
       password: 'padelvrese',
       database: 'postgres',
-      entities: [User,Complex,Court,Term,Tournament],
+      entities: [User, Complex, Court, Term, Tournament],
       synchronize: false,
     }),
     ConfigModule.forRoot(
       {
-        envFilePath:"./../.env",
-        isGlobal:true
+        envFilePath: "./../.env",
+        isGlobal: true
       }
     ),
     ServeStaticModule.forRoot({
@@ -68,7 +68,7 @@ import { StatsModule } from './stats/stats.module';
     ProfileModule,
     StatsModule,
   ],
-  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController,TournamentsController, BookingController,ProfileController],
-  providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService,ProfileController],
+  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController, TournamentsController, BookingController, ProfileController],
+  providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService, ProfileController],
 })
-export class AppModule{}
+export class AppModule { }

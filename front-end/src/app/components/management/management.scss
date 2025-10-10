@@ -92,3 +92,16 @@ mat-select {
     justify-content: center;
     text-align: center;
 }
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.stats {
+    flex: 3;
+}
+
+.stats h3 {
+    text-align: center;
+}

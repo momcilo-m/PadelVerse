@@ -19,4 +19,9 @@ export declare class ComplexService {
         all: Court[];
         available: number[];
     }>;
+    complexPhoto(file: Express.Multer.File, id: number): Promise<{
+        message: string;
+        filename: string;
+        path: string;
+    }>;
 }

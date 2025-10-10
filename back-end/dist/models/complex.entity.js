@@ -21,6 +21,7 @@ let Complex = class Complex {
     close_time;
     country;
     city;
+    photo;
 };
 exports.Complex = Complex;
 __decorate([
@@ -57,6 +58,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Complex.prototype, "city", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Complex.prototype, "photo", void 0);
 exports.Complex = Complex = __decorate([
     (0, typeorm_1.Entity)('complex')
 ], Complex);

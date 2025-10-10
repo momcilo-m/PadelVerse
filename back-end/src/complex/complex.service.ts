@@ -99,4 +99,21 @@ export class ComplexService {
 
         return res;
     }
+
+    async complexPhoto(file: Express.Multer.File, id: number) {
+
+        const updateData: Partial<Complex> = {};
+        updateData.photo = "complex/" + file.filename;
+
+        const update = await this.complexRepository.update({ id }, updateData);
+
+        if (update.affected == 0)
+            throw new NotFoundException("User photo doesn't changed");
+
+        return {
+            message: 'You are successfully uploaded profile photo',
+            filename: file.filename,
+            path: `complex/${file.filename}`,
+        };
+    }
 }

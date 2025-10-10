@@ -31,7 +31,8 @@ export class EditComplex {
       id: -1,
       location: { x: -1, y: -1 },
       name: "",
-      owner: -1
+      owner: -1,
+      photo: ""
     }
 
   editComplex() {

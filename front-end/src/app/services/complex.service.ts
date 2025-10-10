@@ -35,10 +35,6 @@ export class ComplexService {
     return this.http.get<ForecastResponse>(`${base}/forecast.json?key=${key}&q=${location}&dt=${date}&hour=${time}`)
   }
 
-  checkout(complex: number, court: number, count: number) {
-    return this.http.get<{ id: string }>(`http://localhost:3000/booking/checkout-session?complex=${complex}&court=${court}&count=${count}`, { withCredentials: true })
-  }
-
   getComplexByOwner(owner: number) {
     return this.http.get<ComplexInterface[]>(`http://localhost:3000/complex?owner=${owner}`)
   }
@@ -53,5 +49,12 @@ export class ComplexService {
 
   editComplex(complex: CreateComplex, id: number): Observable<CreateComplex> {
     return this.http.patch<CreateComplex>(`http://localhost:3000/complex/${id}`, complex, { withCredentials: true })
+  }
+
+  uploadComplexImage(file: File, id: number): Observable<{ path: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<{ path: string }>(`http://localhost:3000/complex/photo/${id}`, formData, { withCredentials: true });
   }
 }

@@ -1,72 +1,65 @@
 <form [formGroup]="form" style=" display: grid; gap: 15px; height: 100%; grid-template-rows: 1fr 5fr 1fr;">
-<div class="panel">
-    <div class="location">
-        <div class="rounded-corner panel">
-            <mat-icon> location_on</mat-icon>
-            <p>{{city}} {{country}}</p>
+    <div class="panel">
+        <div class="location">
+            <div class="rounded-corner panel">
+                <mat-icon> location_on</mat-icon>
+                <p>{{city}} {{country}}</p>
+            </div>
         </div>
-    </div>
         <div class="date-picker">
-        <mat-form-field appearance="outline" style="width: 200px; height: 50px;">
-        <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="datePicker" formControlName="date">
-        <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
-        <mat-datepicker #datePicker></mat-datepicker>
-        </mat-form-field>
-    </div>
-    
-    <div class="time-picker">
-        <mat-form-field class="time" appearance="outline" style="width: 200px; height: 50px;">
-        <mat-label>Start</mat-label>
-        <input matInput [matTimepicker]="startPicker" formControlName="startTime">
-        <mat-timepicker-toggle matIconSuffix [for]="startPicker"></mat-timepicker-toggle>
-        <mat-timepicker interval="1h" #startPicker></mat-timepicker>
-        </mat-form-field>
-    </div>
+            <mat-form-field appearance="outline" style="width: 200px; height: 50px;">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="datePicker" formControlName="date">
+                <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+                <mat-datepicker #datePicker></mat-datepicker>
+            </mat-form-field>
+        </div>
 
-    <div class="counter">
-        <mat-icon>schedule</mat-icon>
+        <div class="time-picker">
+            <mat-form-field class="time" appearance="outline" style="width: 200px; height: 50px;">
+                <mat-label>Start</mat-label>
+                <input matInput [matTimepicker]="startPicker" formControlName="startTime">
+                <mat-timepicker-toggle matIconSuffix [for]="startPicker"></mat-timepicker-toggle>
+                <mat-timepicker interval="1h" #startPicker></mat-timepicker>
+            </mat-form-field>
+        </div>
 
-        <button mat-icon-button (click)="decrement()">
-            <mat-icon>remove</mat-icon>
-        </button>
-        
-        <span class="value">{{ form.get('count')?.value }}</span>
+        <div class="counter">
+            <mat-icon>schedule</mat-icon>
 
-        <button mat-icon-button (click)="increment()">
-            <mat-icon>add</mat-icon>
-        </button>
+            <button mat-icon-button (click)="decrement()">
+                <mat-icon>remove</mat-icon>
+            </button>
+
+            <span class="value">{{ form.get('count')?.value }}</span>
+
+            <button mat-icon-button (click)="increment()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+
     </div>
-    
-</div>
 
     <div class="grid-content">
         <div>
             <!-- Choose a panel court -->
             <div class="courts rounded-corner">
                 @if (courtsWithStatus$ | async; as courts) {
-                    @for (court of courts; track court.id) {
-                        <div 
-                            [class]="
+                @for (court of courts; track court.id) {
+                <div [class]="
                             ' court rounded-corner ' + 
                             (court.isAvailable ? 'court-available' : 'court-unavailable') + 
                             (form.get('court')?.value === court.id ? ' selectedCourt' : '')
-                            "
-                            (click)="onClickCourt(court.id, court.isAvailable)"
-                            >                            
-                            <h3>{{ court.name }}</h3>
-                        </div>
+                            " (click)="onClickCourt(court.id, court.isAvailable)">
+                    <h3>{{ court.name }}</h3>
+                </div>
                 }
-            }
+                }
             </div>
         </div>
-        
+
         <div class="complex-location">
-            <google-map
-            height="100%"
-            witdh="200px"
-            [center]="(location$ | async)!"
-            [options]="{
+            <google-map height="100%" witdh="200px" [center]="(location$ | async)!" [options]="{
                 mapTypeControl: false,streetViewControl: false, 
                 fullscreenControl: false,
                 zoomControl: false,
@@ -74,26 +67,23 @@
                 scrollwheel: true,
                 draggable: true,
                 keyboardShortcuts: true,
-            }"
-            [zoom]="16">
-            @if (location$ | async; as location) {
-                <map-marker 
-                    [position]="location" 
-                    [title]="'Moja lokacija'">
+            }" [zoom]="16">
+                @if (location$ | async; as location) {
+                <map-marker [position]="location" [title]="'Moja lokacija'">
                 </map-marker>
-            }
+                }
             </google-map>
         </div>
-    
+
         <div class="weather-container">
             Weather Prediction
             <div class="weather rounded-corner">
 
                 <div class="weather-date">
-                @if (weather$ | async; as weather) {
+                    @if (weather$ | async; as weather) {
                     <p>{{ transformDate(form.get('date')?.value!) }}</p>
                     <p>High: {{ weather.max_temp }} Low: {{ weather.min_temp }}</p>
-                }
+                    }
                 </div>
 
                 @if (weather$ | async; as weather) {
@@ -112,7 +102,7 @@
 
 
         <div class="price">
-            <div style="display: flex; align-items: center;">    
+            <div style="display: flex; align-items: center;">
                 <mat-icon>wallet</mat-icon>
                 <p>Total Price</p>
             </div>
@@ -120,16 +110,10 @@
         </div>
 
         <div class="checkout">
-            <button
-            [class]=" 'submit-btn rounded-corner'"
-            mat-icon-button
-            color="primary"
-            type="submit"
-            (click)="checkout()"
-            [disabled] = "(form.get('court')?.value === -1 ?  true : false)"
-            >
-            Proceed Checkout 
-            <mat-icon>input</mat-icon>
+            <button [class]=" 'submit-btn rounded-corner'" mat-icon-button color="primary" type="submit"
+                (click)="checkout()" [disabled]="(form.get('court')?.value === -1 ?  true : false)">
+                Proceed Checkout
+                <mat-icon>input</mat-icon>
             </button>
         </div>
 

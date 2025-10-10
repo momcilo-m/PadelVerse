@@ -5,12 +5,12 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-complex-card',
-   imports: [CommonModule, MatCardModule, MatIconModule],
+  imports: [CommonModule, MatCardModule, MatIconModule],
   templateUrl: './complex-card.html',
   styleUrl: './complex-card.scss'
 })
 export class ComplexCard {
-  @Input() imageUrl!: string;
+  @Input() photo!: string;
   @Input() name!: string;
   @Input() city!: string;
   @Input() country!: string;

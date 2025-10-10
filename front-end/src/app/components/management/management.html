@@ -14,12 +14,15 @@
     }
   </div>
 
-  <div style="display: flex; justify-content: space-between;">
+  <div class="stats-container">
     <div>
       <div class="complex-list">
         @for (complex of myComplex$ | async; track complex.id) {
         <div class="complex" (click)=selectComplex(complex.id)>
-          <img src="https://picsum.photos/300/200">
+          <div>
+            <img [src]="'http://localhost:3000/photo/' + complex.photo" (click)="fileInput.click()">
+            <input type="file" #fileInput style="display: none" (change)="onFileSelected($event, complex.id)">
+          </div>
           <h3>{{complex.name}}</h3>
           <div class="actions">
             <mat-icon (click)="openDialogEditComplex(complex.id)">edit icon</mat-icon>
@@ -84,7 +87,7 @@
 
         <div class="profile">
           <h2>Top Player:</h2>
-          <img src="http://localhost:3000/{{stats.month.user.topUser.photo}}" alt="profile photo">
+          <img src="http://localhost:3000/photo/{{stats.month.user.topUser.photo}}" alt="profile photo">
           <div>
             <h4>First Name: {{stats.month.user.topUser.first_name}}</h4>
             <h4>Last Name: {{stats.month.user.topUser.last_name}}</h4>

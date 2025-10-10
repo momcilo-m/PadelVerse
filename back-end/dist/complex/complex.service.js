@@ -99,6 +99,18 @@ let ComplexService = class ComplexService {
         }
         return res;
     }
+    async complexPhoto(file, id) {
+        const updateData = {};
+        updateData.photo = "complex/" + file.filename;
+        const update = await this.complexRepository.update({ id }, updateData);
+        if (update.affected == 0)
+            throw new common_1.NotFoundException("User photo doesn't changed");
+        return {
+            message: 'You are successfully uploaded profile photo',
+            filename: file.filename,
+            path: `complex/${file.filename}`,
+        };
+    }
 };
 exports.ComplexService = ComplexService;
 exports.ComplexService = ComplexService = __decorate([
