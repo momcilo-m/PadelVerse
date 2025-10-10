@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { ComplexService } from "../../services/complex.service";
 import { catchError, filter, from, map, of, switchMap, tap, withLatestFrom } from "rxjs";
-import { addComplex, addCourt, booking, bookingFailed, bookingSuccess, createComplex, createCourt, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, userComplex, userComplexFailed, userComplexSuccessfully } from "../actions/complex.action";
+import { addComplex, addCourt, booking, bookingFailed, bookingSuccess, createComplex, createCourt, editComplex, editComplexSuccessFully, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, userComplex, userComplexFailed, userComplexSuccessfully } from "../actions/complex.action";
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { weather, weatherFailed } from "../actions/weather.action";
 import { Store } from "@ngrx/store";
@@ -109,6 +109,17 @@ export class ComplexEffect {
             switchMap(({ court }) => this.complexService.createCourt(court).pipe(
                 map(court => addCourt({ court })),
                 catchError((err) => of(failedCourts({ message: err.message || "Failed when create courts" })))
+            ))
+        )
+    })
+
+    editComplex$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(editComplex),
+            switchMap(({ complex, id }) => this.complexService.editComplex(complex, id).pipe(
+                tap((complex) => console.log("EDIT: ", complex)),
+                map((complex) => editComplexSuccessFully({ complex, id })),
+                catchError((err) => of(failedComplex({ message: err.message || "Failed when edit complex" })))
             ))
         )
     })

@@ -5,7 +5,9 @@
   <span>My App</span>
 </mat-toolbar>
 
-<mat-sidenav-container style="max-width: 1600px !important; margin: auto;" class="sidenav-container">
+<!-- style="max-width: 1600px !important; margin: auto;" -->
+
+<mat-sidenav-container class="sidenav-container">
 
   <mat-sidenav #sidenav mode="side" class="sidenav">
     <mat-nav-list>
@@ -31,7 +33,7 @@
   </mat-sidenav>
 
 
-  <mat-sidenav-content>
+  <mat-sidenav-content class="sidenav-content">
     <main>
       <router-outlet></router-outlet>
     </main>

@@ -14,10 +14,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { createComplex, createCourt, selectComplex, userComplex } from '../../store/actions/complex.action';
+import { createComplex, createCourt, editComplex, selectComplex, userComplex } from '../../store/actions/complex.action';
 import { selectUser } from '../../store/selectors/user.selector';
 import { myComplexes, selectedComplex, selectedComplexx } from '../../store/selectors/complex.selector';
-import { filter, firstValueFrom, map, Observable, Subscription } from 'rxjs';
+import { combineLatest, combineLatestAll, filter, firstValueFrom, map, Observable, Subscription } from 'rxjs';
 import { ComplexGlobalStats, ComplexStatsMonth, ComplexStatsWeek } from '../../models/complex.stats';
 import { ManagementService } from '../../services/management.service';
 
@@ -38,6 +38,7 @@ import { AddCourts } from '../add-courts/add-courts';
 import { CreateCourt } from '../../models/create.court.interface';
 import { LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
+
 @Component({
   selector: 'app-management',
   imports: [
@@ -46,6 +47,7 @@ import { LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts
     MatToolbarModule,
     AsyncPipe,
     MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule,
+    MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule,
     NgxChartsModule
   ],
   templateUrl: './management.html',
@@ -70,11 +72,15 @@ export class Management {
       })
   }
 
+  selectedStats: string = 'monthly';
+
   private prevId: number = -1;
 
   monthStats$!: Observable<ComplexStatsMonth>
 
   weekStats$!: Observable<ComplexStatsWeek>
+
+  stats$!: Observable<{ month: ComplexStatsMonth; week: ComplexStatsWeek }>;
 
   globalStats$!: Observable<ComplexGlobalStats>
 
@@ -88,6 +94,14 @@ export class Management {
 
       this.monthStats$ = this.managementService.getMonhtStats(e)
       this.weekStats$ = this.managementService.getWeekStats(e)
+
+      this.stats$ = combineLatest([
+        this.monthStats$,
+        this.weekStats$
+      ]).pipe(
+        map(([month, week]) => ({ month, week }))
+      )
+
 
       this.monthStats$.subscribe((e) => console.log(e))
     })
@@ -104,7 +118,16 @@ export class Management {
   readonly dialog = inject(MatDialog);
 
   openDialogAddComplex() {
-    const dialogRef = this.dialog.open(AddComplex);
+    const dialogRef = this.dialog.open(AddComplex, {
+      data: {
+        name: "",
+        open_time: "",
+        close_time: "",
+        location: "",
+        country: "",
+        city: ""
+      }
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
@@ -138,10 +161,9 @@ export class Management {
     dialogReff.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
       if (result !== undefined && this.userId != -1) {
-        let court: CreateCourt = result;
+        let complex: CreateComplex = result;
 
-        court.complex = id;
-        this.store.dispatch(createCourt({ court }))
+        this.store.dispatch(editComplex({ complex, id }))
       }
     });
   }
@@ -161,9 +183,6 @@ export class Management {
       }
     });
   }
-
-
-  //stats
 
   view: [number, number] = [400, 400];
   gradient: boolean = true;

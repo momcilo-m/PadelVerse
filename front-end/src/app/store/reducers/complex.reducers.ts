@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store"
 import { ComplexState } from "../states/complex.state"
-import { addComplex, addCourt, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, selectCourt, userComplexSuccessfully } from "../actions/complex.action"
+import { addComplex, addCourt, editComplexSuccessFully, failedComplex, failedCourts, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, selectCourt, userComplexSuccessfully } from "../actions/complex.action"
 
 export const initComplexState: ComplexState =
 {
@@ -73,5 +73,23 @@ export const complexReducer = createReducer(
             ...state,
             courts: finded ? [...state.courts] : [...state.courts, payload.court]
         }
-    })
+    }),
+    on(editComplexSuccessFully, (state, { complex, id }) => {
+
+        const [x, y] = complex.location.slice(1, -1).split(",").map(Number);
+
+        return {
+            ...state,
+            complex: state.complex.map(item =>
+                item.id === id
+                    ? { ...item, ...complex, location: { x, y } }
+                    : item
+            )
+        };
+    }),
+
+
+
+
+
 )

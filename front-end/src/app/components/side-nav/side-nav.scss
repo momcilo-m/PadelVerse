@@ -9,3 +9,18 @@
 .content {
   padding: 16px;
 }
+
+.sidenav-content {
+  display: flex;
+  justify-content: center;
+  /* centriranje horizontalno */
+  padding: 0 16px;
+  /* malo padding-a sa strane */
+  box-sizing: border-box;
+}
+
+.sidenav-content>main {
+  max-width: 1600px;
+  /* ograničenje širine sadržaja */
+  width: 100%;
+}

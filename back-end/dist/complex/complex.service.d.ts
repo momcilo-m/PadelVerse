@@ -14,10 +14,7 @@ export declare class ComplexService {
     getByIds(id: number[]): Promise<Complex[]>;
     getByUser(owner: number): Promise<Complex[]>;
     create(complexDTO: ComplexDTO): Promise<Complex>;
-    edit(id: number, complexDTO: ComplexDTO): Promise<BadRequestException | {
-        success: boolean;
-        message: string;
-    }>;
+    edit(id: number, complexDTO: ComplexDTO): Promise<BadRequestException | Partial<Complex>>;
     freeCourts(id: number, start: string, count: number, date: Date): Promise<never[] | {
         all: Court[];
         available: number[];

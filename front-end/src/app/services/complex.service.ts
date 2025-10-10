@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, throwError } from 'rxjs';
+import { map, Observable, retry, throwError } from 'rxjs';
 import { ComplexInterface } from '../models/complex.interface';
 import { Complex } from '../components/complex/complex';
 import { CreateComplex } from '../models/create.complex.interface';
@@ -49,5 +49,9 @@ export class ComplexService {
 
   createCourt(court: CourtInterface): Observable<CourtInterface> {
     return this.http.post<CourtInterface>(`http://localhost:3000/complex/courts`, court, { withCredentials: true })
+  }
+
+  editComplex(complex: CreateComplex, id: number): Observable<CreateComplex> {
+    return this.http.patch<CreateComplex>(`http://localhost:3000/complex/${id}`, complex, { withCredentials: true })
   }
 }

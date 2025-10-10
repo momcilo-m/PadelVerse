@@ -36,46 +36,85 @@
       <button (click)=openDialogAddComplex()>Add Complex</button>
     </div>
 
-    @if (monthStats$ | async; as stats)
-    {
     <div class="stats">
+      @if (stats$ | async; as stats)
+      {
       <div class="stats-header">
-        <h3>Count:{{stats.totalCount}}</h3>
-        <h3>Count:{{stats.totalAmount}}</h3>
+        <h3>
+          Count: {{
+          selectedStats === 'monthly'
+          ? stats.month.totalCount
+          : stats.week.totalCount
+          }}
+        </h3>
+        <h3>
+          Amount: {{
+          selectedStats === 'monthly'
+          ? stats.month.totalAmount
+          : stats.week.totalAmount
+          }}
+        </h3>
+
+        @if(selectedStats==="weekly")
+        {
+        <h3>Today Count : {{stats.week.todayCount}}</h3>
+        <h3>Today Amount : {{stats.week.todayAmount}}$</h3>
+        }
+
+        <mat-select [(value)]="selectedStats">
+          <mat-option value="monthly">Monthly Stats</mat-option>
+          <mat-option value="weekly">Weekly Stats</mat-option>
+        </mat-select>
       </div>
-      @if (stats.user.count != 0) {
+
+      @if (selectedStats==="monthly" && stats.month.user.count != 0) {
       <div class="charts">
-        <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="stats.amountPerWeek" [gradient]="gradient"
-          [legend]="showLegend" [legendPosition]="legendPosition" [labels]="showLabels" [doughnut]="isDoughnut">
+        <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="stats.month.amountPerWeek"
+          [gradient]="gradient" [legend]="showLegend" [legendPosition]="legendPosition" [labels]="showLabels"
+          [doughnut]="isDoughnut">
           >
         </ngx-charts-pie-chart>
 
-        <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="stats.courtsCount" [gradient]="gradient"
-          [legend]="showLegend" [legendPosition]="legendPosition" [labels]="showLabels" [doughnut]="isDoughnut">
+        <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="stats.month.courtsCount"
+          [gradient]="gradient" [legend]="showLegend" [legendPosition]="legendPosition" [labels]="showLabels"
+          [doughnut]="isDoughnut">
           >
         </ngx-charts-pie-chart>
 
 
         <div class="profile">
-          <img src="http://localhost:3000/{{stats.user.topUser.photo}}" alt="profile photo">
-          <h4>First Name: {{stats.user.topUser.first_name}}</h4>
-          <h4>Last Name: {{stats.user.topUser.last_name}}</h4>
-          <h4>Email: {{stats.user.topUser.email}}</h4>
-          <h4>Terms: {{stats.user.count}}</h4>
+          <h2>Top Player:</h2>
+          <img src="http://localhost:3000/{{stats.month.user.topUser.photo}}" alt="profile photo">
+          <div>
+            <h4>First Name: {{stats.month.user.topUser.first_name}}</h4>
+            <h4>Last Name: {{stats.month.user.topUser.last_name}}</h4>
+            <h4>Email: {{stats.month.user.topUser.email}}</h4>
+            <h4>Terms: {{stats.month.user.count}}</h4>
+          </div>
         </div>
+      </div>
+      }
+      @else if(selectedStats==="weekly")
+      {
+      <div class="charts">
+
+        <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="stats.month.courtsCount"
+          [gradient]="gradient" [legend]="showLegend" [legendPosition]="legendPosition" [labels]="showLabels"
+          [doughnut]="isDoughnut">
+          >
+        </ngx-charts-pie-chart>
       </div>
       }
       @else
       {
       <h3>No valuable info &#58;&#40;</h3>
       }
-
+      }
+      @else
+      {
+      <h3>Select complex</h3>
+      }
     </div>
-    }
-    @else
-    {
-    <h3>Select complex</h3>
-    }
   </div>
 
 </div>

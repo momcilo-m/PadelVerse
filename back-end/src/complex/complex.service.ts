@@ -56,13 +56,15 @@ export class ComplexService {
         if (complexDTO.close_time !== undefined) updateData.close_time = complexDTO.close_time;
         if (complexDTO.location !== undefined) updateData.location = complexDTO.location;
         if (complexDTO.name !== undefined) updateData.name = complexDTO.name;
+        if (complexDTO.city !== undefined) updateData.city = complexDTO.city
+        if (complexDTO.country !== undefined) updateData.country = complexDTO.country
 
         const court = await this.complexRepository.update({ id, owner: complexDTO.owner }, updateData);
 
         if (court.affected == 0)
             throw new NotFoundException('Court not found');
 
-        return { success: true, message: 'Court updated successfully' };
+        return updateData
 
     }
 

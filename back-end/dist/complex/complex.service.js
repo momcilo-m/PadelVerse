@@ -66,10 +66,14 @@ let ComplexService = class ComplexService {
             updateData.location = complexDTO.location;
         if (complexDTO.name !== undefined)
             updateData.name = complexDTO.name;
+        if (complexDTO.city !== undefined)
+            updateData.city = complexDTO.city;
+        if (complexDTO.country !== undefined)
+            updateData.country = complexDTO.country;
         const court = await this.complexRepository.update({ id, owner: complexDTO.owner }, updateData);
         if (court.affected == 0)
             throw new common_1.NotFoundException('Court not found');
-        return { success: true, message: 'Court updated successfully' };
+        return updateData;
     }
     async freeCourts(id, start, count, date) {
         date.setHours(0, 0, 0, 0);

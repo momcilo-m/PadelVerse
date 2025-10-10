@@ -9,6 +9,8 @@ export const selectComplex = createAction('selectComplex', props<{ id: number }>
 export const addComplex = createAction('addComplex', props<{ complex: ComplexInterface }>())
 
 export const createComplex = createAction('createComplex', props<{ complex: CreateComplex }>())
+export const editComplex = createAction('editComplex', props<{ complex: CreateComplex, id: number }>())
+export const editComplexSuccessFully = createAction('editComplexSuccessFully', props<{ complex: CreateComplex, id: number }>())
 // export const createComplexSuccessfully = createAction('createComplexSuccessfully', props<{ complex: ComplexInterface }>)
 
 export const loadCourts = createAction('loadCourts', props<{ complex: number, date: string, time: string, count: number }>());

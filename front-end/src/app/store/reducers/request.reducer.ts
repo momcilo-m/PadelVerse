@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store"
 import { RequestState } from "../states/request.state"
 import { isLogin, login, loginFailed, loginSuccessfully, updateProfile, updateProfileFailed, updateProfileImage, updateProfileImageFailed, updateProfileImageSuccessfully, updateProfileSuccessfully } from "../actions/user.action"
-import { addComplex, addCourt, booking, bookingFailed, bookingSuccess, createComplex, createCourt, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, userComplex, userComplexFailed, userComplexSuccessfully } from "../actions/complex.action"
+import { addComplex, addCourt, booking, bookingFailed, bookingSuccess, createComplex, createCourt, editComplex, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, userComplex, userComplexFailed, userComplexSuccessfully } from "../actions/complex.action"
 import { weather, weatherFailed, weatherSuccess } from "../actions/weather.action"
 
 export const initRequestState: RequestState =
@@ -30,7 +30,7 @@ export const requestReducer = createReducer(
             }
         }),
 
-    on(createCourt, createComplex, userComplex, updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
+    on(editComplex, createCourt, createComplex, userComplex, updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
         return {
             loading: true,
             error: false,

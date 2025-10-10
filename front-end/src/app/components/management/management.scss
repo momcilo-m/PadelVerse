@@ -9,6 +9,11 @@
 .complex img {
     width: 140px;
     height: 70px;
+    flex: 1
+}
+
+.complex h3 {
+    flex: 1;
 }
 
 .complex-list {
@@ -29,6 +34,7 @@
 .actions {
     display: flex;
     gap: 15px;
+    flex: 1
 }
 
 .complex h3 {
@@ -73,4 +79,16 @@
 
 .bar span {
     font-weight: normal;
+}
+
+mat-select {
+    width: 200px;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
