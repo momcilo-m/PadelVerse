@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { selectComplexes } from '../../store/selectors/complex.selector';
 import { map, Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 
 @Component({
@@ -20,17 +21,15 @@ export class Maps {
   center: google.maps.LatLngLiteral = { lat: 40.73061, lng: -73.935242 };
   zoom = 13;
 
+  private map_id = environment.mad_id;
   //private subscription!: Subscription;
 
   store = inject<Store<AppState>>(Store)
 
-  ngOnInit()
-  {
-    if(navigator.geolocation)
-    {
+  ngOnInit() {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position)=>
-        {
+        (position) => {
           const newCenter = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -47,17 +46,18 @@ export class Maps {
       this.map = new google.maps.Map(this.mapElement.nativeElement, {
         center: this.center,
         zoom: this.zoom,
-        mapId: '8da2e5ef598c94e14d6d7495'
+        //mapId: '8da2e5ef598c94e14d6d7495'
+        mapId: this.map_id
       });
 
-       this.store.select(selectComplexes).pipe(
-        map(complexes=>complexes.map(el=>({
-              position:{lat:el.location.x,lng:el.location.y},
-              label:el.name
-            })
+      this.store.select(selectComplexes).pipe(
+        map(complexes => complexes.map(el => ({
+          position: { lat: el.location.x, lng: el.location.y },
+          label: el.name
+        })
         )))
-        .subscribe(marker=>
-          marker.forEach(el=>{
+        .subscribe(marker =>
+          marker.forEach(el => {
             new google.maps.marker.AdvancedMarkerElement({
               map: this.map,
               position: el.position,
@@ -65,14 +65,14 @@ export class Maps {
             });
           })
         )
-        
-    } 
+
+    }
     else {
       console.error('Google Maps API not loaded!');
     }
   }
- 
-  
+
+
   private createMarkerContent(label: string, description?: string): HTMLElement {
     // Container za marker i popup
     const container = document.createElement('div');

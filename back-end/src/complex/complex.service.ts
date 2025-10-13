@@ -1,4 +1,5 @@
 import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException, Req, UseGuards } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { ComplexDTO } from 'src/models/complex.dto';
@@ -14,7 +15,7 @@ export class ComplexService {
     constructor(
         @InjectRepository(Complex) private readonly complexRepository: Repository<Complex>,
         @InjectRepository(Court) private readonly courtRepository: Repository<Court>,
-        @Inject(forwardRef(() => TermsService)) private readonly termsService: TermsService
+        @Inject(forwardRef(() => TermsService)) private readonly termsService: TermsService,
     ) { }
 
     async getAll(query: Record<string, any>) {

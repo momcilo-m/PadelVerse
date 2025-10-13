@@ -38,11 +38,25 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MailerService = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const nodemailer = __importStar(require("nodemailer"));
 let MailerService = class MailerService {
+    configService;
+    email;
+    email_key;
+    front;
+    constructor(configService) {
+        this.configService = configService;
+        this.email = this.configService.get("EMAIL");
+        this.email_key = this.configService.get("EMAIL_KEY");
+        this.front = this.configService.get("front");
+    }
     transport() {
         return nodemailer.createTransport({
             host: "smtp.gmail.com",
@@ -50,8 +64,8 @@ let MailerService = class MailerService {
             secure: false,
             service: 'gmail',
             auth: {
-                user: "polovniracunari3@gmail.com",
-                pass: "typnenhrvhhzocdk",
+                user: this.email,
+                pass: this.email_key,
             }
         });
     }
@@ -61,12 +75,13 @@ let MailerService = class MailerService {
             to: `${reciver}`,
             subject: "Welcome to PadelVerse",
             text: "Hello world?",
-            html: `Hello ${name.toUpperCase()} <br> Plase confirm your registration at this link https://localhost:3000/confirmRegistration/${token} </b>`,
+            html: `Hello ${name.toUpperCase()} <br> Plase confirm your registration at this link ${this.front}/confirmRegistration/${token} </b>`,
         });
     }
 };
 exports.MailerService = MailerService;
 exports.MailerService = MailerService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [config_1.ConfigService])
 ], MailerService);
 //# sourceMappingURL=mailer.service.js.map

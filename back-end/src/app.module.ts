@@ -47,12 +47,10 @@ import { StatsModule } from './stats/stats.module';
       entities: [User, Complex, Court, Term, Tournament],
       synchronize: false,
     }),
-    ConfigModule.forRoot(
-      {
-        envFilePath: "./../.env",
-        isGlobal: true
-      }
-    ),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [() => require('./config').default()],
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/',

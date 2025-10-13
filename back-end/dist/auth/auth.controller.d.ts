@@ -2,9 +2,12 @@ import type { Response } from 'express';
 import { UserDTO } from 'src/models/user.dto';
 import { AuthService } from './auth.service';
 import { PasswordUserDTO } from 'src/models/password.user.dto';
+import { ConfigService } from '@nestjs/config';
 export declare class AuthController {
     private readonly service;
-    constructor(service: AuthService);
+    private configService;
+    private readonly cookieExpireDays;
+    constructor(service: AuthService, configService: ConfigService);
     register(userDTO: UserDTO): Promise<{
         message: string;
     }>;

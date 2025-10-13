@@ -44,42 +44,4 @@ export class ProfileController {
         return this.profileService.editProfile(req.user.id, user);
     }
 
-    // @UseInterceptors(FileInterceptor('file'))
-    // @Post('file/pass-validation')
-    // uploadFileAndPassValidation(
-    //     @UploadedFile(
-    //     new ParseFilePipeBuilder()
-    //         .addFileTypeValidator({
-    //             fileType: 'jpeg',
-    //         })
-    //         .build({
-    //             fileIsRequired: true,
-    //         }),
-    //     )
-    //     file?: Express.Multer.File,
-    // ) {
-    //     return {
-    //     file: file?.buffer.toString(),
-    //     };
-    // }
-
-
-
-    // @UseInterceptors(FileInterceptor('file'))
-    // @Post('file/fail-validation')
-    // uploadFileAndFailValidation(
-    //     @UploadedFile(
-    //     new ParseFilePipeBuilder()
-    //         .addFileTypeValidator({
-    //         fileType: 'jpg',
-    //         })
-    //         .build(),
-    //     )
-    //     file: Express.Multer.File,
-    // ) {
-    //     return {
-    //     file: file.buffer.toString(),
-    //     };
-    // }
-
 }

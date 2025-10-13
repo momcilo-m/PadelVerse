@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JwtStrategy = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const passport_1 = require("@nestjs/passport");
 const typeorm_1 = require("@nestjs/typeorm");
 const passport_jwt_1 = require("passport-jwt");
@@ -21,15 +22,18 @@ const user_entity_1 = require("../models/user.entity");
 const typeorm_2 = require("typeorm");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy, 'jwt') {
     userRepository;
-    constructor(userRepository) {
+    configService;
+    constructor(userRepository, configService) {
+        const secret = configService.get("JWT_SECRET");
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromExtractors([
                 passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
                 (req) => req.cookies.jwt
             ]),
-            secretOrKey: 'hard!to-guess_secret'
+            secretOrKey: secret
         });
         this.userRepository = userRepository;
+        this.configService = configService;
     }
     async validate(payload) {
         const user = await this.userRepository.findOneBy(payload.id);
@@ -42,6 +46,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
 exports.JwtStrategy = JwtStrategy;
 exports.JwtStrategy = JwtStrategy = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        config_1.ConfigService])
 ], JwtStrategy);
 //# sourceMappingURL=jwt.strategy.js.map

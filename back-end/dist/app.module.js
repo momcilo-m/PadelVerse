@@ -60,8 +60,8 @@ exports.AppModule = AppModule = __decorate([
                 synchronize: false,
             }),
             config_1.ConfigModule.forRoot({
-                envFilePath: "./../.env",
-                isGlobal: true
+                isGlobal: true,
+                load: [() => require('./config').default()],
             }),
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', 'public'),

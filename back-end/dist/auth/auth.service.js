@@ -55,19 +55,24 @@ const crypto_1 = require("crypto");
 const class_transformer_1 = require("class-transformer");
 const mailer_service_1 = require("../mailer/mailer.service");
 const jwt_1 = require("@nestjs/jwt");
+const config_1 = require("@nestjs/config");
 let AuthService = class AuthService {
     userRepository;
     mail;
     jwtService;
-    constructor(userRepository, mail, jwtService) {
+    configService;
+    token_secret;
+    constructor(userRepository, mail, jwtService, configService) {
         this.userRepository = userRepository;
         this.mail = mail;
         this.jwtService = jwtService;
+        this.configService = configService;
+        this.token_secret = this.configService.get('TOKEN_SECRET');
     }
     async create(userDTO) {
         const hash = await argon2.hash(userDTO.password);
         const token = (0, crypto_1.randomBytes)(32).toString('hex');
-        const hashedToken = (0, crypto_1.createHmac)('sha256', "0v0 j3 v30m4 t3z4k fl4gg").update(token).digest('hex');
+        const hashedToken = (0, crypto_1.createHmac)('sha256', this.token_secret).update(token).digest('hex');
         const user = (0, class_transformer_1.plainToClass)(user_entity_1.User, userDTO);
         user.token_registration = hashedToken;
         user.password = hash;
@@ -76,7 +81,7 @@ let AuthService = class AuthService {
         return { message: "User created. Please visit your email to confirm registration" };
     }
     async activateUser(token_registration) {
-        const hashedToken = (0, crypto_1.createHmac)('sha256', "0v0 j3 v30m4 t3z4k fl4gg").update(token_registration).digest('hex');
+        const hashedToken = (0, crypto_1.createHmac)('sha256', this.token_secret).update(token_registration).digest('hex');
         const user = await this.userRepository.findOneBy({ token_registration: hashedToken });
         if (!user) {
             throw new common_1.UnauthorizedException('Invalid registration token');
@@ -96,12 +101,6 @@ let AuthService = class AuthService {
         if (!verify)
             throw new common_1.UnauthorizedException('Incorrect email or password');
         const token = this.jwtService.sign({ id: user.id }, { expiresIn: 30 * 24 * 60 * 60 });
-        const cookieOptions = {
-            expire: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-            httpOnly: true,
-            sameSite: "lax",
-            secure: false
-        };
         user.password = "";
         return {
             'status': 'success',
@@ -141,6 +140,7 @@ exports.AuthService = AuthService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         mailer_service_1.MailerService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        config_1.ConfigService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

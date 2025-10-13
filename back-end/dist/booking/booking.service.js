@@ -18,15 +18,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingService = void 0;
 const common_1 = require("@nestjs/common");
 const stripe_1 = __importDefault(require("stripe"));
+const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const court_entity_1 = require("../models/court.entity");
 let BookingService = class BookingService {
     courtRepository;
+    configService;
     stripe;
-    constructor(courtRepository) {
+    constructor(courtRepository, configService) {
         this.courtRepository = courtRepository;
-        this.stripe = new stripe_1.default("sk_test_51S6EVACq02uHmIrCR176zUcaEW3j9OH0GZCIEBF0wA7eBtBQemofOtsvHsQjsyOjxWwXV0hhVhrawyoGj2Q93h8b00eg9IZGxz");
+        this.configService = configService;
+        this.stripe = new stripe_1.default(this.configService.get('STRIPE_KEY'));
     }
     async checkout(complexID, courtID, count, email) {
         let court = await this.courtRepository.manager
@@ -69,6 +72,7 @@ exports.BookingService = BookingService;
 exports.BookingService = BookingService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(court_entity_1.Court)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        config_1.ConfigService])
 ], BookingService);
 //# sourceMappingURL=booking.service.js.map

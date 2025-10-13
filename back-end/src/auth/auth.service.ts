@@ -10,16 +10,22 @@ import { MailerService } from 'src/mailer/mailer.service';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { PasswordUserDTO } from 'src/models/password.user.dto';
+import { ConfigService } from '@nestjs/config';
 
 
 @Injectable()
 export class AuthService {
 
+    private readonly token_secret: string;
+
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         private readonly mail: MailerService,
-        private readonly jwtService: JwtService
-    ) { }
+        private readonly jwtService: JwtService,
+        private configService: ConfigService
+    ) {
+        this.token_secret = this.configService.get('TOKEN_SECRET')!;
+    }
 
     async create(userDTO: UserDTO) {
         //Hash password
@@ -27,7 +33,8 @@ export class AuthService {
 
         //Kreiranje tokena za registraciju i hash
         const token = randomBytes(32).toString('hex');
-        const hashedToken = createHmac('sha256', "0v0 j3 v30m4 t3z4k fl4gg").update(token).digest('hex');
+        //"0v0 j3 v30m4 t3z4k fl4gg"
+        const hashedToken = createHmac('sha256', this.token_secret).update(token).digest('hex');
 
         const user = plainToClass(User, userDTO);
         user.token_registration = hashedToken;
@@ -44,7 +51,8 @@ export class AuthService {
 
     async activateUser(token_registration: string) {
 
-        const hashedToken = createHmac('sha256', "0v0 j3 v30m4 t3z4k fl4gg").update(token_registration).digest('hex');
+        //"0v0 j3 v30m4 t3z4k fl4gg"
+        const hashedToken = createHmac('sha256', this.token_secret).update(token_registration).digest('hex');
         const user = await this.userRepository.findOneBy({ token_registration: hashedToken });
 
         if (!user) {
@@ -74,12 +82,12 @@ export class AuthService {
 
         const token = this.jwtService.sign({ id: user.id }, { expiresIn: 30 * 24 * 60 * 60 });
 
-        const cookieOptions = {
-            expire: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-            httpOnly: true,
-            sameSite: "lax",
-            secure: false
-        }
+        // const cookieOptions = {
+        //     expire: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        //     httpOnly: true,
+        //     sameSite: "lax",
+        //     secure: false
+        // }
 
         user.password = "";
 

@@ -7,15 +7,23 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { MailerModule } from 'src/mailer/mailer.module';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-    JwtModule.register({ secret: 'hard!to-guess_secret' }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+      }),
+    }),
+    //JwtModule.register({ secret: 'hard!to-guess_secret' }),
     MailerModule
   ],
-  providers: [AuthService,JwtStrategy],
+  providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
-  exports: [AuthService,JwtModule],
+  exports: [AuthService, JwtModule],
 })
-export class AuthModule {}
+export class AuthModule { }

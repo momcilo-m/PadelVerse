@@ -13,9 +13,10 @@ export class BookingService {
 
     constructor(
         //@InjectRepository(Complex) private readonly complexRepository:Repository<Complex>,
-        @InjectRepository(Court) private readonly courtRepository: Repository<Court>
+        @InjectRepository(Court) private readonly courtRepository: Repository<Court>,
+        private configService: ConfigService
     ) {
-        this.stripe = new Stripe("sk_test_51S6EVACq02uHmIrCR176zUcaEW3j9OH0GZCIEBF0wA7eBtBQemofOtsvHsQjsyOjxWwXV0hhVhrawyoGj2Q93h8b00eg9IZGxz");
+        this.stripe = new Stripe(this.configService.get('STRIPE_KEY')!);
     }
 
     async checkout(complexID: number, courtID: number, count: number, email: string) {

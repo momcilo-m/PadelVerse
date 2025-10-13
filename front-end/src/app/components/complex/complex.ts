@@ -80,8 +80,7 @@ export class Complex {
       return courts$.map(el =>
       ({
         ...el,
-        // isAvailable:available$.includes(el.id),
-        isAvailable: true
+        isAvailable: available$.includes(el.id),
       })
       )
     })

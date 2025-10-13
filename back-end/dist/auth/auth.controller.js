@@ -18,10 +18,15 @@ const user_dto_1 = require("../models/user.dto");
 const auth_service_1 = require("./auth.service");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
 const password_user_dto_1 = require("../models/password.user.dto");
+const config_1 = require("@nestjs/config");
 let AuthController = class AuthController {
     service;
-    constructor(service) {
+    configService;
+    cookieExpireDays;
+    constructor(service, configService) {
         this.service = service;
+        this.configService = configService;
+        this.cookieExpireDays = this.configService.get('COOKIE_EXPIRE');
     }
     register(userDTO) {
         return this.service.create(userDTO);
@@ -36,7 +41,7 @@ let AuthController = class AuthController {
                 httpOnly: true,
                 sameSite: 'none',
                 secure: true,
-                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+                expires: new Date(Date.now() + this.cookieExpireDays * 24 * 60 * 60 * 1000)
             });
         }
         return res;
@@ -97,6 +102,7 @@ __decorate([
 ], AuthController.prototype, "changePassword", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        config_1.ConfigService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map
