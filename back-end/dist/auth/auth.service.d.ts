@@ -11,8 +11,12 @@ export declare class AuthService {
     private readonly mail;
     private readonly jwtService;
     constructor(userRepository: Repository<User>, mail: MailerService, jwtService: JwtService);
-    create(userDTO: UserDTO): Promise<User>;
-    activateUser(token_registration: string): Promise<User>;
+    create(userDTO: UserDTO): Promise<{
+        message: string;
+    }>;
+    activateUser(token_registration: string): Promise<{
+        message: string;
+    }>;
     login(email: string, password: string): Promise<{
         status: string;
         token: string;

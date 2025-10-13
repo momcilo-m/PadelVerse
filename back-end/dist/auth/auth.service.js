@@ -73,7 +73,7 @@ let AuthService = class AuthService {
         user.password = hash;
         const res = await this.userRepository.save(user);
         this.mail.send(user.email, token, user.first_name);
-        return res;
+        return { message: "User created. Please visit your email to confirm registration" };
     }
     async activateUser(token_registration) {
         const hashedToken = (0, crypto_1.createHmac)('sha256', "0v0 j3 v30m4 t3z4k fl4gg").update(token_registration).digest('hex');
@@ -83,7 +83,8 @@ let AuthService = class AuthService {
         }
         user.is_active = true;
         user.token_registration = "";
-        return await this.userRepository.save(user);
+        await this.userRepository.save(user);
+        return { message: "You are successfully activated user" };
     }
     async login(email, password) {
         if (!email || !password)

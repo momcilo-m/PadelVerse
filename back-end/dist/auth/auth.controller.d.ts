@@ -5,8 +5,12 @@ import { PasswordUserDTO } from 'src/models/password.user.dto';
 export declare class AuthController {
     private readonly service;
     constructor(service: AuthService);
-    register(userDTO: UserDTO): Promise<import("../models/user.entity").User>;
-    confirmRegister(token: string): Promise<import("../models/user.entity").User>;
+    register(userDTO: UserDTO): Promise<{
+        message: string;
+    }>;
+    confirmRegister(token: string): Promise<{
+        message: string;
+    }>;
     login(email: string, password: string, response: Response): Promise<{
         status: string;
         token: string;

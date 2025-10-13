@@ -1,0 +1,44 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-container">
+    <h2>Welcome to Padel Verse</h2>
+
+    <mat-form-field appearance="fill">
+        <mat-label>First name</mat-label>
+        <input matInput type="text" placeholder="First name" formControlName="first_name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Last name</mat-label>
+        <input matInput type="text" placeholder="Last name" formControlName="last_name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" placeholder="Email" formControlName="email" />
+        <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input formControlName="password" matInput [type]="hide ? 'password' : 'text'" />
+        <button matIconButton matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide">
+            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Phone</mat-label>
+        <input matInput type="number" placeholder="Phone" formControlName="phone" />
+        <mat-icon matSuffix>phone</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Birth</mat-label>
+        <input matInput type="date" placeholder="Birth" formControlName="birth" />
+        <mat-icon matSuffix>calendar_month</mat-icon>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">
+        Prijavi se
+    </button>
+</form>

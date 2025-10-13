@@ -42,4 +42,12 @@ export class UserService {
 
     return this.http.post<{ path: string }>("http://localhost:3000/profile/photo", formData, { withCredentials: true });
   }
+
+  register(user: UserRegisterInterface) {
+    return this.http.post<{ message: string }>("http://localhost:3000/auth/register", user)
+  }
+
+  confirmRegistration(token: string) {
+    return this.http.get<{ message: string }>(`http://localhost:3000/auth/confirmRegistration/${token}`)
+  }
 }

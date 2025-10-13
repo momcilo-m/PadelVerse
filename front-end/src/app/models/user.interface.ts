@@ -1,24 +1,23 @@
-export interface User
-{
+export interface User {
     id: number;
 
     first_name: string;
 
     last_name: string;
 
-    email:string
-        
-    phone:string
+    email: string
 
-    birth:Date
+    phone: string
 
-    gender:boolean
+    birth: Date
+
+    gender: boolean
 
     is_active: boolean;
 
     date_created: Date;
 
-    token_registration:string
+    token_registration: string
 
-    photo:string
+    photo: string
 }

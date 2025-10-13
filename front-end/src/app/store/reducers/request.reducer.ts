@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store"
 import { RequestState } from "../states/request.state"
-import { isLogin, login, loginFailed, loginSuccessfully, updateProfile, updateProfileFailed, updateProfileImage, updateProfileImageFailed, updateProfileImageSuccessfully, updateProfileSuccessfully } from "../actions/user.action"
+import { activateUser, activateUserFail, activateUserSuccess, isLogin, login, loginSuccessfully, register, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action"
 import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess } from "../actions/complex.action"
 import { weather, weatherFailed, weatherSuccess } from "../actions/weather.action"
 
@@ -15,15 +15,18 @@ export const requestReducer = createReducer(
     initRequestState,
     on(
         userComplexSuccess,
-        updateProfileSuccessfully, updateProfileFailed,
+        updateProfileSuccessfully,
         weatherSuccess, weatherFailed,
         loadedCourts,
         bookingSuccess,
-        loginSuccessfully, loginFailed,
+        loginSuccessfully,
         loadedComplex, failedComplex,
-        updateProfileImageSuccessfully, updateProfileImageFailed,
+        updateProfileImageSuccessfully,
+        userFailed,
         addComplex, addCourt,
         uploadComplexImageSuccess,
+        register, userFailed,
+        activateUserSuccess, activateUserFail,
         (state) => {
             return {
                 ...state,
@@ -31,7 +34,7 @@ export const requestReducer = createReducer(
             }
         }),
 
-    on(uploadComplexImage, editComplex, createCourt, createComplex, userComplex, updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
+    on(activateUser, uploadComplexImage, editComplex, createCourt, createComplex, userComplex, updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
         return {
             loading: true,
             error: false,
@@ -40,7 +43,7 @@ export const requestReducer = createReducer(
     }),
 
     on(
-        updateProfileImageFailed, updateProfileFailed, weatherFailed, loginFailed, failedComplex, (state, { message }) => {
+        activateUserFail, userFailed, weatherFailed, userFailed, failedComplex, (state, { message }) => {
             return {
                 ...state,
                 message

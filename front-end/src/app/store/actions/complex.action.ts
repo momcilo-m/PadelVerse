@@ -3,7 +3,6 @@ import { ComplexInterface } from "../../models/complex.interface";
 import { CreateComplex } from "../../models/create.complex.interface";
 
 export const loadComlpex = createAction("loadComplex")
-export const failedComplex = createAction('failedComplex', props<{ message: string }>());
 export const selectComplex = createAction('selectComplex', props<{ id: number }>())
 export const addComplex = createAction('addComplex', props<{ complex: ComplexInterface }>())
 export const createComplex = createAction('createComplex', props<{ complex: CreateComplex }>())
@@ -28,6 +27,4 @@ export const userComplexSuccess = createAction("userComplexSuccess", props<{ com
 export const uploadComplexImage = createAction("uploadComplexImage", props<{ file: File, id: number }>())
 export const uploadComplexImageSuccess = createAction("uploadComplexImageSuccess", props<{ path: string, id: number }>())
 
-// export const bookingFailed = createAction('bookingFailed', props<{ message: string }>())
-// export const failedCourts = createAction('failedCourts', props<{ message: string }>())
-// export const userComplexFailed = createAction("userComplexFailed", props<{ message: string }>())
+export const failedComplex = createAction('failedComplex', props<{ message: string }>());

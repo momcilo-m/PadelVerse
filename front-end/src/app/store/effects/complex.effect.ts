@@ -9,7 +9,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../states/app.state";
 import { selectComplexes, selectedComplex } from "../selectors/complex.selector";
 import { BookingService } from "../../services/booking.service";
-//import { selectedLocation } from "../selectors/complex.selector";
+
 
 @Injectable()
 export class ComplexEffect {
@@ -27,7 +27,7 @@ export class ComplexEffect {
         return this.actions$.pipe(
             ofType(selectComplex),
             withLatestFrom(this.store.select(selectComplexes)),
-            filter(([{ id }, complexes]) => id != -1 && complexes.find(el => el.id === id) === undefined),
+            filter(([{ id }, complexes]) => id == -1 && complexes.find(el => el.id === id) === undefined),
             //Poziva se samo ako se u ne nalazi u listi
             switchMap(([{ id }, _]) => this.complexService.getComplexById(id).pipe(
                 map((complex) => addComplex({ complex })),

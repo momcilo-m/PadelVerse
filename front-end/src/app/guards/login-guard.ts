@@ -3,60 +3,38 @@ import { CanActivateFn, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { selectUser } from '../store/selectors/user.selector';
-import { filter, map, Observable, switchMap, take } from 'rxjs';
+import { filter, map, Observable, switchMap, take, tap } from 'rxjs';
 import { selectLoading } from '../store/selectors/request.selector';
 
-export const login : CanActivateFn = (route, state) => {
-  
-  const store = inject<Store<AppState>>(Store)  
-  const router = inject(Router)
-  
-  return store.select(selectLoading).pipe(
-    switchMap(state => {
-      if(state)
-      {
-        return store.select(selectUser).pipe(
-          filter(user => user !== null), 
-          map(user =>{
-              if(user) return true;
-              router.navigate(["/login"])
-              return false
-            }
-          ),
-        )
-      }
-      else
-      {
-        return store.select(selectUser).pipe(
-          map(user=>{
-            if(user)return true;
-            router.navigate(["/login"])
-            return false;
-          }),
-          take(1)
+export const login: CanActivateFn = () => {
 
-        )
-      }
-    })
-  )
+  const store = inject<Store<AppState>>(Store)
+  const router = inject(Router)
+
+  return store.select(selectLoading).pipe(
+    filter(state => state == false),
+    switchMap(() => store.select(selectUser).pipe(
+      map(user => {
+        if (user) return true;
+        router.navigate(['/login']);
+        return false;
+      })
+    )))
 };
 
+export const notlogin: CanActivateFn = () => {
 
-export const notlogin : CanActivateFn = (route, state) => {
-  
-  const store = inject<Store<AppState>>(Store)  
+  const store = inject<Store<AppState>>(Store)
   const router = inject(Router)
-  
-  return store.select(selectUser).pipe(
-    filter((user)=>user!==undefined),
-    map(user=>{
-      console.log(user);
-      if(!user) return true
-      else 
-      {
-        router.navigate(['/home'])
+
+  return store.select(selectLoading).pipe(
+    filter(state => state == false),
+    switchMap(() => store.select(selectUser).pipe(
+      tap((user) => console.log(user)),
+      map(user => {
+        if (!user) return true;
+        router.navigate(['/profile']);
         return false;
-      }
-    })
-  )
+      })
+    )))
 };
