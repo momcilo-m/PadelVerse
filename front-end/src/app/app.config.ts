@@ -1,8 +1,8 @@
-import { ApplicationConfig, isDevMode, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, isDevMode, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from "@ngrx/store-devtools"
 import { provideEffects } from '@ngrx/effects';
@@ -13,6 +13,8 @@ import { complexReducer } from './store/reducers/complex.reducers';
 import { ComplexEffect } from './store/effects/complex.effect';
 import { weatherReducer } from './store/reducers/weather.reducer';
 import { WeatherEffect } from './store/effects/weather.effect';
+import { SimpleErrorHandler } from './handler/error.handler';
+//import { AuthInterceptor } from './interceptor/auth.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -29,5 +31,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode(), trace: true }),
     provideEffects(UserEffect, ComplexEffect, WeatherEffect),
+    { provide: ErrorHandler, useClass: SimpleErrorHandler }
+    //{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ]
 };

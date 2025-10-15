@@ -34,12 +34,14 @@ let ComplexService = class ComplexService {
         return await new QueryFeature_1.QueryFeature(this.complexRepository, query).filter().query;
     }
     async getById(id) {
-        return await this.complexRepository
+        let complex = await this.complexRepository
             .createQueryBuilder('complex')
             .leftJoin('complex.owner', 'users')
             .addSelect(['users.phone', 'users.email'])
             .where('complex.id=:id', { id })
             .getOne();
+        if (complex === null)
+            throw new common_1.NotFoundException("Complex not found");
     }
     async getByIds(id) {
         return await this.complexRepository.find({

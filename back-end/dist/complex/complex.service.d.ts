@@ -10,7 +10,7 @@ export declare class ComplexService {
     private readonly termsService;
     constructor(complexRepository: Repository<Complex>, courtRepository: Repository<Court>, termsService: TermsService);
     getAll(query: Record<string, any>): Promise<any>;
-    getById(id: number): Promise<Complex | null>;
+    getById(id: number): Promise<void>;
     getByIds(id: number[]): Promise<Complex[]>;
     getByUser(owner: number): Promise<Complex[]>;
     create(complexDTO: ComplexDTO): Promise<Complex>;

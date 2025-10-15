@@ -22,6 +22,7 @@ import { User } from '../../models/user.interface';
 })
 export class Profile {
 
+  //Trazimo ga po "id-u", tj po reference varijabli
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   store = inject<Store<AppState>>(Store)

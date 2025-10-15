@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { isLogin, login, loginSuccessfully, updateProfileImageSuccessfully, updateProfileSuccessfully } from "../actions/user.action";
+import { isLogin, login, loginSuccessfully, logout, updateProfileImageSuccessfully, updateProfileSuccessfully } from "../actions/user.action";
 import { UserState } from "../states/user.state";
 
 export const initUserState: UserState =
@@ -17,7 +17,7 @@ export const userReducer = createReducer(
             user,
         }
     }),
-    on(login, (state) => {
+    on(login, logout, (state) => {
         return {
             ...state,
             user: null,

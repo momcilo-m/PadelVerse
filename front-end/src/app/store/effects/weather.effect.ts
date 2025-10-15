@@ -34,7 +34,7 @@ export class WeatherEffect {
                             complex!.location.x.toString() + "," + complex!.location.y.toString()
                         ).pipe(
                             map(data => weatherSuccess({ data })),
-                            catchError(err => of(weatherFailed({ message: err.message || 'Greska' })))
+                            catchError(({ err }) => of(weatherFailed({ message: err.message || 'Greska' })))
                         )
                     )
                 )

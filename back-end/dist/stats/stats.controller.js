@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StatsController = void 0;
 const common_1 = require("@nestjs/common");
 const stats_service_1 = require("./stats.service");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let StatsController = class StatsController {
     service;
     constructor(service) {
@@ -32,6 +33,7 @@ let StatsController = class StatsController {
 };
 exports.StatsController = StatsController;
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("month/:id"),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -39,6 +41,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StatsController.prototype, "getMonthStats", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("week/:id"),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -46,6 +49,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StatsController.prototype, "getWeekStats", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/:id"),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),

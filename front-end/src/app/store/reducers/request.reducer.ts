@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store"
 import { RequestState } from "../states/request.state"
-import { activateUser, activateUserFail, activateUserSuccess, isLogin, login, loginSuccessfully, register, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action"
+import { activateUser, activateUserFail, activateUserSuccess, isLogin, login, loginSuccessfully, logout, register, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action"
 import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess } from "../actions/complex.action"
 import { weather, weatherFailed, weatherSuccess } from "../actions/weather.action"
 
@@ -19,7 +19,7 @@ export const requestReducer = createReducer(
         weatherSuccess, weatherFailed,
         loadedCourts,
         bookingSuccess,
-        loginSuccessfully,
+        loginSuccessfully, logout,
         loadedComplex, failedComplex,
         updateProfileImageSuccessfully,
         userFailed,

@@ -9,6 +9,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../states/app.state";
 import { selectComplexes, selectedComplex } from "../selectors/complex.selector";
 import { BookingService } from "../../services/booking.service";
+import { SimpleErrorHandler } from "../../handler/error.handler";
 
 
 @Injectable()
@@ -18,6 +19,7 @@ export class ComplexEffect {
     private bookingService = inject(BookingService)
 
     store = inject<Store<AppState>>(Store)
+    private errorHandler = inject(SimpleErrorHandler)
 
 
     constructor() {
@@ -27,11 +29,15 @@ export class ComplexEffect {
         return this.actions$.pipe(
             ofType(selectComplex),
             withLatestFrom(this.store.select(selectComplexes)),
-            filter(([{ id }, complexes]) => id == -1 && complexes.find(el => el.id === id) === undefined),
+            filter(([{ id }, complexes]) => complexes.find(el => el.id === id) === undefined),
+
             //Poziva se samo ako se u ne nalazi u listi
             switchMap(([{ id }, _]) => this.complexService.getComplexById(id).pipe(
                 map((complex) => addComplex({ complex })),
-                catchError((err) => of(failedComplex({ message: err.message || "Failed while fetch complex" })))
+                catchError(({ error }) => {
+                    this.errorHandler.handleError(error)
+                    return of(failedComplex({ message: error.message || "Failed while fetch complex" }))
+                })
             ))
         )
     })
@@ -43,7 +49,7 @@ export class ComplexEffect {
             ofType(loadComlpex),
             switchMap(() => this.complexService.getComplex().pipe(
                 map(res => loadedComplex({ complexes: res })),
-                catchError(error => of(failedComplex({ message: error.message || "Error while fetch complex" })))
+                catchError(({ error }) => of(failedComplex({ message: error.message || "Error while fetch complex" })))
             ))
         )
     })
@@ -59,10 +65,9 @@ export class ComplexEffect {
                             //weather({ date: param.date, hour: param.time })
                         ]
                         )),
-                    catchError(err =>
+                    catchError(({ error }) =>
                         of(
-                            //failedCourts({ message: err.message || "Fail when load courts" }),
-                            failedComplex({ message: err.message || "Fail when load courts" })
+                            failedComplex({ message: error.message || "Fail when load courts" })
                         ),
                     )
                 ))
@@ -74,9 +79,8 @@ export class ComplexEffect {
             ofType(booking),
             switchMap((param) => this.bookingService.checkout_session(param.complex, param.court, param.count).pipe(
                 map(res => bookingSuccess({ id: res.id })),
-                catchError(err => of(
-                    // bookingFailed({ message: err.message || "Fail with checkout" })
-                    failedComplex({ message: err.message || "Fail with checkout" })
+                catchError(({ error }) => of(
+                    failedComplex({ message: error.message || "Fail with checkout" })
                 ))
             ))
         )
@@ -86,8 +90,8 @@ export class ComplexEffect {
         return this.actions$.pipe(
             ofType(bookingSuccess),
             tap(({ id }) => this.bookingService.checkout(id.toString())),
-            catchError(err => of(
-                failedComplex({ message: err.message || "Problem" })
+            catchError(({ error }) => of(
+                failedComplex({ message: error.message || "Problem" })
             ))
         )
     }, { dispatch: false })
@@ -97,9 +101,9 @@ export class ComplexEffect {
             ofType(userComplex),
             switchMap((owner) => this.complexService.getComplexByOwner(owner.id).pipe(
                 map(complex => userComplexSuccess({ complex })),
-                catchError((err) => of(
-                    //userComplexFailed({ message: err.message || "Failed when load message" })
-                    failedComplex({ message: err.message || "Fail with checkout" })
+                catchError(({ error }) => of(
+                    //userComplexFailed({ message: error.message || "Failed when load message" })
+                    failedComplex({ message: error.message || "Fail with checkout" })
                 ))
             ))
         )
@@ -110,7 +114,7 @@ export class ComplexEffect {
             ofType(createComplex),
             switchMap(({ complex }) => this.complexService.createComplex(complex).pipe(
                 map(complex => addComplex({ complex })),
-                catchError((err) => of(failedComplex({ message: err.message || "Failed when create complex" })))
+                catchError(({ error }) => of(failedComplex({ message: error.message || "Failed when create complex" })))
             ))
         )
     })
@@ -120,9 +124,9 @@ export class ComplexEffect {
             ofType(createCourt),
             switchMap(({ court }) => this.complexService.createCourt(court).pipe(
                 map(court => addCourt({ court })),
-                catchError((err) => of(
-                    //failedCourts({ message: err.message || "Failed when create courts" })
-                    failedComplex({ message: err.message || "Failed when create courts" })
+                catchError(({ error }) => of(
+                    //failedCourts({ message: error.message || "Failed when create courts" })
+                    failedComplex({ message: error.message || "Failed when create courts" })
                 ))
             ))
         )
@@ -134,7 +138,7 @@ export class ComplexEffect {
             switchMap(({ complex, id }) => this.complexService.editComplex(complex, id).pipe(
                 tap((complex) => console.log("EDIT: ", complex)),
                 map((complex) => editComplexSuccess({ complex, id })),
-                catchError((err) => of(failedComplex({ message: err.message || "Failed when edit complex" })))
+                catchError(({ error }) => of(failedComplex({ message: error.message || "Failed when edit complex" })))
             ))
         )
     })
@@ -145,7 +149,7 @@ export class ComplexEffect {
             switchMap(({ file, id }) => this.complexService.uploadComplexImage(file, id).pipe(
                 tap((img) => console.log(img.path)),
                 map(({ path }) => uploadComplexImageSuccess({ path, id })),
-                catchError(error => of(failedComplex({ message: error.message || "Error while upload image" })))
+                catchError(({ error }) => of(failedComplex({ message: error.message || "Error while upload image" })))
             ))
         )
     })

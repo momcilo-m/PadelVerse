@@ -4,6 +4,7 @@ import { User } from "../../models/user.interface";
 export const login = createAction("login", props<{ email: string, password: string }>())
 export const isLogin = createAction('isLogin');
 export const loginSuccessfully = createAction("loginSuccessfully", props<{ user: User }>())
+export const logout = createAction("logout");
 
 export const updateProfile = createAction("updateProfile", props<{ email?: string, phone?: string, first_name?: string, last_name?: string }>())
 export const updateProfileSuccessfully = createAction("updateProfileSuccessfully", props<{ user: User }>())

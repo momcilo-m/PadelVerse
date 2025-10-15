@@ -23,12 +23,15 @@ export class ComplexService {
     }
 
     async getById(id: number) {
-        return await this.complexRepository
+        let complex = await this.complexRepository
             .createQueryBuilder('complex')
             .leftJoin('complex.owner', 'users')
             .addSelect(['users.phone', 'users.email'])
             .where('complex.id=:id', { id })
             .getOne();
+
+        if (complex === null)
+            throw new NotFoundException("Complex not found")
     }
 
     async getByIds(id: number[]) {
