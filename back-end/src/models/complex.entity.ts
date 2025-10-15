@@ -35,4 +35,16 @@ export class Complex {
 
     @Column()
     photo: string
+
+    @Column()
+    rating: number
+
+    @Column()
+    votes: number
+
+    @Column()
+    priceMin: number
+
+    @Column()
+    priceMax: number
 }

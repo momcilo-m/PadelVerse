@@ -43,6 +43,10 @@ const profile_controller_1 = require("./profile/profile.controller");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
 const stats_module_1 = require("./stats/stats.module");
+const review_module_1 = require("./review/review.module");
+const review_controller_1 = require("./review/review.controller");
+const profile_service_1 = require("./profile/profile.service");
+const review_entity_1 = require("./models/review.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -56,7 +60,7 @@ exports.AppModule = AppModule = __decorate([
                 username: 'momcilo',
                 password: 'padelvrese',
                 database: 'postgres',
-                entities: [user_entity_1.User, complex_entity_1.Complex, court_entity_1.Court, term_entity_1.Term, tournament_entity_1.Tournament],
+                entities: [user_entity_1.User, complex_entity_1.Complex, court_entity_1.Court, term_entity_1.Term, tournament_entity_1.Tournament, review_entity_1.Review],
                 synchronize: false,
             }),
             config_1.ConfigModule.forRoot({
@@ -77,9 +81,10 @@ exports.AppModule = AppModule = __decorate([
             booking_module_1.BookingModule,
             profile_module_1.ProfileModule,
             stats_module_1.StatsModule,
+            review_module_1.ReviewModule,
         ],
-        controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController, booking_controller_1.BookingController, profile_controller_1.ProfileController],
-        providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, complex_service_1.ComplexService, terms_service_1.TermsService, tournaments_service_1.TournamentsService, courts_service_1.CourtsService, profile_controller_1.ProfileController],
+        controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController, booking_controller_1.BookingController, profile_controller_1.ProfileController, review_controller_1.ReviewController],
+        providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, complex_service_1.ComplexService, terms_service_1.TermsService, tournaments_service_1.TournamentsService, courts_service_1.CourtsService, profile_service_1.ProfileService, review_controller_1.ReviewController],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

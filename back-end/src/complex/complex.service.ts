@@ -7,7 +7,7 @@ import { Complex } from 'src/models/complex.entity';
 import { Court } from 'src/models/court.entity';
 import { TermsService } from 'src/terms/terms.service';
 import { QueryFeature } from 'src/Utils/QueryFeature';
-import { In, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class ComplexService {
@@ -19,7 +19,8 @@ export class ComplexService {
     ) { }
 
     async getAll(query: Record<string, any>) {
-        return await new QueryFeature(this.complexRepository, query).filter().query
+
+        return await new QueryFeature(this.complexRepository, query).execute().query
     }
 
     async getById(id: number) {
@@ -32,6 +33,8 @@ export class ComplexService {
 
         if (complex === null)
             throw new NotFoundException("Complex not found")
+
+        return complex;
     }
 
     async getByIds(id: number[]) {
@@ -120,4 +123,39 @@ export class ComplexService {
             path: `complex/${file.filename}`,
         };
     }
+
+    async editPrice(id: number, price: number) {
+
+        const complex = await this.complexRepository.findOneBy({ id });
+
+        if (!complex) throw new Error("Complex not found");
+
+        if (price < complex.priceMin || price > complex.priceMax) {
+            complex.priceMin = Math.min(complex.priceMin, price);
+            complex.priceMax = Math.max(complex.priceMax, price);
+
+            await this.complexRepository.save(complex);
+        }
+    }
+
+    async updateVote(id: number, rating: number, old: number) {
+
+        const complex = await this.complexRepository.findOneBy({ id });
+
+        if (!complex) throw new NotFoundException("Complex not found");
+
+        if (old == 0) {
+            complex.votes += 1;
+            complex.rating += rating;
+        }
+        else {
+            complex.rating = complex.rating + old + rating;
+        }
+
+        await this.complexRepository.update(id, {
+            rating: complex.rating,
+            votes: complex.votes
+        });
+    }
+
 }

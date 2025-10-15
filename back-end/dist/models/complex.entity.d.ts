@@ -8,4 +8,8 @@ export declare class Complex {
     country: string;
     city: string;
     photo: string;
+    rating: number;
+    votes: number;
+    priceMin: number;
+    priceMax: number;
 }

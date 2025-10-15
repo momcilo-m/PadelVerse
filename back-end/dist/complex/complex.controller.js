@@ -51,7 +51,9 @@ let ComplexController = class ComplexController {
         return this.service.edit(id, complexDTO);
     }
     createCourt(req, courtDTO) {
-        return this.courtService.createCourt(courtDTO);
+        let res = this.courtService.createCourt(courtDTO);
+        this.service.editPrice(courtDTO.complex, courtDTO.price);
+        return res;
     }
     uploadComplex(req, file, id) {
         return this.service.complexPhoto(file, id);

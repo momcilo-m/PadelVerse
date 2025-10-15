@@ -77,7 +77,7 @@ let AuthService = class AuthService {
         user.token_registration = hashedToken;
         user.password = hash;
         const res = await this.userRepository.save(user);
-        this.mail.send(user.email, token, user.first_name);
+        this.mail.confirmRegistration(user.email, token, user.first_name);
         return { message: "User created. Please visit your email to confirm registration" };
     }
     async activateUser(token_registration) {

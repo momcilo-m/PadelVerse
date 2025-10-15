@@ -7,5 +7,5 @@ export declare class MailerService {
     private readonly front;
     constructor(configService: ConfigService);
     transport(): nodemailer.Transporter<import("nodemailer/lib/smtp-transport").SentMessageInfo, import("nodemailer/lib/smtp-transport").Options>;
-    send(reciver: string, token: string, name: string): void;
+    confirmRegistration(receiver: string, token: string, name: string): void;
 }

@@ -22,6 +22,10 @@ let Complex = class Complex {
     country;
     city;
     photo;
+    rating;
+    votes;
+    priceMin;
+    priceMax;
 };
 exports.Complex = Complex;
 __decorate([
@@ -62,6 +66,22 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Complex.prototype, "photo", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Complex.prototype, "rating", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Complex.prototype, "votes", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Complex.prototype, "priceMin", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Complex.prototype, "priceMax", void 0);
 exports.Complex = Complex = __decorate([
     (0, typeorm_1.Entity)('complex')
 ], Complex);

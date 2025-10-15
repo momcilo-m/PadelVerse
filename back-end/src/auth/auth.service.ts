@@ -44,7 +44,7 @@ export class AuthService {
         const res = await this.userRepository.save(user);
 
         //Slanje mejla
-        this.mail.send(user.email, token, user.first_name);
+        this.mail.confirmRegistration(user.email, token, user.first_name);
 
         return { message: "User created. Please visit your email to confirm registration" }
     }

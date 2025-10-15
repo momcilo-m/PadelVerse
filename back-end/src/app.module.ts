@@ -34,6 +34,10 @@ import { ProfileController } from './profile/profile.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { StatsModule } from './stats/stats.module';
+import { ReviewModule } from './review/review.module';
+import { ReviewController } from './review/review.controller';
+import { ProfileService } from './profile/profile.service';
+import { Review } from './models/review.entity';
 
 @Module({
   imports: [
@@ -44,7 +48,7 @@ import { StatsModule } from './stats/stats.module';
       username: 'momcilo',
       password: 'padelvrese',
       database: 'postgres',
-      entities: [User, Complex, Court, Term, Tournament],
+      entities: [User, Complex, Court, Term, Tournament, Review],
       synchronize: false,
     }),
     ConfigModule.forRoot({
@@ -65,8 +69,9 @@ import { StatsModule } from './stats/stats.module';
     BookingModule,
     ProfileModule,
     StatsModule,
+    ReviewModule,
   ],
-  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController, TournamentsController, BookingController, ProfileController],
-  providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService, ProfileController],
+  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController, TournamentsController, BookingController, ProfileController, ReviewController],
+  providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService, ProfileService, ReviewController],
 })
 export class AppModule { }

@@ -4,8 +4,14 @@ export declare class QueryFeature {
     private queryObject;
     query: Promise<any>;
     constructor(repo: Repository<any>, queryObject: Record<string, any>);
-    filter(): this;
-    sort(): void;
-    limit(): void;
-    paginate(): void;
+    execute(): this;
+    advanceFilter(el: any, value: any): {
+        [x: number]: any;
+    };
+    filter(): {
+        [x: string]: any;
+    };
+    sort(): {};
+    limit(): number;
+    paginate(): number;
 }

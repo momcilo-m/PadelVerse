@@ -31,7 +31,7 @@ let ComplexService = class ComplexService {
         this.termsService = termsService;
     }
     async getAll(query) {
-        return await new QueryFeature_1.QueryFeature(this.complexRepository, query).filter().query;
+        return await new QueryFeature_1.QueryFeature(this.complexRepository, query).execute().query;
     }
     async getById(id) {
         let complex = await this.complexRepository
@@ -42,6 +42,7 @@ let ComplexService = class ComplexService {
             .getOne();
         if (complex === null)
             throw new common_1.NotFoundException("Complex not found");
+        return complex;
     }
     async getByIds(id) {
         return await this.complexRepository.find({
@@ -112,6 +113,33 @@ let ComplexService = class ComplexService {
             filename: file.filename,
             path: `complex/${file.filename}`,
         };
+    }
+    async editPrice(id, price) {
+        const complex = await this.complexRepository.findOneBy({ id });
+        if (!complex)
+            throw new Error("Complex not found");
+        if (price < complex.priceMin || price > complex.priceMax) {
+            complex.priceMin = Math.min(complex.priceMin, price);
+            complex.priceMax = Math.max(complex.priceMax, price);
+            await this.complexRepository.save(complex);
+        }
+    }
+    async updateVote(id, rating, old) {
+        const complex = await this.complexRepository.findOneBy({ id });
+        console.log("RATING ", rating, " OLD: ", old);
+        if (!complex)
+            throw new common_1.NotFoundException("Complex not found");
+        if (old == 0) {
+            complex.votes += 1;
+            complex.rating += rating;
+        }
+        else {
+            complex.rating = complex.rating + old + rating;
+        }
+        await this.complexRepository.update(id, {
+            rating: complex.rating,
+            votes: complex.votes
+        });
     }
 };
 exports.ComplexService = ComplexService;

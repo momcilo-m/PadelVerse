@@ -21,13 +21,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt')
                 (req) => req.cookies.jwt
 
             ]),
-            //hard!to-guess_secret
+            //secretOrKey: "hard!to-guess_secret"
             secretOrKey: secret
         });
     }
 
     async validate(payload: any) {
-        const user = await this.userRepository.findOneBy(payload.id);
+        const user = await this.userRepository.findOne({ where: { id: payload.id } })
 
         if (!user || !user.is_active) {
             throw new UnauthorizedException('User not found or inactive');
