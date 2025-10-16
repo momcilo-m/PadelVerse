@@ -1,12 +1,86 @@
-<div class="complex-list">
+<div class="box">
 
-    @for (item of complex$ | async; track item.id)
-    {
-    <app-complex-card photo={{item.photo}} name={{item.name}} city={{item.city}} country={{item.country}}
-        openTime={{item.open_time}} closeTime={{item.close_time}} price="5 $/hrs" (click)=pickComplex(item.id)
-        [rating]="4.5">
-    </app-complex-card>
-    }
+
+    <div class="panel">
+
+        <h3>Filter</h3>
+        <form class="filter">
+            <mat-form-field class="time" appearance="outline" style="width: 200px; height: 50px;">
+                <mat-label>Start</mat-label>
+                <input matInput [matTimepicker]="startPicker" formControlName="startTime">
+                <mat-timepicker-toggle matIconSuffix [for]="startPicker"></mat-timepicker-toggle>
+                <mat-timepicker interval="1h" #startPicker></mat-timepicker>
+            </mat-form-field>
+
+            <mat-form-field class="time" appearance="outline" style="width: 200px; height: 50px;">
+                <mat-label>End</mat-label>
+                <input matInput [matTimepicker]="endPicker" formControlName="endTime">
+                <mat-timepicker-toggle matIconSuffix [for]="endPicker"></mat-timepicker-toggle>
+                <mat-timepicker interval="1h" #endPicker></mat-timepicker>
+            </mat-form-field>
+
+            <mat-label>Price:</mat-label>
+
+            <mat-slider min="0" max="100" step="1" discrete>
+                <input matSliderStartThumb (ngModel)="rangeStart" />
+                <input matSliderEndThumb (ngModel)="rangeEnd" />
+            </mat-slider>
+
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title> Rating </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-checkbox class="example-margin">4+</mat-checkbox>
+                <mat-checkbox class="example-margin">3+</mat-checkbox>
+                <mat-checkbox class="example-margin">2+</mat-checkbox>
+            </mat-expansion-panel>
+
+
+
+        </form>
+        <h3>Sort:</h3>
+
+        <form class="sort">
+            <mat-form-field>
+                <mat-label>Sort by:</mat-label>
+                <mat-select>
+                    <mat-option [value]="'name'">Name</mat-option>
+                    <mat-option [value]="'priceMin'">Price Minimum</mat-option>
+                    <mat-option [value]="'priceMax'">Price Maximum</mat-option>
+                    <mat-option [value]="'timeStart'">Time Start</mat-option>
+                    <mat-option [value]="'timeEnd'">Time End</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Order:</mat-label>
+                <mat-select>
+                    <mat-option [value]="'asc'">Ascending</mat-option>
+                    <mat-option [value]="'dsc'">Descending</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+
+
+    </div>
+
+
+    <div class="content">
+        <div class="complex-list">
+
+            @for (item of complex$ | async; track item.id)
+            {
+            <app-complex-card photo={{item.photo}} name={{item.name}} city={{item.city}} country={{item.country}}
+                openTime={{item.open_time}} closeTime={{item.close_time}} price="5 $/hrs" [rating]="item.rating"
+                [votes]="item.votes" [priceMin]="item.priceMin" [priceMax]="item.priceMax" (click)=pickComplex(item.id)>
+
+            </app-complex-card>
+            }
+        </div>
+
+        @if (count$ | async; as count) {
+
+        <mat-paginator [length]="count" [pageSize]="2" (page)="changePage($event)" [pageSizeOptions]="[2,5, 10, 25]"
+            aria-label="Select page"></mat-paginator>
+        }
+    </div>
 </div>
-
-<!-- price="{{item.price}} $/hrs" -->

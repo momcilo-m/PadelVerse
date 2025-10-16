@@ -28,17 +28,16 @@ let ReviewService = class ReviewService {
         if (review == null) {
             let res = await this.repository.save((0, class_transformer_1.plainToClass)(review_entity_1.Review, reviewDTO));
             res.rating = 0;
-            console.log("NOVO", res);
             return res;
         }
         let oldVote = -review.rating;
         review.rating = reviewDTO.rating;
-        console.log("a");
         await this.repository.save(review);
-        console.log("STARO PRE", review);
         review.rating = oldVote;
-        console.log("STARO POSLE", review);
         return review;
+    }
+    async getReview(user, complex) {
+        return await this.repository.findOneBy({ user, complex });
     }
 };
 exports.ReviewService = ReviewService;

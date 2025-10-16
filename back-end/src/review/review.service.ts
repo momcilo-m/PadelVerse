@@ -33,4 +33,8 @@ export class ReviewService {
         return review;
     }
 
+    async getReview(user: number, complex: number) {
+        return await this.repository.findOneBy({ user, complex })
+    }
+
 }

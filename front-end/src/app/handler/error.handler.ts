@@ -23,6 +23,9 @@ export class SimpleErrorHandler implements ErrorHandler {
             this.notificationService.error(error.message)
             this.router.navigate(['/']);
         }
+        else if (error.statusCode === 500) {
+            this.notificationService.error("Internal server error")
+        }
         else if (error.statusCode === 600) {
             this.notificationService.success(error.message)
             this.router.navigate(['/profile']);

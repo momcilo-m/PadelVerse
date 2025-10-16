@@ -17,8 +17,8 @@ export class ComplexService {
   private FORECAST_BASE = environment.forecast_api
   private FORECAST_KEY = environment.forecast_key
 
-  getComplex(): Observable<ComplexInterface[]> {
-    return this.http.get<ComplexInterface[]>(`${this.BASE}/complex`, { withCredentials: true })
+  getComplex(query?: string): Observable<[complexes: ComplexInterface[], length: number]> {
+    return this.http.get<[complexes: ComplexInterface[], length: number,]>(`${this.BASE}/complex?${query ? query : ""}`, { withCredentials: true })
   }
 
   getComplexById(id: number): Observable<ComplexInterface> {
@@ -61,5 +61,13 @@ export class ComplexService {
     formData.append('file', file);
 
     return this.http.post<{ path: string }>(`${this.BASE}/complex/photo/${id}`, formData, { withCredentials: true });
+  }
+
+  getReview(user: number, complex: number): Observable<{ rating: number }> {
+    return this.http.get<{ rating: number }>(`${this.BASE}/review/${user}/${complex}`, { withCredentials: true })
+  }
+
+  vote(user: number, rating: number, complex: number): Observable<{ rating: number, user: number, complex: number }> {
+    return this.http.post<{ rating: number, user: number, complex: number }>(`${this.BASE}/review`, { user, rating, complex }, { withCredentials: true })
   }
 }

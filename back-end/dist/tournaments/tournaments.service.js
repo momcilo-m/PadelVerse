@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TournamentsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const class_transformer_1 = require("class-transformer");
 const complex_service_1 = require("../complex/complex.service");
 const tournament_entity_1 = require("../models/tournament.entity");
 const typeorm_2 = require("typeorm");
@@ -31,11 +30,6 @@ let TournamentsService = class TournamentsService {
     }
     async getByName(name) {
         return await this.tourRepository.findOneBy({ name });
-    }
-    async create(tournamentDTO) {
-        const { country, city } = tournamentDTO;
-        const courts = await this.courtService.getByIds(tournamentDTO.court);
-        return await this.tourRepository.save((0, class_transformer_1.plainToClass)(tournament_entity_1.Tournament, { ...tournamentDTO, court: courts }));
     }
 };
 exports.TournamentsService = TournamentsService;

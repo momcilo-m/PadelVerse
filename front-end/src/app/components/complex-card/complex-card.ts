@@ -18,4 +18,7 @@ export class ComplexCard {
   @Input() closeTime!: string;
   @Input() price!: string;
   @Input() rating!: number;
+  @Input() votes!: number;
+  @Input() priceMin!: number;
+  @Input() priceMax!: number;
 }

@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ComplexService } from 'src/complex/complex.service';
 import { ReviewDTO } from 'src/models/review.dto';
 import { ReviewService } from './review.service';
+import { User } from 'src/models/user.entity';
 
 @Controller('review')
 export class ReviewController {
@@ -24,5 +25,11 @@ export class ReviewController {
         res.rating = reviewComplex.rating
 
         return res;
+    }
+
+    @Get("/:user/:complex")
+    @UseGuards(JwtAuthGuard)
+    async getReview(@Req() req: any, @Param('user', ParseIntPipe) user: number, @Param('complex', ParseIntPipe) complex: number) {
+        return await this.service.getReview(req.user.id, complex);
     }
 }

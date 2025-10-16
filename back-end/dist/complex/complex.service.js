@@ -34,22 +34,14 @@ let ComplexService = class ComplexService {
         return await new QueryFeature_1.QueryFeature(this.complexRepository, query).execute().query;
     }
     async getById(id) {
-        let complex = await this.complexRepository
+        let complex = this.complexRepository
             .createQueryBuilder('complex')
             .leftJoin('complex.owner', 'users')
             .addSelect(['users.phone', 'users.email'])
-            .where('complex.id=:id', { id })
-            .getOne();
+            .where('complex.id=:id', { id }).getOne();
         if (complex === null)
             throw new common_1.NotFoundException("Complex not found");
         return complex;
-    }
-    async getByIds(id) {
-        return await this.complexRepository.find({
-            where: {
-                id: (0, typeorm_2.In)(id)
-            }
-        });
     }
     async getByUser(owner) {
         return await this.complexRepository.findBy({ owner });
@@ -126,7 +118,6 @@ let ComplexService = class ComplexService {
     }
     async updateVote(id, rating, old) {
         const complex = await this.complexRepository.findOneBy({ id });
-        console.log("RATING ", rating, " OLD: ", old);
         if (!complex)
             throw new common_1.NotFoundException("Complex not found");
         if (old == 0) {

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Complex = void 0;
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
+const review_entity_1 = require("./review.entity");
 let Complex = class Complex {
     id;
     name;
@@ -26,6 +27,7 @@ let Complex = class Complex {
     votes;
     priceMin;
     priceMax;
+    reviews;
 };
 exports.Complex = Complex;
 __decorate([
@@ -82,6 +84,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Complex.prototype, "priceMax", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => review_entity_1.Review, review => review.complex),
+    __metadata("design:type", Array)
+], Complex.prototype, "reviews", void 0);
 exports.Complex = Complex = __decorate([
     (0, typeorm_1.Entity)('complex')
 ], Complex);

@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { ComplexService } from "../../services/complex.service";
 import { catchError, filter, from, map, of, switchMap, tap, withLatestFrom } from "rxjs";
-import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, editComplexSuccess, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess } from "../actions/complex.action";
+import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, editComplexSuccess, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, updateReview, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess, vote } from "../actions/complex.action";
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { weather, weatherFailed } from "../actions/weather.action";
 import { Store } from "@ngrx/store";
@@ -10,6 +10,7 @@ import { AppState } from "../states/app.state";
 import { selectComplexes, selectedComplex } from "../selectors/complex.selector";
 import { BookingService } from "../../services/booking.service";
 import { SimpleErrorHandler } from "../../handler/error.handler";
+import { selectUser } from "../selectors/user.selector";
 
 
 @Injectable()
@@ -17,9 +18,9 @@ export class ComplexEffect {
     private actions$ = inject(Actions)
     private complexService = inject(ComplexService)
     private bookingService = inject(BookingService)
+    private errorHandler = inject(SimpleErrorHandler)
 
     store = inject<Store<AppState>>(Store)
-    private errorHandler = inject(SimpleErrorHandler)
 
 
     constructor() {
@@ -29,7 +30,8 @@ export class ComplexEffect {
         return this.actions$.pipe(
             ofType(selectComplex),
             withLatestFrom(this.store.select(selectComplexes)),
-            filter(([{ id }, complexes]) => complexes.find(el => el.id === id) === undefined),
+
+            filter(([{ id }, complexes]) => complexes.length === 0 && complexes.find(el => el.id === id) === undefined),
 
             //Poziva se samo ako se u ne nalazi u listi
             switchMap(([{ id }, _]) => this.complexService.getComplexById(id).pipe(
@@ -42,13 +44,49 @@ export class ComplexEffect {
         )
     })
 
+    votes$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(selectComplex),
+            withLatestFrom(this.store.select(selectComplexes)),
 
+            filter(([{ id }, complexes]) => complexes.length === 0 && complexes.find(el => el.id === id && el.reviews != null) === undefined),
+
+            switchMap(([{ id }, _]) => this.complexService.getReview(5, id).pipe(
+                map(({ rating }) => updateReview({ rating, id })),
+                catchError(({ error }) => {
+                    this.errorHandler.handleError(error)
+                    return of(failedComplex({ message: error.message || "Failed while fetch review for complex" }))
+                })
+            ))
+        )
+    })
+
+    vote$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(vote),
+            withLatestFrom(this.store.select(selectUser)),
+
+            tap(([data, user]) => console.log(data, user)),
+
+            filter(([_, user]) => user != null),
+
+
+
+            switchMap(([{ complex, rating }, user]) => this.complexService.vote(user!.id, rating, complex).pipe(
+                map(({ complex, rating }) => updateReview({ rating, id: complex })),
+                catchError(({ error }) => {
+                    this.errorHandler.handleError(error)
+                    return of(failedComplex({ message: error.message || "Failed while vote" }))
+                })
+            ))
+        )
+    })
 
     complex$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(loadComlpex),
-            switchMap(() => this.complexService.getComplex().pipe(
-                map(res => loadedComplex({ complexes: res })),
+            switchMap(({ query }) => this.complexService.getComplex(query).pipe(
+                map(([complexes, count]) => loadedComplex({ complexes, count })),
                 catchError(({ error }) => of(failedComplex({ message: error.message || "Error while fetch complex" })))
             ))
         )

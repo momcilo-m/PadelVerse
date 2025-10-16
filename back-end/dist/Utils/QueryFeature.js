@@ -16,7 +16,7 @@ class QueryFeature {
         const limit = this.limit();
         const page = this.paginate();
         const skip = (page - 1) * limit;
-        this.query = this.repo.find({
+        this.query = this.repo.findAndCount({
             where: { ...filter },
             order: { ...sort },
             skip: skip,

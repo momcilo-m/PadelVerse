@@ -12,3 +12,5 @@ export const selectedLocation = (state: AppState) => state.complexStatus.complex
 export const selectedComplex = (state: AppState) => state.complexStatus.complex.find(el => el.id === state.complexStatus.selectedComplexId)
 
 export const myComplexes = (state: AppState) => state.complexStatus.complex.filter(el => el.owner === state.userStatus.user?.id)
+
+export const complexCount = (state: AppState) => state.complexStatus.count

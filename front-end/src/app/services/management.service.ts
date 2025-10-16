@@ -13,14 +13,14 @@ export class ManagementService {
   private BASE = environment.apiUrl
 
   getMonhtStats(id: number): Observable<ComplexStatsMonth> {
-    return this.http.get<ComplexStatsMonth>(`${this.BASE}/stats/month/${id}`)
+    return this.http.get<ComplexStatsMonth>(`${this.BASE}/stats/month/${id}`, { withCredentials: true })
   }
 
   getWeekStats(id: number): Observable<ComplexStatsWeek> {
-    return this.http.get<ComplexStatsWeek>(`${this.BASE}/stats/week/${id}`)
+    return this.http.get<ComplexStatsWeek>(`${this.BASE}/stats/week/${id}`, { withCredentials: true })
   }
 
   getGlobalStats(id: number): Observable<ComplexGlobalStats> {
-    return this.http.get<ComplexGlobalStats>(`${this.BASE}/stats/${id}`)
+    return this.http.get<ComplexGlobalStats>(`${this.BASE}/stats/${id}`, { withCredentials: true })
   }
 }

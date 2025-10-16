@@ -28,11 +28,16 @@ export class EditComplex {
       open_time: "",
       close_time: "",
       country: "",
-      id: -1,
-      location: { x: -1, y: -1 },
       name: "",
+      location: { x: -1, y: -1 },
+      photo: "",
+      id: -1,
       owner: -1,
-      photo: ""
+      rating: -1,
+      votes: -1,
+      priceMin: -1,
+      priceMax: -1,
+      reviews: -1
     }
 
   editComplex() {

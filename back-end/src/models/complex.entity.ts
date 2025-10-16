@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 import { Tournament } from "./tournament.entity";
+import { Review } from "./review.entity";
 
 @Entity('complex')
 export class Complex {
@@ -47,4 +48,7 @@ export class Complex {
 
     @Column()
     priceMax: number
+
+    @OneToMany(() => Review, review => review.complex)
+    reviews: Review[];
 }

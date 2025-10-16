@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store"
 import { ComplexState } from "../states/complex.state"
-import { addComplex, addCourt, editComplexSuccess, failedComplex, loadComlpex, loadedComplex, loadedCourts, selectComplex, selectCourt, uploadComplexImageSuccess, userComplexSuccess } from "../actions/complex.action"
+import { addComplex, addCourt, editComplexSuccess, failedComplex, loadComlpex, loadedComplex, loadedCourts, selectComplex, selectCourt, updateReview, uploadComplexImageSuccess, userComplexSuccess } from "../actions/complex.action"
 
 export const initComplexState: ComplexState =
 {
@@ -9,6 +9,7 @@ export const initComplexState: ComplexState =
     courts: [],
     avalaibleCourts: [],
     selectedCorut: -1,
+    count: 0
 }
 
 export const complexReducer = createReducer(
@@ -20,10 +21,13 @@ export const complexReducer = createReducer(
         }
     }),
     on(loadedComplex, (state, payload) => {
-        let notInList = payload.complexes.filter((complex) => !state.complex.find(c => c.id === complex.id))
+        const { complexes, count } = payload
+        //let notInList = complexes.filter((complex) => !state.complex.find(c => c.id === complex.id))
         return {
             ...state,
-            complex: [...state.complex, ...notInList]
+            //complex: [...state.complex, ...notInList],
+            complex: complexes,
+            count
         }
     }),
     on(selectComplex, (state, payload) => {
@@ -80,20 +84,20 @@ export const complexReducer = createReducer(
 
         return {
             ...state,
-            complex: state.complex.map(item =>
-                item.id === id
-                    ? { ...item, ...complex, location: { x, y } }
-                    : item
-            )
+            complex: state.complex.map(item => item.id === id ? { ...item, ...complex, location: { x, y } } : item)
         };
     }),
     on(uploadComplexImageSuccess, (state, { id, path }) => {
         return {
             ...state,
-            complex: state.complex.map(cmp =>
-                cmp.id === id ? { ...cmp, photo: path } : cmp
-            )
+            complex: state.complex.map(cmp => cmp.id === id ? { ...cmp, photo: path } : cmp)
         };
+    }),
+    on(updateReview, (state, { rating, id }) => {
+        return {
+            ...state,
+            complex: state.complex.map(cmp => cmp.id === id ? { ...cmp, reviews: rating } : cmp)
+        }
     })
 
 )

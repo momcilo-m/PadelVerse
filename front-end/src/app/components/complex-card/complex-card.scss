@@ -5,6 +5,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+
 }
 
 .card-content {
@@ -25,7 +26,8 @@
 .card-header {
   flex: 1;
   position: relative;
-  text-align: right; /* poravnanje desno */
+  text-align: right;
+  /* poravnanje desno */
   background-color: #f5f5f5;
 }
 
@@ -39,7 +41,8 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35); /* sivi overlay */
+  background: rgba(0, 0, 0, 0.35);
+  /* sivi overlay */
 }
 
 .place-name {
@@ -47,7 +50,8 @@
   bottom: 8px;
   right: 12px;
   margin: 0;
-  color: #fff; /* da se vidi na overlay */
+  color: #fff;
+  /* da se vidi na overlay */
   font-size: 1.2rem;
   font-weight: 600;
   z-index: 1;

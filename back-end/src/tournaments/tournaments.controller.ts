@@ -5,18 +5,17 @@ import { TournamentsDTO } from 'src/models/tournament.dto';
 @Controller('tournaments')
 export class TournamentsController {
 
-    constructor(private readonly tourService:TournamentsService){};
+    constructor(private readonly tourService: TournamentsService) { };
 
     @Get()
-    async getAllTournaments()
-    {
+    async getAllTournaments() {
         return this.tourService.getAll();
     }
 
-    @Post()
-    async createTournamet(@Body(new ValidationPipe({transform:true}))tourDTO:TournamentsDTO)
-    {
-        return this.tourService.create(tourDTO);
-    }
+    // @Post()
+    // async createTournamet(@Body(new ValidationPipe({transform:true}))tourDTO:TournamentsDTO)
+    // {
+    //     return this.tourService.create(tourDTO);
+    // }
 
 }

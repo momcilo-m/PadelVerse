@@ -24,12 +24,12 @@ export class ComplexService {
     }
 
     async getById(id: number) {
-        let complex = await this.complexRepository
+
+        let complex = this.complexRepository
             .createQueryBuilder('complex')
             .leftJoin('complex.owner', 'users')
             .addSelect(['users.phone', 'users.email'])
-            .where('complex.id=:id', { id })
-            .getOne();
+            .where('complex.id=:id', { id }).getOne();
 
         if (complex === null)
             throw new NotFoundException("Complex not found")
@@ -37,13 +37,13 @@ export class ComplexService {
         return complex;
     }
 
-    async getByIds(id: number[]) {
-        return await this.complexRepository.find({
-            where: {
-                id: In(id)
-            }
-        })
-    }
+    // async getByIdd(id: number[]) {
+    //     return await this.complexRepository.find({
+    //         where: {
+    //             id: In(id)
+    //         }
+    //     })
+    // }
 
     async getByUser(owner: number) {
         return await this.complexRepository.findBy({ owner })

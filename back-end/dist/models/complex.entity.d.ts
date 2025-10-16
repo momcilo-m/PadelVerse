@@ -1,3 +1,4 @@
+import { Review } from "./review.entity";
 export declare class Complex {
     id: number;
     name: string;
@@ -12,4 +13,5 @@ export declare class Complex {
     votes: number;
     priceMin: number;
     priceMax: number;
+    reviews: Review[];
 }

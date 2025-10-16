@@ -10,15 +10,14 @@ export declare class ComplexService {
     private readonly termsService;
     constructor(complexRepository: Repository<Complex>, courtRepository: Repository<Court>, termsService: TermsService);
     getAll(query: Record<string, any>): Promise<any>;
-    getById(id: number): Promise<Complex>;
-    getByIds(id: number[]): Promise<Complex[]>;
+    getById(id: number): Promise<Complex | null>;
     getByUser(owner: number): Promise<Complex[]>;
     create(complexDTO: ComplexDTO): Promise<Complex>;
     edit(id: number, complexDTO: ComplexDTO): Promise<BadRequestException | Partial<Complex>>;
-    freeCourts(id: number, start: string, count: number, date: Date): Promise<never[] | {
+    freeCourts(id: number, start: string, count: number, date: Date): Promise<{
         all: Court[];
         available: number[];
-    }>;
+    } | never[]>;
     complexPhoto(file: Express.Multer.File, id: number): Promise<{
         message: string;
         filename: string;

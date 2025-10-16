@@ -20,12 +20,20 @@
 
     <div class="info-row">
       <mat-icon>attach_money</mat-icon>
-      <span>{{ price }}</span>
+      <span>{{ priceMin }}$ - {{priceMax}}$</span>
     </div>
 
     <div class="info-row">
       <mat-icon>star</mat-icon>
-      <span>{{ rating }}/5 rating</span>
+      @if(votes > 0)
+      {
+      <span>{{ rating/votes | number:'1.1-1' }} / 5 rating</span>
+      }
+      @else
+      {
+      <span>Not voted yet</span>
+      }
+
     </div>
   </div>
 </mat-card>

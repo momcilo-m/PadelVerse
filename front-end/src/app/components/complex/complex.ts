@@ -17,12 +17,13 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { ComplexInterface } from '../../models/complex.interface';
 import { selectError } from '../../store/selectors/request.selector';
 import { selectWeather } from '../../store/selectors/weather.selector';
+import { Rating } from '../rating/rating';
 
 @Component({
   selector: 'app-complex',
   imports: [
     MatIconModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatTimepickerModule, ReactiveFormsModule,
-    AsyncPipe, GoogleMapsModule
+    AsyncPipe, GoogleMapsModule, Rating
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './complex.html',
@@ -33,7 +34,7 @@ export class Complex {
 
   constructor(private route: ActivatedRoute) { }
 
-  private id: string = "";
+  id: string = "";
 
   form = new FormGroup({
     date: new FormControl<Date>(new Date()),
@@ -47,6 +48,7 @@ export class Complex {
   city: String = "";
   country: String = "";
   price: number = 1;
+  vote: number = 0;
 
   store = inject<Store<AppState>>(Store)
 
@@ -70,7 +72,8 @@ export class Complex {
       this.location = { lat: complex?.location.x || 42, lng: complex?.location.y || 23 };
       this.city = complex?.city || ""
       this.country = complex?.country || ""
-      console.log(this.location, this.city, this.country)
+      this.vote = complex?.reviews || 0
+      console.log(this.location, this.city, this.country, this.vote)
     })
 
   courtsWithStatus$ = combineLatest([this.courts$, this.available$]).pipe(

@@ -8,14 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TournamentsController = void 0;
 const common_1 = require("@nestjs/common");
 const tournaments_service_1 = require("./tournaments.service");
-const tournament_dto_1 = require("../models/tournament.dto");
 let TournamentsController = class TournamentsController {
     tourService;
     constructor(tourService) {
@@ -25,9 +21,6 @@ let TournamentsController = class TournamentsController {
     async getAllTournaments() {
         return this.tourService.getAll();
     }
-    async createTournamet(tourDTO) {
-        return this.tourService.create(tourDTO);
-    }
 };
 exports.TournamentsController = TournamentsController;
 __decorate([
@@ -36,13 +29,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], TournamentsController.prototype, "getAllTournaments", null);
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({ transform: true }))),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [tournament_dto_1.TournamentsDTO]),
-    __metadata("design:returntype", Promise)
-], TournamentsController.prototype, "createTournamet", null);
 exports.TournamentsController = TournamentsController = __decorate([
     (0, common_1.Controller)('tournaments'),
     __metadata("design:paramtypes", [tournaments_service_1.TournamentsService])

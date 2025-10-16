@@ -12,25 +12,23 @@ export class TournamentsService {
     constructor(
         @InjectRepository(Tournament) private readonly tourRepository: Repository<Tournament>,
         private readonly courtService: ComplexService
-    ){}
+    ) { }
 
-    async getAll()
-    {
+    async getAll() {
         return await this.tourRepository.find();
-    } 
-
-    async getByName(name:string)
-    {
-        return await this.tourRepository.findOneBy({name})
     }
 
-    async create(tournamentDTO:TournamentsDTO)
-    {
-        //Provera da li grad i drzava postoje
-        const {country,city} = tournamentDTO;
-
-        const courts = await this.courtService.getByIds(tournamentDTO.court)
-
-        return await this.tourRepository.save(plainToClass(Tournament,{...tournamentDTO, court:courts}));
+    async getByName(name: string) {
+        return await this.tourRepository.findOneBy({ name })
     }
+
+    // async create(tournamentDTO:TournamentsDTO)
+    // {
+    //     //Provera da li grad i drzava postoje
+    //     const {country,city} = tournamentDTO;
+
+    //     const courts = await this.courtService.getByIds(tournamentDTO.court)
+
+    //     return await this.tourRepository.save(plainToClass(Tournament,{...tournamentDTO, court:courts}));
+    // }
 }

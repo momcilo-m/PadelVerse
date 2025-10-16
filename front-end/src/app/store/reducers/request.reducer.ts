@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store"
 import { RequestState } from "../states/request.state"
 import { activateUser, activateUserFail, activateUserSuccess, isLogin, login, loginSuccessfully, logout, register, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action"
-import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess } from "../actions/complex.action"
+import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, updateReview, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess, vote } from "../actions/complex.action"
 import { weather, weatherFailed, weatherSuccess } from "../actions/weather.action"
 
 export const initRequestState: RequestState =
@@ -27,6 +27,7 @@ export const requestReducer = createReducer(
         uploadComplexImageSuccess,
         register, userFailed,
         activateUserSuccess, activateUserFail,
+        updateReview,
         (state) => {
             return {
                 ...state,
@@ -34,7 +35,7 @@ export const requestReducer = createReducer(
             }
         }),
 
-    on(activateUser, uploadComplexImage, editComplex, createCourt, createComplex, userComplex, updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
+    on(vote, activateUser, uploadComplexImage, editComplex, createCourt, createComplex, userComplex, updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
         return {
             loading: true,
             error: false,

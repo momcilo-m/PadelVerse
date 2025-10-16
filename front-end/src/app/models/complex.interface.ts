@@ -10,5 +10,10 @@ export interface ComplexInterface {
     close_time: string,
     country: string,
     city: string,
-    photo: string
+    photo: string,
+    votes: number,
+    rating: number,
+    priceMin: number,
+    priceMax: number,
+    reviews: number
 }
