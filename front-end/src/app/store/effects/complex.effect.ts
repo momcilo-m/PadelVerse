@@ -115,7 +115,7 @@ export class ComplexEffect {
     $booking = createEffect(() => {
         return this.actions$.pipe(
             ofType(booking),
-            switchMap((param) => this.bookingService.checkout_session(param.complex, param.court, param.count).pipe(
+            switchMap(({ complex, court, count, date }) => this.bookingService.checkout_session(complex, court, count, date).pipe(
                 map(res => bookingSuccess({ id: res.id })),
                 catchError(({ error }) => of(
                     failedComplex({ message: error.message || "Fail with checkout" })

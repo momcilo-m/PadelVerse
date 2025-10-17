@@ -3,33 +3,33 @@ import { User } from "./user.entity";
 import { Court } from "./court.entity";
 
 @Entity("terms")
-export class Term
-{
+export class Term {
     @PrimaryGeneratedColumn()
-    id:number
+    id: number
 
     @Column()
-    @ManyToOne(()=>Court)
-    @JoinColumn({name:'court'})
-    court:number
+    @ManyToOne(() => Court)
+    @JoinColumn({ name: 'court' })
+    court: number
 
     @Column()
-    @ManyToOne(()=>User)
-    @JoinColumn({name:'user'})
-    user:number
+    @ManyToOne(() => User)
+    @JoinColumn({ name: 'user' })
+    user: number
 
     @Column()
-    date:Date
+    date: Date
 
-    @Column({type:"time"})
-    time:string
-
-    @Column()
-    equipment:boolean
+    @Column({ type: "time" })
+    time: string
 
     @Column()
-    count:number
+    equipment: boolean
 
     @Column()
-    players:number
+    players: number
+
+    @Column()
+    count: number
+
 }

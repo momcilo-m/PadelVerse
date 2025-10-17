@@ -20,8 +20,8 @@ let Term = class Term {
     date;
     time;
     equipment;
-    count;
     players;
+    count;
 };
 exports.Term = Term;
 __decorate([
@@ -55,11 +55,11 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], Term.prototype, "count", void 0);
+], Term.prototype, "players", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
-], Term.prototype, "players", void 0);
+], Term.prototype, "count", void 0);
 exports.Term = Term = __decorate([
     (0, typeorm_1.Entity)("terms")
 ], Term);

@@ -1,10 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Complex } from 'src/models/complex.entity';
 import { Repository } from 'typeorm';
 import { Court } from 'src/models/court.entity';
+import { TermsService } from 'src/terms/terms.service';
+import { TermsDTO } from 'src/models/term.dto';
+import { format } from 'path';
+import { TermsCreateDTO } from 'src/models/term.create.dto';
 
 @Injectable()
 export class BookingService {
@@ -13,31 +17,39 @@ export class BookingService {
 
     constructor(
         //@InjectRepository(Complex) private readonly complexRepository:Repository<Complex>,
+        //forwardRef(() => TermsService)
         @InjectRepository(Court) private readonly courtRepository: Repository<Court>,
-        private configService: ConfigService
+        @Inject() private readonly termsService: TermsService,
+        private configService: ConfigService,
     ) {
         this.stripe = new Stripe(this.configService.get('STRIPE_KEY')!);
     }
 
-    async checkout(complexID: number, courtID: number, count: number, email: string) {
+
+
+    async checkout(dto: TermsCreateDTO, email: string) {
+
+        const { complex, count, court: courtID } = dto;
 
         let court = await this.courtRepository.manager
             .getRepository(Court)
             .createQueryBuilder('court')
             .leftJoinAndSelect('court.complex', 'complex')
-            .where('complex.id = :complexID', { complexID })
+            .where('complex.id = :complex', { complex })
             .getOne()
 
         if (court == null) {
             return new BadRequestException("Court not found");
         }
 
+        await this.termsService.create(dto)
+
         return await this.stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             success_url: "http://localhost:4200/complex",
             cancel_url: "http://localhost:4200/maps",
             customer_email: email,
-            client_reference_id: complexID.toString(),
+            client_reference_id: complex.toString(),
             mode: "payment",
             line_items: [
                 {
@@ -47,10 +59,9 @@ export class BookingService {
                         product_data:
                         {
                             name: court.complex.name,
-                            images: ["image.png"],
+                            images: ["https://i.imgur.com/VjAuz15.jpeg"],
                         },
                         unit_amount: court.price * count * 100,
-
                     },
                     quantity: count
                 }
@@ -58,7 +69,7 @@ export class BookingService {
             metadata:
             {
                 court: courtID.toString(),
-                complex: complexID.toString()
+                complex: complex.toString()
             }
         })
     }

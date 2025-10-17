@@ -15,8 +15,8 @@ export class BookingService {
 
   private stripe = loadStripe(this.STRIPE_KEY);
 
-  checkout_session(complex: number, court: number, count: number) {
-    return this.http.get<{ id: string }>(`${this.BASE}/booking/checkout-session?complex=${complex}&court=${court}&count=${count}`, { withCredentials: true })
+  checkout_session(complex: number, court: number, count: number, date: string) {
+    return this.http.get<{ id: string }>(`${this.BASE}/booking/checkout-session?complex=${complex}&court=${court}&count=${count}&date=${date}`, { withCredentials: true })
   }
 
 

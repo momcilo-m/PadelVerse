@@ -22,31 +22,36 @@ const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const court_entity_1 = require("../models/court.entity");
+const terms_service_1 = require("../terms/terms.service");
 let BookingService = class BookingService {
     courtRepository;
+    termsService;
     configService;
     stripe;
-    constructor(courtRepository, configService) {
+    constructor(courtRepository, termsService, configService) {
         this.courtRepository = courtRepository;
+        this.termsService = termsService;
         this.configService = configService;
         this.stripe = new stripe_1.default(this.configService.get('STRIPE_KEY'));
     }
-    async checkout(complexID, courtID, count, email) {
+    async checkout(dto, email) {
+        const { complex, count, court: courtID } = dto;
         let court = await this.courtRepository.manager
             .getRepository(court_entity_1.Court)
             .createQueryBuilder('court')
             .leftJoinAndSelect('court.complex', 'complex')
-            .where('complex.id = :complexID', { complexID })
+            .where('complex.id = :complex', { complex })
             .getOne();
         if (court == null) {
             return new common_1.BadRequestException("Court not found");
         }
+        await this.termsService.create(dto);
         return await this.stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             success_url: "http://localhost:4200/complex",
             cancel_url: "http://localhost:4200/maps",
             customer_email: email,
-            client_reference_id: complexID.toString(),
+            client_reference_id: complex.toString(),
             mode: "payment",
             line_items: [
                 {
@@ -54,7 +59,7 @@ let BookingService = class BookingService {
                         currency: "EUR",
                         product_data: {
                             name: court.complex.name,
-                            images: ["image.png"],
+                            images: ["https://i.imgur.com/VjAuz15.jpeg"],
                         },
                         unit_amount: court.price * count * 100,
                     },
@@ -63,7 +68,7 @@ let BookingService = class BookingService {
             ],
             metadata: {
                 court: courtID.toString(),
-                complex: complexID.toString()
+                complex: complex.toString()
             }
         });
     }
@@ -72,7 +77,9 @@ exports.BookingService = BookingService;
 exports.BookingService = BookingService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(court_entity_1.Court)),
+    __param(1, (0, common_1.Inject)()),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        terms_service_1.TermsService,
         config_1.ConfigService])
 ], BookingService);
 //# sourceMappingURL=booking.service.js.map

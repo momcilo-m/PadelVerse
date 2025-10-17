@@ -1,31 +1,30 @@
 import { Type } from "class-transformer";
-import { IsDate, IsDefined, IsPositive, Matches, Max, Min } from "class-validator";
+import { IsDate, IsDefined, IsOptional, IsPositive, Matches, Max, Min } from "class-validator";
 
-export class TermsDTO
-{
+export class TermsDTO {
     @IsPositive()
-    court:number
-    
+    court: number
+
     @IsPositive()
-    user:number
-    
+    user: number
+
     @IsDate()
-    @Type(()=>Date)
-    date:Date
-    
+    @Type(() => Date)
+    date: Date
+
     @IsDefined()
     time: string;
 
-    @IsDefined()
-    equipment:boolean
+    @IsOptional()
+    equipment: boolean
 
     @IsPositive()
     @Min(1)
-    count:number
+    count: number
 
-    @IsPositive()
+    @IsOptional()
     @Min(2)
     @Max(4)
-    players:number
+    players: number
 
 }

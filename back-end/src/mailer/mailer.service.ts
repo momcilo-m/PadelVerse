@@ -57,17 +57,23 @@ export class MailerService {
         The PadelVerse Team`;
 
         const html = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; text-align: center;">
+                <img src="https://i.imgur.com/vKCYjUz.png" 
+                    alt="PadelVerse Logo" 
+                    style="width: 100px; height: 100px; border-radius: 50%; display: block; margin: 0 auto 20px;">
+
                 <h2 style="color: #2E86C1;">Welcome to PadelVerse, ${name.toUpperCase()}!</h2>
                 <p>Thank you for signing up. To complete your registration, please confirm your email by clicking the button below:</p>
+
                 <a href="${this.front}/confirmRegistration/${token}" 
                 style="display: inline-block; padding: 12px 20px; margin: 20px 0; font-size: 16px; color: #fff; background-color: #2E86C1; text-decoration: none; border-radius: 5px;">
                 Confirm Registration
                 </a>
+
                 <p>If you did not register, you can safely ignore this email.</p>
                 <p>Best regards,<br>The PadelVerse Team</p>
             </div>
-        `;
+            `;
 
         this.transport().sendMail({
             from: '"PadelVerse Team" <admin@padelverse.com>',

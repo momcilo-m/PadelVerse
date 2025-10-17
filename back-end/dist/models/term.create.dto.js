@@ -9,49 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TermsDTO = void 0;
+exports.TermsCreateDTO = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
-class TermsDTO {
+class TermsCreateDTO {
     court;
+    complex;
     user;
     date;
     time;
-    equipment;
     count;
-    players;
 }
-exports.TermsDTO = TermsDTO;
+exports.TermsCreateDTO = TermsCreateDTO;
 __decorate([
     (0, class_validator_1.IsPositive)(),
     __metadata("design:type", Number)
-], TermsDTO.prototype, "court", void 0);
+], TermsCreateDTO.prototype, "court", void 0);
 __decorate([
     (0, class_validator_1.IsPositive)(),
     __metadata("design:type", Number)
-], TermsDTO.prototype, "user", void 0);
+], TermsCreateDTO.prototype, "complex", void 0);
+__decorate([
+    (0, class_validator_1.IsPositive)(),
+    __metadata("design:type", Number)
+], TermsCreateDTO.prototype, "user", void 0);
 __decorate([
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
-], TermsDTO.prototype, "date", void 0);
+], TermsCreateDTO.prototype, "date", void 0);
 __decorate([
     (0, class_validator_1.IsDefined)(),
     __metadata("design:type", String)
-], TermsDTO.prototype, "time", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Boolean)
-], TermsDTO.prototype, "equipment", void 0);
+], TermsCreateDTO.prototype, "time", void 0);
 __decorate([
     (0, class_validator_1.IsPositive)(),
     (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)
-], TermsDTO.prototype, "count", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.Min)(2),
-    (0, class_validator_1.Max)(4),
-    __metadata("design:type", Number)
-], TermsDTO.prototype, "players", void 0);
-//# sourceMappingURL=term.dto.js.map
+], TermsCreateDTO.prototype, "count", void 0);
+//# sourceMappingURL=term.create.dto.js.map

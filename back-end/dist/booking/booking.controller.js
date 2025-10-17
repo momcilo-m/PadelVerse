@@ -16,25 +16,25 @@ exports.BookingController = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const booking_service_1 = require("./booking.service");
+const term_create_dto_1 = require("../models/term.create.dto");
 let BookingController = class BookingController {
     service;
     constructor(service) {
         this.service = service;
     }
-    checkout_session(req, complexId, courtId, count) {
-        return this.service.checkout(complexId, courtId, count, req.user.email);
+    checkout_session(req, dto) {
+        dto.user = req.user.id;
+        return this.service.checkout(dto, req.user.email);
     }
 };
 exports.BookingController = BookingController;
 __decorate([
-    (0, common_1.Get)("checkout-session"),
+    (0, common_1.Post)("checkout-session"),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Query)("complex", common_1.ParseIntPipe)),
-    __param(2, (0, common_1.Query)("court", common_1.ParseIntPipe)),
-    __param(3, (0, common_1.Query)("count", common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number, Number, Number]),
+    __metadata("design:paramtypes", [Object, term_create_dto_1.TermsCreateDTO]),
     __metadata("design:returntype", void 0)
 ], BookingController.prototype, "checkout_session", null);
 exports.BookingController = BookingController = __decorate([

@@ -1,10 +1,8 @@
-export declare class Term {
-    id: number;
+export declare class TermsCreateDTO {
     court: number;
+    complex: number;
     user: number;
     date: Date;
     time: string;
-    equipment: boolean;
-    players: number;
     count: number;
 }

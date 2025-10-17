@@ -12,12 +12,13 @@ const booking_service_1 = require("./booking.service");
 const auth_module_1 = require("../auth/auth.module");
 const booking_controller_1 = require("./booking.controller");
 const courts_module_1 = require("../courts/courts.module");
+const terms_module_1 = require("../terms/terms.module");
 let BookingModule = class BookingModule {
 };
 exports.BookingModule = BookingModule;
 exports.BookingModule = BookingModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, courts_module_1.CourtsModule],
+        imports: [auth_module_1.AuthModule, courts_module_1.CourtsModule, terms_module_1.TermsModule],
         providers: [booking_service_1.BookingService],
         exports: [booking_service_1.BookingService],
         controllers: [booking_controller_1.BookingController]

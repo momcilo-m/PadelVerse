@@ -5,6 +5,7 @@ import { ComplexService } from 'src/complex/complex.service';
 import { CourtsService } from 'src/courts/courts.service';
 import { Complex } from 'src/models/complex.entity';
 import { Court } from 'src/models/court.entity';
+import { TermsCreateDTO } from 'src/models/term.create.dto';
 import { TermsDTO } from 'src/models/term.dto';
 import { Term } from 'src/models/term.entity';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
@@ -14,45 +15,45 @@ export class TermsService {
 
     constructor(
         @InjectRepository(Term) private readonly termsRepository: Repository<Term>,
-        private readonly courtService:CourtsService,
-        @Inject(forwardRef(() => ComplexService)) private readonly complexService: ComplexService
-    ){}
+        @Inject(forwardRef(() => ComplexService)) private readonly complexService: ComplexService,
+        private readonly courtService: CourtsService,
+    ) { }
 
-    async getByIds(court?:number,user?:number,start_date?:Date, end_date?:Date)
-    {
-        if(court== null && user == null)
+    async getByIds(court?: number, user?: number, start_date?: Date, end_date?: Date) {
+        if (court == null && user == null)
             throw new BadRequestException('Please insert a court-id or user-id');
 
-        let where:any={};
+        let where: any = {};
 
-        if(court) where.court = court;
-        if(user) where.id = user;
+        if (court) where.court = court;
+        if (user) where.id = user;
 
-        if(start_date)
+        if (start_date)
             where.start_date = MoreThanOrEqual(start_date);
 
-        if(end_date)
+        if (end_date)
             where.end_date = LessThanOrEqual(end_date)
 
-        return await this.termsRepository.find({where})
+        return await this.termsRepository.find({ where })
     }
 
-    async create(termsDTO:TermsDTO)
-    {
-        const {time,count,date,court:cId} = termsDTO;
-        date.setHours(0,0,0,0);
+    async create(termsDTO: TermsCreateDTO) {
+        const { time, count, date: dateString, court: cId } = termsDTO;
+
+        let date = new Date(dateString)
+        date.setHours(0, 0, 0, 0);
 
         const startTime = time;
-        const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2,'0')+":00:00";
+        const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2, '0') + ":00:00";
 
         const court = await this.courtService.getByIdWithCourt(cId);
-        
-        if(!court || !court.complex)
+
+        if (!court || !court.complex)
             throw new NotFoundException("Court not found");
 
-        await this.isTermFree(startTime,endTime, date,cId);
+        await this.isTermFree(startTime, endTime, date, cId);
 
-        return await this.termsRepository.save(plainToClass(Term,termsDTO));
+        return await this.termsRepository.save(plainToClass(Term, termsDTO));
     }
 
     async isTermFree(
@@ -60,7 +61,7 @@ export class TermsService {
         endTime: string,
         date: Date,
         courtId: number,
-    ):Promise<Boolean> {
+    ): Promise<Boolean> {
         // 1. Uzimamo court zajedno sa complex (join)
         const court = await this.termsRepository.manager
             .getRepository(Court)
@@ -90,8 +91,8 @@ export class TermsService {
             .where('term.court = :courtId', { courtId })
             .andWhere('term.date = :date', { date })
             .andWhere(
-            ':startTime < (term.time + (term.count || \' hours\')::interval)',
-            { startTime },
+                ':startTime < (term.time + (term.count || \' hours\')::interval)',
+                { startTime },
             )
             .andWhere(':endTime > term.time', { endTime })
             .getMany();
@@ -104,20 +105,19 @@ export class TermsService {
     }
 
 
-    async delete(id:number)
-    {
-        const terms = await this.termsRepository.findOneBy({id});
+    async delete(id: number) {
+        const terms = await this.termsRepository.findOneBy({ id });
 
-        if(!terms)
+        if (!terms)
             throw new NotFoundException(terms);
 
         const termTime = new Date(terms.date);
         const [hours] = terms.time.split(':').map(Number);
         termTime.setHours(hours);
 
-        if(termTime.getTime() < Date.now())
+        if (termTime.getTime() < Date.now())
             throw new BadRequestException('You can\'t delete term that past');
 
-        return await this.termsRepository.delete({id})
+        return await this.termsRepository.delete({ id })
     }
 }

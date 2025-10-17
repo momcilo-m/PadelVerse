@@ -82,11 +82,12 @@ export class QueryFeature {
 
         query.sort.split(",").forEach(el => {
             if (el.startsWith('-')) {
-                sortQuery[el.slice(1)] = "DSC";
+                sortQuery[el.slice(1)] = "DESC";
             } else {
                 sortQuery[el] = "ASC";
             }
         })
+        console.log(sortQuery)
         return sortQuery;
     }
 

@@ -18,7 +18,7 @@ export const selectCourt = createAction('selectCourt', props<{ id: number }>())
 export const createCourt = createAction('createCourt', props<{ court: CourtInterface }>())
 export const addCourt = createAction('addCourt', props<{ court: CourtInterface }>())
 
-export const booking = createAction("booking", props<{ complex: number, court: number, count: number }>())
+export const booking = createAction("booking", props<{ complex: number, court: number, count: number, date: string }>())
 export const bookingSuccess = createAction("bookingSuccess", props<{ id: string }>());
 
 export const userComplex = createAction("userComplex", props<{ id: number }>())

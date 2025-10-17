@@ -4,11 +4,12 @@ import { AuthModule } from 'src/auth/auth.module';
 import { ComplexModule } from 'src/complex/complex.module';
 import { BookingController } from './booking.controller';
 import { CourtsModule } from 'src/courts/courts.module';
+import { TermsModule } from 'src/terms/terms.module';
 
 @Module({
-  imports:[AuthModule,CourtsModule],
+  imports: [AuthModule, CourtsModule, TermsModule],
   providers: [BookingService],
-  exports:[BookingService],
-  controllers:[BookingController]
+  exports: [BookingService],
+  controllers: [BookingController]
 })
-export class BookingModule {}
+export class BookingModule { }

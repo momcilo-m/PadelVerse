@@ -178,11 +178,15 @@ export class Complex {
     let complex = +this.id;
     let court = this.form.get("court")?.value || -1;
     let count = this.form.get('count')?.value || -1;
+    let date = this.form.get('date')?.value;
 
-    if (complex == -1 || court == -1 || count == -1) {
+    if (complex == -1 || court == -1 || count == -1 || !date) {
       return;
     }
-    this.store.dispatch(booking({ complex, court, count }))
+
+    let dateString = this.transformDate(date)
+
+    this.store.dispatch(booking({ complex, court, count, date: dateString }))
   }
 
   transformDate(start: Date): string {

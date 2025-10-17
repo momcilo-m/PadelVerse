@@ -23,12 +23,12 @@ const term_entity_1 = require("../models/term.entity");
 const typeorm_2 = require("typeorm");
 let TermsService = class TermsService {
     termsRepository;
-    courtService;
     complexService;
-    constructor(termsRepository, courtService, complexService) {
+    courtService;
+    constructor(termsRepository, complexService, courtService) {
         this.termsRepository = termsRepository;
-        this.courtService = courtService;
         this.complexService = complexService;
+        this.courtService = courtService;
     }
     async getByIds(court, user, start_date, end_date) {
         if (court == null && user == null)
@@ -45,7 +45,8 @@ let TermsService = class TermsService {
         return await this.termsRepository.find({ where });
     }
     async create(termsDTO) {
-        const { time, count, date, court: cId } = termsDTO;
+        const { time, count, date: dateString, court: cId } = termsDTO;
+        let date = new Date(dateString);
         date.setHours(0, 0, 0, 0);
         const startTime = time;
         const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2, '0') + ":00:00";
@@ -100,9 +101,9 @@ exports.TermsService = TermsService;
 exports.TermsService = TermsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(term_entity_1.Term)),
-    __param(2, (0, common_1.Inject)((0, common_1.forwardRef)(() => complex_service_1.ComplexService))),
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => complex_service_1.ComplexService))),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        courts_service_1.CourtsService,
-        complex_service_1.ComplexService])
+        complex_service_1.ComplexService,
+        courts_service_1.CourtsService])
 ], TermsService);
 //# sourceMappingURL=terms.service.js.map

@@ -1,21 +1,29 @@
-import { Controller, Get, Param, ParseIntPipe, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { BookingService } from './booking.service';
+import { TermsDTO } from 'src/models/term.dto';
+import { TermsCreateDTO } from 'src/models/term.create.dto';
 
 @Controller('booking')
 export class BookingController {
 
-    constructor(private readonly service: BookingService) {}
+    constructor(private readonly service: BookingService) { }
 
-    @Get("checkout-session")
+    //create(@Body(new ValidationPipe({transform:true}))termsDTO:TermsCreateDTO)
+    @Post("checkout-session")
     @UseGuards(JwtAuthGuard)
     checkout_session(
-        @Req()req:any,
-        @Query("complex",ParseIntPipe)complexId:number,
-        @Query("court",ParseIntPipe)courtId:number,
-        @Query("count",ParseIntPipe)count:number)
-    {
-        return this.service.checkout(complexId,courtId,count,req.user.email);
+        @Req() req: any,
+        @Body() dto: TermsCreateDTO
+    ) {
+        dto.user = req.user.id;
+        return this.service.checkout(dto, req.user.email);
     }
 
+    /*
+ @Query("complex", ParseIntPipe) complexId: number,
+        @Query("court", ParseIntPipe) courtId: number,
+        @Query("count", ParseIntPipe) count: number,
+        @Query("date") date: string
+    */
 }
