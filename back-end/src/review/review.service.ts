@@ -34,7 +34,9 @@ export class ReviewService {
     }
 
     async getReview(user: number, complex: number) {
-        return await this.repository.findOneBy({ user, complex })
+        let res = await this.repository.findOneBy({ user, complex })
+
+        return res ? res : [];
     }
 
 }

@@ -21,26 +21,23 @@ export class WeatherEffect {
         this.actions$.pipe(
             ofType(weather),
             withLatestFrom(this.store.select(selectedComplex)),
-            filter(([_, complex]) => complex !== undefined),
-            switchMap(([action, complex]) =>
-                this.store.select(selectedLocation).pipe(
-                    filter(loc => !!loc),
-                    take(1),
-                    tap((loc) => console.log(loc)),
-                    switchMap(() =>
-                        this.complexService.getWeather(
-                            action.date,
-                            action.hour,
-                            complex!.location.x.toString() + "," + complex!.location.y.toString()
-                        ).pipe(
-                            map(data => weatherSuccess({ data })),
-                            catchError(({ err }) => of(weatherFailed({ message: err.message || 'Greska' })))
-                        )
-                    )
-                )
-            )
+            filter(([_, complex]) => complex?.location !== undefined),
+            filter(([_, complex]) => complex?.location.x !== undefined && complex?.location.y !== undefined),
+            switchMap(([action, complex]) => this.complexService.getWeather(action.date, action.hour, complex!.location.x.toString() + "," + complex!.location.y.toString()).pipe(
+                map(data => weatherSuccess({ data: data, hour: +action.hour.split(":")[0] })),
+                catchError(({ err }) => of(weatherFailed({ message: err.message || 'Greska' })))
+            ))
         )
     );
-
-
 }
+
+
+
+// this.store.select(selectedLocation).pipe(
+//     filter(loc => !!loc),
+//     take(1),
+//     tap((loc) => console.log(loc)),
+//     switchMap(() =>
+//        
+//     )
+// )

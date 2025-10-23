@@ -82,3 +82,23 @@ body {
   background-color: #04672c;
   color: white;
 }
+
+.popup {
+  position: absolute;
+  bottom: 35px;
+  left: -50px;
+  width: 150px;
+  padding: 5px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  display: none;
+
+  // display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+a:visited {
+  color: black;
+}

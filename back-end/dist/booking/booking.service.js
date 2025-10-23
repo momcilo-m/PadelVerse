@@ -36,6 +36,7 @@ let BookingService = class BookingService {
     }
     async checkout(dto, email) {
         const { complex, count, court: courtID } = dto;
+        console.log(complex, count, courtID);
         let court = await this.courtRepository.manager
             .getRepository(court_entity_1.Court)
             .createQueryBuilder('court')

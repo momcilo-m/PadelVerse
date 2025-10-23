@@ -36,10 +36,13 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         this.configService = configService;
     }
     async validate(payload) {
+        console.log(payload);
         const user = await this.userRepository.findOne({ where: { id: payload.id } });
+        console.log(user);
         if (!user || !user.is_active) {
             throw new common_1.UnauthorizedException('User not found or inactive');
         }
+        console.log("proslo");
         return user;
     }
 };

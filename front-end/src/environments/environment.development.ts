@@ -1,6 +1,7 @@
 export const environment = {
     production: false,
     apiUrl: 'http://localhost:3000',
+    clinet: 'http://localhost:4200',
     stipe_key: "pk_test_51S6EVACq02uHmIrC98mVnThKAvZT6PJ3zGpZuhow7AVExgJSuzPAWkp2MfCXGC1VnldB4BloLuKWZh9l9d8LnR6I00UC8jbVRS",
     forecast_api: "http://api.weatherapi.com/v1",
     forecast_key: "29b677f206f94d6295a175818251009",

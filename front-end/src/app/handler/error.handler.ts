@@ -11,11 +11,21 @@ export class SimpleErrorHandler implements ErrorHandler {
     private router = inject(Router)
     private notificationService = inject(NotificationService)
 
+    private unprotected = ["/", "/home", "/complex"];
+    private unprotectedIndexed = ["/complex/"]
+
     handleError(error: any): void {
 
-        console.log(error)
+        const currentUrl = this.router.url;
 
-        if (error.statusCode === 401 && !(this.router.url === "/" || this.router.url === "home")) {
+        const isUnprotected =
+            this.unprotected.includes(currentUrl) ||
+            this.unprotectedIndexed.some(path => currentUrl.startsWith(path));
+
+        // console.log("a", !(this.router.url === "/" || this.router.url === "home"))
+        // console.log(error, this.router.url)
+
+        if (error.statusCode === 401 && !isUnprotected) {
             this.notificationService.error(error.message)
             this.router.navigate(['/login']);
         }
@@ -29,6 +39,9 @@ export class SimpleErrorHandler implements ErrorHandler {
         else if (error.statusCode === 600) {
             this.notificationService.success(error.message)
             this.router.navigate(['/profile']);
+        }
+        else {
+            console.log("default")
         }
     }
 }

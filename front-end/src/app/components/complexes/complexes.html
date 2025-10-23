@@ -47,7 +47,7 @@
             <!-- NAME -->
             <div class="sort-row">
                 <span class="sort-label">Name:</span>
-                <button mat-icon-button type="button" (click)="sort('name')">
+                <button mat-raised-button color="primary" type="button" (click)="sort('name')">
                     <mat-icon>
                         {{
                         formSort.get('name')?.value === 'asc' ? 'arrow_upward' :
@@ -61,7 +61,7 @@
             <!-- PRICE -->
             <div class="sort-row">
                 <span class="sort-label">PriceMin:</span>
-                <button mat-icon-button type="button" (click)="sort('priceMin')">
+                <button mat-raised-button color="primary" type="button" (click)="sort('priceMin')">
                     <mat-icon>
                         {{
                         formSort.get('priceMin')?.value === 'asc' ? 'arrow_upward' :
@@ -74,7 +74,7 @@
 
             <div class="sort-row">
                 <span class="sort-label">PriceMax:</span>
-                <button mat-icon-button type="button" (click)="sort('priceMax')">
+                <button mat-raised-button color="primary" type="button" (click)="sort('priceMax')">
                     <mat-icon>
                         {{
                         formSort.get('priceMax')?.value === 'asc' ? 'arrow_upward' :
@@ -88,7 +88,7 @@
             <!-- TIME START -->
             <div class="sort-row">
                 <span class="sort-label">Time Start:</span>
-                <button mat-icon-button type="button" (click)="sort('timeStart')">
+                <button mat-raised-button color="primary" type="button" (click)="sort('timeStart')">
                     <mat-icon>
                         {{
                         formSort.get('timeStart')?.value === 'asc' ? 'arrow_upward' :
@@ -103,7 +103,7 @@
             <!-- TIME END -->
             <div class="sort-row">
                 <span class="sort-label">Time End:</span>
-                <button mat-icon-button type="button" (click)="sort('timeEnd')">
+                <button mat-raised-button color="primary" type="button" (click)="sort('timeEnd')">
                     <mat-icon>
                         {{
                         formSort.get('timeEnd')?.value === 'asc' ? 'arrow_upward' :
@@ -115,7 +115,9 @@
             </div>
         </form>
 
-        <button (click)="execute()">Sort && Filter</button>
+        <button mat-raised-button color="primary" (click)="execute()">
+            Sort & Filter
+        </button>
     </div>
 
     <!-- (click)="toggleSort('timeStart')" -->

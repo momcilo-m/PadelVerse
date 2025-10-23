@@ -29,10 +29,10 @@ let BookingController = class BookingController {
 };
 exports.BookingController = BookingController;
 __decorate([
-    (0, common_1.Post)("checkout-session"),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("checkout-session"),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Body)(new common_1.ValidationPipe({ transform: true }))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, term_create_dto_1.TermsCreateDTO]),
     __metadata("design:returntype", void 0)

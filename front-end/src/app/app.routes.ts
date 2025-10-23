@@ -16,11 +16,12 @@ import { ConfirmRegistration } from './components/confirm-registration/confirm-r
 export const routes: Routes = [
   {
     path: '', component: SideNav, children: [
-      { path: 'home', component: Home, canActivate: [login] },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: Home },
       { path: 'tours', component: Tournament, canActivate: [login] },
       { path: 'maps', component: Maps, canActivate: [login] },
       { path: 'complex', component: Complexes },
-      { path: 'complex/:id', component: Complex, canActivate: [login] },
+      { path: 'complex/:id', component: Complex },
       { path: 'profile', component: Profile, canActivate: [login] },
       { path: 'management', component: Management, canActivate: [login] },
     ]

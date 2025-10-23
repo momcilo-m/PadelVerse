@@ -32,7 +32,7 @@ let ReviewController = class ReviewController {
         res.rating = reviewComplex.rating;
         return res;
     }
-    async getReview(req, user, complex) {
+    async getReview(req, complex) {
         return await this.service.getReview(req.user.id, complex);
     }
 };
@@ -47,13 +47,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ReviewController.prototype, "review", null);
 __decorate([
-    (0, common_1.Get)("/:user/:complex"),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("/:complex"),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Param)('user', common_1.ParseIntPipe)),
-    __param(2, (0, common_1.Param)('complex', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Param)('complex', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number, Number]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], ReviewController.prototype, "getReview", null);
 exports.ReviewController = ReviewController = __decorate([

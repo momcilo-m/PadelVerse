@@ -41,7 +41,7 @@ export class ComplexService {
   }
 
   getComplexByOwner(owner: number) {
-    return this.http.get<ComplexInterface[]>(`${this.BASE}/complex?owner=${owner}`)
+    return this.http.get<[complexes: ComplexInterface[], count: number]>(`${this.BASE}/complex?owner=${owner}`)
   }
 
   createComplex(complex: CreateComplex): Observable<ComplexInterface> {
@@ -63,8 +63,8 @@ export class ComplexService {
     return this.http.post<{ path: string }>(`${this.BASE}/complex/photo/${id}`, formData, { withCredentials: true });
   }
 
-  getReview(user: number, complex: number): Observable<{ rating: number }> {
-    return this.http.get<{ rating: number }>(`${this.BASE}/review/${user}/${complex}`, { withCredentials: true })
+  getReview(complex: number): Observable<{ rating: number }> {
+    return this.http.get<{ rating: number }>(`${this.BASE}/review/${complex}`, { withCredentials: true })
   }
 
   vote(user: number, rating: number, complex: number): Observable<{ rating: number, user: number, complex: number }> {

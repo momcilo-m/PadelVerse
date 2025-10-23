@@ -14,10 +14,10 @@ export declare class ComplexService {
     getByUser(owner: number): Promise<Complex[]>;
     create(complexDTO: ComplexDTO): Promise<Complex>;
     edit(id: number, complexDTO: ComplexDTO): Promise<BadRequestException | Partial<Complex>>;
-    freeCourts(id: number, start: string, count: number, date: Date): Promise<{
+    freeCourts(id: number, start: string, count: number, date: Date): Promise<never[] | {
         all: Court[];
         available: number[];
-    } | never[]>;
+    }>;
     complexPhoto(file: Express.Multer.File, id: number): Promise<{
         message: string;
         filename: string;

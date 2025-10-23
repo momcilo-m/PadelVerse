@@ -11,6 +11,7 @@ async function bootstrap() {
     app.enableCors({
         origin: ['http://localhost:4200'],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        allowedHeaders: 'Content-Type, Authorization',
         credentials: true
     });
     app.use((0, cookie_parser_1.default)());

@@ -35,6 +35,11 @@ export class Complex {
   constructor(private route: ActivatedRoute) { }
 
   id: string = "";
+  location: { lat: number, lng: number } = { lat: 42, lng: 23 }
+  city: String = "";
+  country: String = "";
+  price: number = 1;
+  vote: number = 0;
 
   form = new FormGroup({
     date: new FormControl<Date>(new Date()),
@@ -43,24 +48,13 @@ export class Complex {
     court: new FormControl<number>(-1),
   });
 
-
-  location: { lat: number, lng: number } = { lat: 42, lng: 23 }
-  city: String = "";
-  country: String = "";
-  price: number = 1;
-  vote: number = 0;
-
   store = inject<Store<AppState>>(Store)
 
   courts$ = this.store.select(selectCourts);
   available$ = this.store.select(selectAvailable)
-  //selectedCourt:number=-1;
-
-  location$: Observable<{ lat: number, lng: number }> = this.store.select(selectComplexes).pipe(
-    map(complexes => complexes.find(complex => complex.id === Number(this.id))),
-    map(complex => complex ? { lat: complex.location.x, lng: complex.location.y } : { lat: 42, lng: 23 })
-  );
-
+  selectedCourtId$ = this.store.select(selectedCourt)
+  weather$ = this.store.select(selectWeather);
+  messageError$ = this.store.select(selectError);
 
   complex$ = combineLatest([
     this.store.select(selectComplexes),
@@ -89,7 +83,6 @@ export class Complex {
     })
   )
 
-  selectedCourtId$ = this.store.select(selectedCourt)
 
   selectedCourt$ = combineLatest([this.courts$, this.selectedCourtId$]).pipe(
     map(([courts, id]) => courts.find(c => c.id === id) ?? null),
@@ -99,11 +92,6 @@ export class Complex {
     map(court => court ? court.price : 0),
   )
 
-
-  //price$ = 1;
-
-  weather$ = this.store.select(selectWeather);
-  messageError$ = this.store.select(selectError);
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') || "";
@@ -179,14 +167,16 @@ export class Complex {
     let court = this.form.get("court")?.value || -1;
     let count = this.form.get('count')?.value || -1;
     let date = this.form.get('date')?.value;
+    let time = this.form.get("start_time")?.value || new Date();
 
     if (complex == -1 || court == -1 || count == -1 || !date) {
       return;
     }
 
     let dateString = this.transformDate(date)
+    let timeString = this.transformTime(time, 0);
 
-    this.store.dispatch(booking({ complex, court, count, date: dateString }))
+    this.store.dispatch(booking({ complex, court, count, date: dateString, time: timeString }))
   }
 
   transformDate(start: Date): string {

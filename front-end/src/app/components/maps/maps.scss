@@ -1,10 +1,8 @@
-.mapa
-{
-    position: static !important;
+.mapa {
+  position: static !important;
 }
 
-::ng-deep .map-container
-{
+::ng-deep .map-container {
   position: static !important;
   height: 100% !important;
   width: 100% !important;

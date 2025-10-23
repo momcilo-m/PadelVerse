@@ -27,9 +27,9 @@ export class ReviewController {
         return res;
     }
 
-    @Get("/:user/:complex")
     @UseGuards(JwtAuthGuard)
-    async getReview(@Req() req: any, @Param('user', ParseIntPipe) user: number, @Param('complex', ParseIntPipe) complex: number) {
+    @Get("/:complex")
+    async getReview(@Req() req: any, @Param('complex', ParseIntPipe) complex: number) {
         return await this.service.getReview(req.user.id, complex);
     }
 }

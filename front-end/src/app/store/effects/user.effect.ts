@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from "@ngrx/effects"
 import { UserService } from "../../services/user.service";
-import { activateUser, activateUserFail, activateUserSuccess, isLogin, login, loginSuccessfully, logout, register, registerSuccess, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action";
+import { activateUser, activateUserFail, activateUserSuccess, changePassword, isLogin, login, loginSuccessfully, logout, register, registerSuccess, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action";
 import { catchError, delay, EMPTY, exhaustMap, filter, map, of, switchMap, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { NotificationService } from "../../services/notification.service";
@@ -44,6 +44,7 @@ export class UserEffect {
             switchMap(() => this.userService.isLogin().pipe(
                 map(user => loginSuccessfully({ user })),
                 catchError(({ error }) => {
+                    console.log("ovde se desila greska")
                     this.errorHandler.handleError(error)
                     return of(userFailed({ message: error.message || "Fail" }))
                 })
@@ -65,8 +66,21 @@ export class UserEffect {
         return this.actions$.pipe(
             ofType(updateProfileImage),
             switchMap((action) => this.userService.updateProfileImage(action.file).pipe(
-                tap((img) => console.log(img.path)),
+                //tap((img) => console.log(img.path)),
                 map(({ path }) => updateProfileImageSuccessfully({ path })),
+                catchError(({ error }) => of(userFailed({ message: error.message || "Fail" })))
+            ))
+        )
+    })
+
+    changePassword$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(changePassword),
+            switchMap(({ email, password, newPassword, confirmPassword }) => this.userService.changePassword(email, password, newPassword, confirmPassword).pipe(
+                //Koristi se loginSuccess zato sto radi isto sto i changePasswordSuccess
+                //Dobija se korisnik i treba da se smesti u store
+                tap(() => { window.location.reload() }),
+                map(({ user }) => loginSuccessfully({ user })),
                 catchError(({ error }) => of(userFailed({ message: error.message || "Fail" })))
             ))
         )

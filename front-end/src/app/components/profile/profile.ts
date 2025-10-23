@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { filter, map, take, tap } from 'rxjs';
-import { updateProfile, updateProfileImage } from '../../store/actions/user.action';
+import { changePassword, updateProfile, updateProfileImage } from '../../store/actions/user.action';
 import { User } from '../../models/user.interface';
 
 
@@ -22,7 +22,7 @@ import { User } from '../../models/user.interface';
 })
 export class Profile {
 
-  //Trazimo ga po "id-u", tj po reference varijabli
+  //Trazimo ga po "id-u", tj po "reference" varijabli
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   store = inject<Store<AppState>>(Store)
@@ -89,5 +89,16 @@ export class Profile {
     this.form.get("file")?.setValue(this.fileInput.nativeElement.files!.item(0))
   }
 
-  updatePassword() { }
+  changePass() {
+
+    let email = this.form.get("email")?.value ?? undefined;
+    let password = this.formPassword.get("password")?.value ?? undefined;
+    let newPassword = this.formPassword.get("newPassword")?.value ?? undefined;
+    let confirmPassword = this.formPassword.get("confirmPassword")?.value ?? undefined;
+
+    if (!email || !password || !newPassword || !confirmPassword)
+      return;
+
+    this.store.dispatch(changePassword({ email, password, newPassword, confirmPassword }))
+  }
 }

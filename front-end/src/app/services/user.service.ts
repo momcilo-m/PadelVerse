@@ -53,4 +53,8 @@ export class UserService {
   confirmRegistration(token: string) {
     return this.http.get<{ message: string }>(`${this.BASE}/auth/confirmRegistration/${token}`)
   }
+
+  changePassword(email: string, password: string, newPassword: string, confirmPassword: string) {
+    return this.http.patch<{ user: User }>(`${this.BASE}/auth/change-password`, { email, password, newPassword, confirmPassword }, { withCredentials: true })
+  }
 }

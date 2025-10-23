@@ -20,3 +20,5 @@ export const activateUserSuccess = createAction("activateUserSuccess");
 export const activateUserFail = createAction("activateUserFail", props<{ message: string }>())
 
 export const userFailed = createAction("userFailed", props<{ message: string }>())
+
+export const changePassword = createAction("changePassword", props<{ email: string, password: string, newPassword: string, confirmPassword: string }>())

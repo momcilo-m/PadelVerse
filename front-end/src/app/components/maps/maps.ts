@@ -22,6 +22,8 @@ export class Maps {
   zoom = 13;
 
   private map_id = environment.mad_id;
+  private api = environment.apiUrl;
+  private client = environment.clinet;
   //private subscription!: Subscription;
 
   store = inject<Store<AppState>>(Store)
@@ -53,7 +55,9 @@ export class Maps {
       this.store.select(selectComplexes).pipe(
         map(complexes => complexes.map(el => ({
           position: { lat: el.location.x, lng: el.location.y },
-          label: el.name
+          label: el.name,
+          photo: el.photo,
+          id: el.id
         })
         )))
         .subscribe(marker =>
@@ -61,7 +65,7 @@ export class Maps {
             new google.maps.marker.AdvancedMarkerElement({
               map: this.map,
               position: el.position,
-              content: this.createMarkerContent(el.label)
+              content: this.createMarkerContent(el.label, el.photo, el.id)
             });
           })
         )
@@ -73,36 +77,45 @@ export class Maps {
   }
 
 
-  private createMarkerContent(label: string, description?: string): HTMLElement {
+  private createMarkerContent(label: string, photo: string, id: number, description?: string): HTMLElement {
     // Container za marker i popup
     const container = document.createElement('div');
     container.style.position = 'relative';
 
     // Marker vizual
-    const markerDiv = document.createElement('div');
-    markerDiv.style.width = '20px';
-    markerDiv.style.height = '20px';
-    markerDiv.style.backgroundColor = 'red';
-    markerDiv.style.borderRadius = '50%';
+    const markerDiv = document.createElement('span');
+    markerDiv.classList.add('material-icons');
+    markerDiv.textContent = 'sports_tennis';
+    markerDiv.style.fontSize = '32px';
+    markerDiv.style.color = 'green';
     markerDiv.style.cursor = 'pointer';
     container.appendChild(markerDiv);
 
+
     // Popup iznad markera
     const popup = document.createElement('div');
-    popup.style.position = 'absolute';
-    popup.style.bottom = '25px';
-    popup.style.left = '-50px';
-    popup.style.width = '150px';
-    popup.style.padding = '5px';
-    popup.style.backgroundColor = 'white';
-    popup.style.border = '1px solid black';
-    popup.style.borderRadius = '5px';
-    popup.style.display = 'none';
-    popup.innerText = description || label;
+    popup.className = "popup";
+
+    //Slika u pop-up
+    const img = document.createElement('img');
+    img.src = this.api + "/photo/" + photo;
+    img.style.height = "50px"
+    img.style.width = "75px"
+
+    //Text
+    const link = document.createElement("a");
+    link.innerText = label;
+    link.href = this.client + `/complex/${id}`;
+    link.style.textDecoration = 'none';
+    link.style.color = "green"
+
+    //popup.innerText = description || label;
+    popup.appendChild(img);
+    popup.appendChild(link);
     container.appendChild(popup);
 
     markerDiv.addEventListener('click', () => {
-      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+      popup.style.display = popup.style.display === 'none' ? 'flex' : 'none';
     });
 
     return container;

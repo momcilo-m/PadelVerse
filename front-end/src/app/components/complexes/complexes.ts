@@ -17,14 +17,14 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
-
+import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-complex',
   standalone: true,
   imports: [ComplexCard, AsyncPipe, MatPaginatorModule,
     MatSliderModule, MatSliderModule, MatExpansionModule, MatCheckboxModule, MatInputModule,
     MatTimepickerModule, MatSelectModule, MatRadioModule,
-    ReactiveFormsModule, MatIconModule,
+    ReactiveFormsModule, MatIconModule, MatButtonModule
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './complexes.html',

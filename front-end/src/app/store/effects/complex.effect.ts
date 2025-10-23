@@ -49,9 +49,12 @@ export class ComplexEffect {
             ofType(selectComplex),
             withLatestFrom(this.store.select(selectComplexes)),
 
-            filter(([{ id }, complexes]) => complexes.length === 0 && complexes.find(el => el.id === id && el.reviews != null) === undefined),
+            filter(([{ id }, complexes]) => {
+                const complex = complexes.find(el => el.id === id);
+                return complex !== undefined && complex.rating !== 0;
+            }),
 
-            switchMap(([{ id }, _]) => this.complexService.getReview(5, id).pipe(
+            switchMap(([{ id }, _]) => this.complexService.getReview(id).pipe(
                 map(({ rating }) => updateReview({ rating, id })),
                 catchError(({ error }) => {
                     this.errorHandler.handleError(error)
@@ -100,13 +103,10 @@ export class ComplexEffect {
                     switchMap((res) =>
                         from([
                             loadedCourts({ courts: res.all, avalaible: res.available }),
-                            //weather({ date: param.date, hour: param.time })
+                            weather({ date: param.date, hour: param.time })
                         ]
                         )),
-                    catchError(({ error }) =>
-                        of(
-                            failedComplex({ message: error.message || "Fail when load courts" })
-                        ),
+                    catchError(({ error }) => of(failedComplex({ message: error.message || "Fail when load courts" })),
                     )
                 ))
         )
@@ -115,7 +115,7 @@ export class ComplexEffect {
     $booking = createEffect(() => {
         return this.actions$.pipe(
             ofType(booking),
-            switchMap(({ complex, court, count, date }) => this.bookingService.checkout_session(complex, court, count, date).pipe(
+            switchMap(({ complex, court, count, date, time }) => this.bookingService.checkout_session(complex, court, count, date, time).pipe(
                 map(res => bookingSuccess({ id: res.id })),
                 catchError(({ error }) => of(
                     failedComplex({ message: error.message || "Fail with checkout" })
@@ -138,7 +138,7 @@ export class ComplexEffect {
         return this.actions$.pipe(
             ofType(userComplex),
             switchMap((owner) => this.complexService.getComplexByOwner(owner.id).pipe(
-                map(complex => userComplexSuccess({ complex })),
+                map(([complex, _]) => userComplexSuccess({ complex })),
                 catchError(({ error }) => of(
                     //userComplexFailed({ message: error.message || "Failed when load message" })
                     failedComplex({ message: error.message || "Fail with checkout" })

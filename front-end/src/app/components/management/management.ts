@@ -21,8 +21,6 @@ import { combineLatest, combineLatestAll, filter, firstValueFrom, map, Observabl
 import { ComplexGlobalStats, ComplexStatsMonth, ComplexStatsWeek } from '../../models/complex.stats';
 import { ManagementService } from '../../services/management.service';
 
-import { ChangeDetectionStrategy, model, signal } from '@angular/core';
-
 import {
   MatDialog,
 } from '@angular/material/dialog';

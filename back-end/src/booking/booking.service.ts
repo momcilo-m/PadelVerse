@@ -31,6 +31,8 @@ export class BookingService {
 
         const { complex, count, court: courtID } = dto;
 
+        console.log(complex, count, courtID);
+
         let court = await this.courtRepository.manager
             .getRepository(Court)
             .createQueryBuilder('court')

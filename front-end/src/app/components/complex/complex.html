@@ -59,7 +59,7 @@
         </div>
 
         <div class="complex-location">
-            <google-map height="100%" witdh="200px" [center]="(location$ | async)!" [options]="{
+            <google-map height="100%" witdh="200px" [center]="(this.location)!" [options]="{
                 mapTypeControl: false,streetViewControl: false, 
                 fullscreenControl: false,
                 zoomControl: false,
@@ -68,8 +68,8 @@
                 draggable: true,
                 keyboardShortcuts: true,
             }" [zoom]="16">
-                @if (location$ | async; as location) {
-                <map-marker [position]="location" [title]="'Moja lokacija'">
+                @if (this.location) {
+                <map-marker [position]="this.location" [title]="'Moja lokacija'">
                 </map-marker>
                 }
             </google-map>
@@ -79,21 +79,35 @@
             Weather Prediction
             <div class="weather rounded-corner">
 
+                @if(weather$ | async; as weather)
+                {
+
+                @if (weather.icon !== '') {
+
                 <div class="weather-date">
-                    @if (weather$ | async; as weather) {
                     <p>{{ transformDate(form.get('date')?.value!) }}</p>
                     <p>High: {{ weather.max_temp }} Low: {{ weather.min_temp }}</p>
-                    }
                 </div>
 
-                @if (weather$ | async; as weather) {
                 <div class="">Temp: {{ weather.temp }}</div>
-                }
 
-                @if (weather$ | async; as weather) {
+
                 <div class="weather-icon">
                     <img [src]="weather.icon" alt="weather-icon">
                     <p>Condition: {{ weather.text }}</p>
+                </div>
+                }
+                @else
+                {
+                <div class="weather-date">
+                    No data :(
+                </div>
+                }
+                }
+                @else
+                {
+                <div class="weather-date">
+                    No data :(
                 </div>
                 }
 

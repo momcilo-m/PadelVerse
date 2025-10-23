@@ -10,7 +10,7 @@ export class TermsCreateDTO {
     @IsPositive()
     complex: number
 
-    @IsPositive()
+    // @IsPositive()
     user: number
 
     @IsDate()

@@ -6,5 +6,5 @@ export declare class ReviewController {
     private readonly complexService;
     constructor(service: ReviewService, complexService: ComplexService);
     review(req: any, reviewComplex: ReviewDTO): Promise<import("../models/review.entity").Review>;
-    getReview(req: any, user: number, complex: number): Promise<import("../models/review.entity").Review | null>;
+    getReview(req: any, complex: number): Promise<import("../models/review.entity").Review | never[]>;
 }

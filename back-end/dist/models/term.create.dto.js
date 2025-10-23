@@ -30,10 +30,6 @@ __decorate([
     __metadata("design:type", Number)
 ], TermsCreateDTO.prototype, "complex", void 0);
 __decorate([
-    (0, class_validator_1.IsPositive)(),
-    __metadata("design:type", Number)
-], TermsCreateDTO.prototype, "user", void 0);
-__decorate([
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
