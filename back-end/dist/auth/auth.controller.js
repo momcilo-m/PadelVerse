@@ -53,6 +53,15 @@ let AuthController = class AuthController {
         user.email = req.user.email;
         return this.service.changePassword(user);
     }
+    logout(response) {
+        response.cookie('jwt', "ciao", {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            expires: new Date(Date.now() + 10 * 1000)
+        });
+        return { message: 'Logged out successfully' };
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -100,6 +109,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, password_user_dto_1.PasswordUserDTO]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "changePassword", null);
+__decorate([
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Get)("/logout"),
+    __param(0, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "logout", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService,

@@ -47,8 +47,8 @@ export const complexReducer = createReducer(
         console.log(payload)
         return {
             ...state,
-            courts: payload.courts,
-            avalaibleCourts: payload.avalaible
+            courts: payload.courts || [],
+            avalaibleCourts: payload.avalaible || []
         }
     }),
     on(selectCourt, (state, payload) => {

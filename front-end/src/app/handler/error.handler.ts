@@ -18,6 +18,8 @@ export class SimpleErrorHandler implements ErrorHandler {
 
         const currentUrl = this.router.url;
 
+        console.log(currentUrl)
+
         const isUnprotected =
             this.unprotected.includes(currentUrl) ||
             this.unprotectedIndexed.some(path => currentUrl.startsWith(path));
@@ -25,13 +27,21 @@ export class SimpleErrorHandler implements ErrorHandler {
         // console.log("a", !(this.router.url === "/" || this.router.url === "home"))
         // console.log(error, this.router.url)
 
+        console.log(error.statusCode === 401, !isUnprotected)
+        //Greska sa servera
         if (error.statusCode === 401 && !isUnprotected) {
+            this.notificationService.error(error.message)
+            this.router.navigate(['/login']);
+        }
+        //Greska clijenta
+        else if(error.statusCode === 411)
+        {
             this.notificationService.error(error.message)
             this.router.navigate(['/login']);
         }
         else if (error.statusCode === 404) {
             this.notificationService.error(error.message)
-            this.router.navigate(['/']);
+            this.router.navigate(['/home']);
         }
         else if (error.statusCode === 500) {
             this.notificationService.error("Internal server error")

@@ -5,14 +5,41 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
-// :root {
-//   @include mat.snack-bar-overrides((container-color: red,
-//       supporting-text-color:white));
+// // :root {
+// //   @include mat.snack-bar-overrides((container-color: red,
+// //       supporting-text-color:white));
+// // }
+
+// html {
+//   @include mat.theme((color: (primary: mat.$azure-palette,
+//         tertiary: mat.$blue-palette,
+//       ),
+//       typography: Roboto,
+//       density: 0,
+//     ));
+// }
+
+// body {
+//   // Default the application to a light color theme. This can be changed to
+//   // `dark` to enable the dark color theme, or to `light dark` to defer to the
+//   // user's system settings.
+//   color-scheme: light;
+
+//   // Set a default background, font and text colors for the application using
+//   // Angular Material's system-level CSS variables. Learn more about these
+//   // variables at https://material.angular.dev/guide/system-variables
+//   background-color: var(--mat-sys-surface);
+//   color: var(--mat-sys-on-surface);
+//   font: var(--mat-sys-body-medium);
+
+//   // Reset the user agent margin.
+//   margin: 0;
 // }
 
 html {
-  @include mat.theme((color: (primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
+  @include mat.theme((color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
       ),
       typography: Roboto,
       density: 0,
@@ -23,41 +50,47 @@ body {
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the
   // user's system settings.
-  color-scheme: light;
+  color-scheme: dark;
 
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
+  background-color: var(--mat-sys-on-primary-fixed);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
 
   // Reset the user agent margin.
   margin: 0;
+
+  overflow: hidden;
+
+  z-index: 1;
+  height: 100vh;
 }
 
-/* You can add global styles to this file, and also import other style files */
-
-html,
-body {
-  height: 100%;
+.mat-drawer-container, .mat-toolbar, .mat-drawer
+{
+  background-color: transparent !important;
 }
 
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+app-management, app-complex, app-profile,app-login{
+  display: block;
+  height: 100% !important;
 }
 
-// .map-container
-// {
-// position: static !important;
-// height: 100% !important;
-// width: 100% !important;
-// }
+app-login{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .mat-drawer-content.mat-sidenav-content {
   overflow: hidden !important;
   scrollbar-width: none !important;
+}
+
+app-home{
+  z-index: 3;
 }
 
 .my-marker {

@@ -49,7 +49,9 @@ export class Maps {
         center: this.center,
         zoom: this.zoom,
         //mapId: '8da2e5ef598c94e14d6d7495'
-        mapId: this.map_id
+        mapId: this.map_id,
+        streetViewControl: false
+
       });
 
       this.store.select(selectComplexes).pipe(

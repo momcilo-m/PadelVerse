@@ -1,36 +1,39 @@
 <!-- <h2 mat-dialog-title>Hi {{data.name}}</h2> -->
 <mat-dialog-content>
     <h3>Let's create your complex?</h3>
-    <mat-form-field>
-        <mat-label>Complex Name</mat-label>
-        <input matInput [(ngModel)]="data.name" />
-    </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>Open Time:</mat-label>
-        <input matInput type="time" id="openTime" name="openTime" [(ngModel)]="data.open_time" required step="1" />
-    </mat-form-field>
+    <div class="grid-field">
+        <mat-form-field>
+            <mat-label>Complex Name</mat-label>
+            <input matInput [(ngModel)]="data.name" />
+        </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>Close Time:</mat-label>
-        <input matInput type="time" id="closeTime" name="closeTime" [(ngModel)]="data.close_time" required step="1" />
-    </mat-form-field>
+        <mat-form-field>
+            <mat-label>Open Time:</mat-label>
+            <input matInput type="time" id="openTime" name="openTime" [(ngModel)]="data.open_time" required step="1" />
+        </mat-form-field>
+        
+        <mat-form-field>
+            <mat-label>Close Time:</mat-label>
+            <input matInput type="time" id="closeTime" name="closeTime" [(ngModel)]="data.close_time" required step="1" />
+        </mat-form-field> 
 
-    <mat-form-field>
-        <mat-label>Location</mat-label>
-        <input id="location" name="location" matInput [(ngModel)]="data.location" />
-    </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>Counrty</mat-label>
-        <input id="country" name="country" matInput [(ngModel)]="data.country" />
-    </mat-form-field>
+        <mat-form-field>
+            <mat-label>Location</mat-label>
+            <input id="location" name="location" matInput [(ngModel)]="data.location" />
+        </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>city</mat-label>
-        <input id="city" name="city" matInput [(ngModel)]="data.city" />
-    </mat-form-field>
+        <mat-form-field>
+            <mat-label>Counrty</mat-label>
+            <input id="country" name="country" matInput [(ngModel)]="data.country" />
+        </mat-form-field>
 
+        <mat-form-field>
+            <mat-label>City</mat-label>
+            <input id="city" name="city" matInput [(ngModel)]="data.city" />
+        </mat-form-field>
+    </div>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button matButton (click)="addComplex()" cdkFocusInitial>Ok</button>

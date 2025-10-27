@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from "@ngrx/effects"
 import { UserService } from "../../services/user.service";
-import { activateUser, activateUserFail, activateUserSuccess, changePassword, isLogin, login, loginSuccessfully, logout, register, registerSuccess, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action";
+import { activateUser, activateUserFail, activateUserSuccess, changePassword, isLogin, login, loginSuccessfully, logout, logoutReq, register, registerSuccess, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action";
 import { catchError, delay, EMPTY, exhaustMap, filter, map, of, switchMap, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { NotificationService } from "../../services/notification.service";
@@ -31,12 +31,22 @@ export class UserEffect {
             ofType(logout),
             tap(() => {
                 this.router.navigate(['/home']);
-                this.notify.error("Please login")
+                this.notify.error("Logout")
             }),
         )
     },
         { dispatch: false }
     )
+
+    logoutReq$ = createEffect(()=>{
+        return this.actions$.pipe(
+            ofType(logoutReq),
+            switchMap(()=>this.userService.logout().pipe(
+                map(()=>logout()),
+                catchError(({error})=>of(userFailed({message:error.message})))
+            ))
+        )
+    })
 
     init$ = createEffect(() => {
         return this.actions$.pipe(
@@ -44,7 +54,6 @@ export class UserEffect {
             switchMap(() => this.userService.isLogin().pipe(
                 map(user => loginSuccessfully({ user })),
                 catchError(({ error }) => {
-                    console.log("ovde se desila greska")
                     this.errorHandler.handleError(error)
                     return of(userFailed({ message: error.message || "Fail" }))
                 })

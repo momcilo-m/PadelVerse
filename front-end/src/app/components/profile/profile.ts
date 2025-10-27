@@ -9,13 +9,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { filter, map, take, tap } from 'rxjs';
-import { changePassword, updateProfile, updateProfileImage } from '../../store/actions/user.action';
+import { changePassword, logout, logoutReq, updateProfile, updateProfileImage } from '../../store/actions/user.action';
 import { User } from '../../models/user.interface';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, MatTabsModule, MatIcon, MatFormFieldModule, MatInputModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, MatTabsModule, MatIcon, MatFormFieldModule, MatInputModule, ReactiveFormsModule, FormsModule, MatButtonModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
   standalone: true
@@ -100,5 +101,10 @@ export class Profile {
       return;
 
     this.store.dispatch(changePassword({ email, password, newPassword, confirmPassword }))
+  }
+
+  logout()
+  {
+    this.store.dispatch(logoutReq())
   }
 }

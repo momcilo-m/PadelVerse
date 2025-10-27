@@ -57,4 +57,9 @@ export class UserService {
   changePassword(email: string, password: string, newPassword: string, confirmPassword: string) {
     return this.http.patch<{ user: User }>(`${this.BASE}/auth/change-password`, { email, password, newPassword, confirmPassword }, { withCredentials: true })
   }
+
+  logout():Observable<{message:string}>
+  {
+    return this.http.get<{message:string}>(`${this.BASE}/auth/logout`,{withCredentials:true})
+  }
 }

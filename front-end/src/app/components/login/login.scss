@@ -2,5 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 300px;
+  max-width: 400px;
+  margin: auto;
+}
+
+a{
+  color: var(--mat-sys-on-primary-container);
+  text-decoration: none;
 }

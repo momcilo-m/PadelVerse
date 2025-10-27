@@ -13,14 +13,24 @@
 .sidenav-content {
   display: flex;
   justify-content: center;
-  /* centriranje horizontalno */
   padding: 0 16px;
-  /* malo padding-a sa strane */
   box-sizing: border-box;
 }
 
 .sidenav-content>main {
-  max-width: 1600px;
-  /* ograničenje širine sadržaja */
+  max-width: 1400px;
   width: 100%;
+  padding: 20px;
+}
+
+.no-link
+{
+  color: white;
+  text-decoration: none;
+}
+
+.no-link :visited
+{
+  color: white;
+  text-decoration: none;
 }

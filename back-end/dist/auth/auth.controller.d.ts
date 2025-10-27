@@ -24,4 +24,7 @@ export declare class AuthController {
         user: Express.User;
     }>;
     changePassword(req: any, user: PasswordUserDTO): Promise<import("../models/user.entity").User | import("@nestjs/common").BadRequestException>;
+    logout(response: Response): {
+        message: string;
+    };
 }

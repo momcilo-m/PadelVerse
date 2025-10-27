@@ -16,8 +16,16 @@
     flex: 1;
 }
 
+.managament-container
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .complex-list {
-    border: 1px solid black;
+    border: 1px solid white;
+    border-right: none;
     border-radius: 20px;
     max-width: 400px;
     max-height: 440px;
@@ -25,6 +33,7 @@
     overflow-y: scroll;
     scrollbar-width: 0;
     padding: 10px;
+    margin-bottom: 10px;
 }
 
 .complex:hover {
@@ -96,6 +105,9 @@ mat-select {
 .stats-container {
     display: flex;
     justify-content: space-between;
+    //margin-top: auto;
+    align-self: center;
+    gap: 50px;
 }
 
 .stats {

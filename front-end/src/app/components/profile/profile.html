@@ -25,6 +25,10 @@
           <span>Gender:</span>
           <p>{{form.get('gender')?.value ? 'Male': 'Female'}}</p>
         </div>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="logout()">Logout</button>
+        </div>
       </div>
     </div>
   </mat-tab>
@@ -76,7 +80,7 @@
           </mat-form-field>
         </div>
         <div class="actions">
-          <button mat-button color="primary" type="submit">Save</button>
+          <button mat-raised-button color="primary" type="submit">Save</button>
         </div>
       </form>
     </div>
@@ -117,7 +121,7 @@
         </div>
 
         <div class="actions">
-          <button mat-button color="primary" type="submit">Change Password</button>
+          <button mat-raised-button color="primary" type="submit">Change Password</button>
         </div>
       </form>
     </div>

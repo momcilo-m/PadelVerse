@@ -27,15 +27,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt')
     }
 
     async validate(payload: any) {
-        console.log(payload)
+
         const user = await this.userRepository.findOne({ where: { id: payload.id } })
-        console.log(user)
 
         if (!user || !user.is_active) {
             throw new UnauthorizedException('User not found or inactive');
         }
 
-        console.log("proslo")
         return user;
     }
 

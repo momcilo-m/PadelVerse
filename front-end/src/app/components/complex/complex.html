@@ -42,18 +42,29 @@
 
     <div class="grid-content">
         <div>
-            <!-- Choose a panel court -->
             <div class="courts rounded-corner">
                 @if (courtsWithStatus$ | async; as courts) {
-                @for (court of courts; track court.id) {
-                <div [class]="
-                            ' court rounded-corner ' + 
-                            (court.isAvailable ? 'court-available' : 'court-unavailable') + 
-                            (form.get('court')?.value === court.id ? ' selectedCourt' : '')
-                            " (click)="onClickCourt(court.id, court.isAvailable)">
-                    <h3>{{ court.name }}</h3>
-                </div>
+
+                    @if(courts.length > 0)
+                    {
+                        @for (court of courts; track court.id) {
+                    <div [class]="
+                                ' court rounded-corner ' + 
+                                (court.isAvailable ? 'court-available' : 'court-unavailable') + 
+                                (form.get('court')?.value === court.id ? ' selectedCourt' : '')
+                                " (click)="onClickCourt(court.id, court.isAvailable)">
+                        <h3>{{ court.name }}</h3>
+                    </div>
+                    }
+                    }
+                    @else
+                    {
+                        <p>No available</p>
+                    }   
                 }
+                @else
+                {
+                    <p>No courts</p>
                 }
             </div>
         </div>
@@ -124,7 +135,7 @@
         </div>
 
         <div class="checkout">
-            <button [class]=" 'submit-btn rounded-corner'" mat-icon-button color="primary" type="submit"
+            <button [class]=" 'submit-btn rounded-corner'" mat-raised-button color="secondary" type="submit"
                 (click)="checkout()" [disabled]="(form.get('court')?.value === -1 ?  true : false)">
                 Proceed Checkout
                 <mat-icon>input</mat-icon>

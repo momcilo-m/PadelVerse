@@ -59,4 +59,20 @@ export class AuthController {
         user.email = req.user.email;
         return this.service.changePassword(user);
     }
+
+    @HttpCode(200)
+    @Get("/logout")
+    logout(@Res({ passthrough: true }) response: Response)
+    {
+    
+       response.cookie('jwt', "ciao", {
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+                expires: new Date(Date.now()+ 10 * 1000)
+            });
+        
+        return { message: 'Logged out successfully' };
+ 
+    }
 }

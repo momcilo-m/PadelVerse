@@ -19,7 +19,7 @@ export const login: CanActivateFn = () => {
       map(user => {
         if (user) return true;
         //router.navigate(['/login']);
-        errorHandler.handleError({ message: "Not auth", statusCode: 401 })
+        errorHandler.handleError({ message: "Please login", statusCode: 411 })
         return false;
       })
     )))

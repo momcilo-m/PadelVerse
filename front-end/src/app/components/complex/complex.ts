@@ -43,7 +43,7 @@ export class Complex {
 
   form = new FormGroup({
     date: new FormControl<Date>(new Date()),
-    startTime: new FormControl<Date>(new Date()),
+    startTime: new FormControl<Date | null>(new Date()),
     count: new FormControl<number>(1),
     court: new FormControl<number>(-1),
   });
@@ -167,9 +167,9 @@ export class Complex {
     let court = this.form.get("court")?.value || -1;
     let count = this.form.get('count')?.value || -1;
     let date = this.form.get('date')?.value;
-    let time = this.form.get("start_time")?.value || new Date();
+    let time = this.form.get("startTime")?.value || null;
 
-    if (complex == -1 || court == -1 || count == -1 || !date) {
+    if (complex == -1 || court == -1 || count == -1 || !date || !time) {
       return;
     }
 

@@ -47,7 +47,7 @@
 .profile {
     padding: 20px;
     max-width: 500px;
-    margin: auto;
+    flex: 1;
 }
 
 .profile-container {
@@ -55,3 +55,18 @@
     flex-direction: column;
     gap: 10px;
 }
+
+.info-row span{
+    color: white !important;
+}
+
+::ng-deep .mat-mdc-tab-body-wrapper{
+    align-self: center !important;
+}
+
+// ::ng-deep .mat-mdc-tab-body-content
+// {
+    //     display: flex;
+    //     justify-content: center;
+    //     height: 100vh !important;
+// }

@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatD
     CommonModule,
     MatIconModule, MatDialogModule,
     MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatButton,
-    MatDialogActions, MatDialogContent
+    MatDialogActions, MatDialogContent, MatTimepickerModule
   ],
   templateUrl: './add-complex.html',
   styleUrl: './add-complex.scss'

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 
@@ -15,5 +15,13 @@ import { RouterModule } from '@angular/router';
   standalone: true
 })
 export class Home {
+
+  @ViewChild('bgVideo') bgVideo!: ElementRef<HTMLVideoElement>;
+
+  constructor() {}
+
+  ngAfterViewInit(): void {
+    this.bgVideo.nativeElement.play().catch(() => {});
+  }
 
 }
