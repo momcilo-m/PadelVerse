@@ -47,7 +47,7 @@ let TermsService = class TermsService {
     async create(termsDTO) {
         const { time, count, date: dateString, court: cId } = termsDTO;
         let date = new Date(dateString);
-        date.setHours(0, 0, 0, 0);
+        date.setUTCHours(0, 0, 0, 0);
         const startTime = time;
         const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2, '0') + ":00:00";
         const court = await this.courtService.getByIdWithCourt(cId);

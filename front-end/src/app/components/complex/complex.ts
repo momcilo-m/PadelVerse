@@ -34,6 +34,8 @@ export class Complex {
 
   constructor(private route: ActivatedRoute) { }
 
+  today: Date = new Date();
+
   id: string = "";
   location: { lat: number, lng: number } = { lat: 42, lng: 23 }
   city: String = "";

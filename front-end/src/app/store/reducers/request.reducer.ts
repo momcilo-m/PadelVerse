@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store"
 import { RequestState } from "../states/request.state"
 import { activateUser, activateUserFail, activateUserSuccess, isLogin, login, loginSuccessfully, logout, logoutReq, register, updateProfile, updateProfileImage, updateProfileImageSuccessfully, updateProfileSuccessfully, userFailed } from "../actions/user.action"
-import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, updateReview, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess, vote } from "../actions/complex.action"
+import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, failedComplex, getVote, loadComlpex, loadCourts, loadedComplex, loadedCourts, updateReview, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess, vote } from "../actions/complex.action"
 import { weather, weatherFailed, weatherSuccess } from "../actions/weather.action"
 
 export const initRequestState: RequestState =
@@ -35,7 +35,7 @@ export const requestReducer = createReducer(
             }
         }),
 
-    on(logoutReq,vote, activateUser, uploadComplexImage, editComplex, createCourt, createComplex, userComplex, updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
+    on(getVote,logoutReq,vote, activateUser, uploadComplexImage, editComplex, createCourt, createComplex, userComplex, updateProfileImage, updateProfile, weather, loadCourts, login, booking, loadComlpex, () => {
         return {
             loading: true,
             error: false,

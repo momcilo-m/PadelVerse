@@ -10,5 +10,5 @@ export declare class User {
     is_active: boolean;
     date_created: Date;
     token_registration: string;
-    photo: string;
+    photo?: string;
 }

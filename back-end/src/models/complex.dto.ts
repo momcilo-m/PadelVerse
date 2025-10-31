@@ -29,6 +29,4 @@ export class ComplexDTO {
 
     @IsOptional()
     city: string
-
-
 }

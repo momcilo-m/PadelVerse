@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { ComplexService } from "../../services/complex.service";
 import { catchError, filter, from, map, of, switchMap, tap, withLatestFrom } from "rxjs";
-import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, editComplexSuccess, failedComplex, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, updateReview, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess, vote } from "../actions/complex.action";
+import { addComplex, addCourt, booking, bookingSuccess, createComplex, createCourt, editComplex, editComplexSuccess, failedComplex, getVote, loadComlpex, loadCourts, loadedComplex, loadedCourts, selectComplex, updateReview, uploadComplexImage, uploadComplexImageSuccess, userComplex, userComplexSuccess, vote } from "../actions/complex.action";
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { weather, weatherFailed } from "../actions/weather.action";
 import { Store } from "@ngrx/store";
@@ -12,6 +12,7 @@ import { BookingService } from "../../services/booking.service";
 import { SimpleErrorHandler } from "../../handler/error.handler";
 import { selectUser } from "../selectors/user.selector";
 import { logoutReq } from "../actions/user.action";
+import { NotificationService } from "../../services/notification.service";
 
 
 @Injectable()
@@ -20,6 +21,7 @@ export class ComplexEffect {
     private complexService = inject(ComplexService)
     private bookingService = inject(BookingService)
     private errorHandler = inject(SimpleErrorHandler)
+    private notify = inject(NotificationService)
 
     store = inject<Store<AppState>>(Store)
 
@@ -45,9 +47,16 @@ export class ComplexEffect {
         )
     })
 
+    triggerGetVote$ = createEffect(() => {
+    return this.actions$.pipe(
+        ofType(addComplex),
+        map(({complex}) => getVote({ id: complex.id }))
+    );
+    });
+
     votes$ = createEffect(() => {
         return this.actions$.pipe(
-            ofType(selectComplex),
+            ofType(getVote),
             withLatestFrom(this.store.select(selectComplexes)),
 
             filter(([{ id }, complexes]) => {
@@ -73,8 +82,6 @@ export class ComplexEffect {
             tap(([data, user]) => console.log(data, user)),
 
             filter(([_, user]) => user != null),
-
-
 
             switchMap(([{ complex, rating }, user]) => this.complexService.vote(user!.id, rating, complex).pipe(
                 map(({ complex, rating }) => updateReview({ rating, id: complex })),
@@ -104,7 +111,7 @@ export class ComplexEffect {
                     switchMap((res) =>
                         from([
                             loadedCourts({ courts: res.all, avalaible: res.available }),
-                            //weather({ date: param.date, hour: param.time })
+                            weather({ date: param.date, hour: param.time })
                         ]
                         )),
                     catchError(({ error }) => of(failedComplex({ message: error.message || "Fail when load courts" })),
@@ -162,7 +169,10 @@ export class ComplexEffect {
         return this.actions$.pipe(
             ofType(createCourt),
             switchMap(({ court }) => this.complexService.createCourt(court).pipe(
-                map(court => addCourt({ court })),
+                map(court => {
+                    this.notify.success("Court created successfully")
+                    return addCourt({ court })
+                }), 
                 catchError(({ error }) => of(
                     //failedCourts({ message: error.message || "Failed when create courts" })
                     failedComplex({ message: error.message || "Failed when create courts" })

@@ -1,3 +1,4 @@
+import { IsOptional } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
@@ -35,6 +36,6 @@ export class User {
     @Column()
     token_registration:string
 
-    @Column()
-    photo:string
+    @Column({ nullable: true, default: 'photo/default.png' })
+    photo?: string;
 }

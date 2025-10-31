@@ -73,7 +73,7 @@ export class AuthService {
         const user = await this.userRepository.findOneBy({ email });
 
         if (!user || !user.is_active)
-            throw new UnauthorizedException('User not found');
+            throw new UnauthorizedException('Incorrect email or password');
 
         const verify = await argon2.verify(user.password, password);
 

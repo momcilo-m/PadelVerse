@@ -71,7 +71,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "token_registration", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true, default: 'photo/default.png' }),
     __metadata("design:type", String)
 ], User.prototype, "photo", void 0);
 exports.User = User = __decorate([

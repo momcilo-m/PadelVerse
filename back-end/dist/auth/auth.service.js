@@ -96,7 +96,7 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Please insert your email and password');
         const user = await this.userRepository.findOneBy({ email });
         if (!user || !user.is_active)
-            throw new common_1.UnauthorizedException('User not found');
+            throw new common_1.UnauthorizedException('Incorrect email or password');
         const verify = await argon2.verify(user.password, password);
         if (!verify)
             throw new common_1.UnauthorizedException('Incorrect email or password');

@@ -38,6 +38,8 @@ import { ReviewModule } from './review/review.module';
 import { ReviewController } from './review/review.controller';
 import { ProfileService } from './profile/profile.service';
 import { Review } from './models/review.entity';
+import { LocationService } from './location/location.service';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -70,8 +72,9 @@ import { Review } from './models/review.entity';
     ProfileModule,
     StatsModule,
     ReviewModule,
+    LocationModule,
   ],
   controllers: [AppController, UsersController, AuthController, ComplexController, TermsController, TournamentsController, BookingController, ProfileController, ReviewController],
-  providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService, ProfileService, ReviewController],
+  providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService, ProfileService],
 })
 export class AppModule { }

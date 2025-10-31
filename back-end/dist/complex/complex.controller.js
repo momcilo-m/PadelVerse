@@ -50,9 +50,9 @@ let ComplexController = class ComplexController {
         complexDTO.owner = req.user.id;
         return this.service.edit(id, complexDTO);
     }
-    createCourt(req, courtDTO) {
-        let res = this.courtService.createCourt(courtDTO);
-        this.service.editPrice(courtDTO.complex, courtDTO.price);
+    async createCourt(req, courtDTO) {
+        let res = await this.courtService.createCourt(courtDTO);
+        await this.service.editPrice(courtDTO.complex, courtDTO.price);
         return res;
     }
     uploadComplex(req, file, id) {
@@ -110,7 +110,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, court_dto_1.CourtDTO]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ComplexController.prototype, "createCourt", null);
 __decorate([
     (0, common_1.Post)("/photo/:id"),

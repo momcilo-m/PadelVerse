@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ComplexService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const class_transformer_1 = require("class-transformer");
+const location_service_1 = require("../location/location.service");
 const complex_entity_1 = require("../models/complex.entity");
 const court_entity_1 = require("../models/court.entity");
 const terms_service_1 = require("../terms/terms.service");
@@ -25,10 +25,12 @@ let ComplexService = class ComplexService {
     complexRepository;
     courtRepository;
     termsService;
-    constructor(complexRepository, courtRepository, termsService) {
+    locationService;
+    constructor(complexRepository, courtRepository, termsService, locationService) {
         this.complexRepository = complexRepository;
         this.courtRepository = courtRepository;
         this.termsService = termsService;
+        this.locationService = locationService;
     }
     async getAll(query) {
         return await new QueryFeature_1.QueryFeature(this.complexRepository, query).execute().query;
@@ -47,7 +49,15 @@ let ComplexService = class ComplexService {
         return await this.complexRepository.findBy({ owner });
     }
     async create(complexDTO) {
-        return await this.complexRepository.save((0, class_transformer_1.plainToClass)(complex_entity_1.Complex, complexDTO));
+        let { location: loc } = complexDTO;
+        loc = loc.slice(1, loc.length - 1);
+        let [lat, lng] = loc.split(",");
+        let location = await this.locationService.reverseGeoCoding(+lat, +lng);
+        complexDTO.city = location.city;
+        complexDTO.country = location.country;
+        const entity = this.complexRepository.create(complexDTO);
+        const saved = await this.complexRepository.save(entity);
+        return await this.complexRepository.findOne({ where: { id: saved.id } });
     }
     async edit(id, complexDTO) {
         if (!complexDTO)
@@ -110,9 +120,11 @@ let ComplexService = class ComplexService {
         const complex = await this.complexRepository.findOneBy({ id });
         if (!complex)
             throw new Error("Complex not found");
+        console.log(complex);
         if (price < complex.priceMin || price > complex.priceMax) {
-            complex.priceMin = Math.min(complex.priceMin, price);
+            complex.priceMin = complex.priceMin === 0 ? price : Math.min(complex.priceMin, price);
             complex.priceMax = Math.max(complex.priceMax, price);
+            delete complex.location;
             await this.complexRepository.save(complex);
         }
     }
@@ -139,8 +151,10 @@ exports.ComplexService = ComplexService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(complex_entity_1.Complex)),
     __param(1, (0, typeorm_1.InjectRepository)(court_entity_1.Court)),
     __param(2, (0, common_1.Inject)((0, common_1.forwardRef)(() => terms_service_1.TermsService))),
+    __param(3, (0, common_1.Inject)()),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
-        terms_service_1.TermsService])
+        terms_service_1.TermsService,
+        location_service_1.LocationService])
 ], ComplexService);
 //# sourceMappingURL=complex.service.js.map

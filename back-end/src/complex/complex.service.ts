@@ -2,6 +2,7 @@ import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException,
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
+import { LocationService } from 'src/location/location.service';
 import { ComplexDTO } from 'src/models/complex.dto';
 import { Complex } from 'src/models/complex.entity';
 import { Court } from 'src/models/court.entity';
@@ -16,6 +17,7 @@ export class ComplexService {
         @InjectRepository(Complex) private readonly complexRepository: Repository<Complex>,
         @InjectRepository(Court) private readonly courtRepository: Repository<Court>,
         @Inject(forwardRef(() => TermsService)) private readonly termsService: TermsService,
+        @Inject() private readonly locationService:LocationService
     ) { }
 
     async getAll(query: Record<string, any>) {
@@ -50,7 +52,19 @@ export class ComplexService {
     }
 
     async create(complexDTO: ComplexDTO) {
-        return await this.complexRepository.save(plainToClass(Complex, complexDTO));
+
+        let {location:loc} = complexDTO;
+        loc = loc.slice(1,loc.length-1);
+        let [lat,lng] = loc.split(",");
+
+        let location = await this.locationService.reverseGeoCoding(+lat,+lng);
+
+        complexDTO.city = location.city;
+        complexDTO.country = location.country;
+
+        const entity = this.complexRepository.create(complexDTO);
+        const saved = await this.complexRepository.save(entity);
+        return await this.complexRepository.findOne({ where: { id: saved.id } });
     }
 
     async edit(id: number, complexDTO: ComplexDTO) {
@@ -130,10 +144,14 @@ export class ComplexService {
 
         if (!complex) throw new Error("Complex not found");
 
-        if (price < complex.priceMin || price > complex.priceMax) {
-            complex.priceMin = Math.min(complex.priceMin, price);
-            complex.priceMax = Math.max(complex.priceMax, price);
+        console.log(complex);
 
+        if (price < complex.priceMin || price > complex.priceMax) {
+            complex.priceMin = complex.priceMin === 0 ? price : Math.min(complex.priceMin, price);
+            complex.priceMax = Math.max(complex.priceMax, price);
+            
+            // @ts-ignore
+            delete complex.location;
             await this.complexRepository.save(complex);
         }
     }

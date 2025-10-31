@@ -19,10 +19,18 @@ export class UserEffect {
         return this.actions$.pipe(
             ofType(login),
             switchMap((action) => this.userService.login(action.email, action.password).pipe(
-                map(user => loginSuccessfully({ user })),
-                catchError(error => of(userFailed({ message: error.message || "Fail" })))
+                map(user => {
+                    this.router.navigate(['/profile'])
+                    return loginSuccessfully({ user })
+                }),
+                catchError(({error}) => 
+                    {
+                        console.log("GRESKA NA LOGIN",error)
+                        this.notify.error(error.message)
+                        return of(userFailed({ message: error.message || "Fail" }))
+                    }
+                )
             )),
-            tap(() => this.router.navigate(['/profile']))
         );
     });
 
@@ -100,7 +108,12 @@ export class UserEffect {
             ofType(register),
             switchMap(({ user }) => this.userService.register(user).pipe(
                 map(() => registerSuccess()),
-                catchError(({ error }) => of(userFailed({ message: error.error.message.join(", ") || "Fail while register" })))
+                catchError(({ error }) => 
+                    {
+                        this.notify.error(error.message)
+                        return of(userFailed({ message: error.error.message.join(", ") || "Fail while register" }))
+                    }
+                )
             ))
         )
     })

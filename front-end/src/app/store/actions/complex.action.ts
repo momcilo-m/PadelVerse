@@ -31,3 +31,4 @@ export const failedComplex = createAction('failedComplex', props<{ message: stri
 
 export const updateReview = createAction('updateReview', props<{ rating: number, id: number }>())
 export const vote = createAction("vote", props<{ complex: number, rating: number }>())
+export const getVote = createAction("getVore",props<{id:number}>())

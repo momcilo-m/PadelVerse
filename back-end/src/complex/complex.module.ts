@@ -7,9 +7,11 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { TermsModule } from 'src/terms/terms.module';
 import { CourtsModule } from 'src/courts/courts.module';
+import { LocationModule } from 'src/location/location.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Complex]),UsersModule,AuthModule,forwardRef(() => TermsModule),CourtsModule],
+  imports: [TypeOrmModule.forFeature([Complex]),UsersModule,AuthModule,forwardRef(() => TermsModule),CourtsModule,LocationModule],
+  //],
   exports: [TypeOrmModule,ComplexService],
   providers: [ComplexService],
   controllers: [ComplexController],

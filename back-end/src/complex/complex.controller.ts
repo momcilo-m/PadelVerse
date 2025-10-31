@@ -55,9 +55,9 @@ export class ComplexController {
     //Nije dobro zasticeno, moze bilo koji loginovan da upise court na tudji complex
     @Post("/courts")
     @UseGuards(JwtAuthGuard)
-    createCourt(@Req() req: any, @Body() courtDTO: CourtDTO) {
-        let res = this.courtService.createCourt(courtDTO)
-        this.service.editPrice(courtDTO.complex, courtDTO.price);
+    async createCourt(@Req() req: any, @Body() courtDTO: CourtDTO) {
+        let res = await this.courtService.createCourt(courtDTO)
+        await this.service.editPrice(courtDTO.complex, courtDTO.price);
         return res;
     }
 

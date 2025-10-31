@@ -9,7 +9,7 @@
         <div class="date-picker">
             <mat-form-field appearance="outline" style="width: 200px; height: 50px;">
                 <mat-label>Choose a date</mat-label>
-                <input matInput [matDatepicker]="datePicker" formControlName="date">
+                <input matInput [matDatepicker]="datePicker" formControlName="date" [min]="today">
                 <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
                 <mat-datepicker #datePicker></mat-datepicker>
             </mat-form-field>
@@ -48,14 +48,14 @@
                     @if(courts.length > 0)
                     {
                         @for (court of courts; track court.id) {
-                    <div [class]="
-                                ' court rounded-corner ' + 
-                                (court.isAvailable ? 'court-available' : 'court-unavailable') + 
-                                (form.get('court')?.value === court.id ? ' selectedCourt' : '')
-                                " (click)="onClickCourt(court.id, court.isAvailable)">
-                        <h3>{{ court.name }}</h3>
-                    </div>
-                    }
+                            <div [class]="
+                                        ' court rounded-corner ' + 
+                                        (court.isAvailable ? 'court-available' : 'court-unavailable') + 
+                                        (form.get('court')?.value === court.id ? ' selectedCourt' : '')
+                                        " (click)="onClickCourt(court.id, court.isAvailable)">
+                                <h3>{{ court.name }}</h3>
+                            </div>
+                        }
                     }
                     @else
                     {
@@ -93,27 +93,28 @@
                 @if(weather$ | async; as weather)
                 {
 
-                @if (weather.icon !== '') {
+                    @if (weather.icon !== '') {
 
-                <div class="weather-date">
-                    <p>{{ transformDate(form.get('date')?.value!) }}</p>
-                    <p>High: {{ weather.max_temp }} Low: {{ weather.min_temp }}</p>
-                </div>
+                    <div class="weather-date">
+                        <p>{{ transformDate(form.get('date')?.value!) }}</p>
+                        <p>High: {{ weather.max_temp }}</p>
+                        <p>Low: {{ weather.min_temp }}</p>
+                    </div>
 
-                <div class="">Temp: {{ weather.temp }}</div>
+                    <div class="">Temp: {{ weather.temp }}</div>
 
 
-                <div class="weather-icon">
-                    <img [src]="weather.icon" alt="weather-icon">
-                    <p>Condition: {{ weather.text }}</p>
-                </div>
-                }
-                @else
-                {
-                <div class="weather-date">
-                    No data :(
-                </div>
-                }
+                    <div class="weather-icon">
+                        <img [src]="weather.icon" alt="weather-icon">
+                        <p>Condition: {{ weather.text }}</p>
+                    </div>
+                    }
+                    @else
+                    {
+                    <div class="weather-date">
+                        No data :(
+                    </div>
+                    }
                 }
                 @else
                 {
