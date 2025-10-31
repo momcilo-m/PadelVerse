@@ -1,9 +1,11 @@
+@if(complex$ | async; as complex)
+{
 <form [formGroup]="form" style=" display: grid; gap: 15px; height: 100%; grid-template-rows: 1fr 5fr 1fr;">
     <div class="panel">
         <div class="location">
             <div class="rounded-corner panel">
                 <mat-icon> location_on</mat-icon>
-                <p>{{city}} {{country}}</p>
+                <p>{{complex.city}} {{complex.country}}</p>
             </div>
         </div>
         <div class="date-picker">
@@ -41,36 +43,41 @@
     </div>
 
     <div class="grid-content">
+        @if(courts$ | async; as courts)
+        {
         <div>
             <div class="courts rounded-corner">
                 @if (courtsWithStatus$ | async; as courts) {
 
-                    @if(courts.length > 0)
-                    {
-                        @for (court of courts; track court.id) {
-                            <div [class]="
-                                        ' court rounded-corner ' + 
-                                        (court.isAvailable ? 'court-available' : 'court-unavailable') + 
-                                        (form.get('court')?.value === court.id ? ' selectedCourt' : '')
-                                        " (click)="onClickCourt(court.id, court.isAvailable)">
-                                <h3>{{ court.name }}</h3>
-                            </div>
-                        }
-                    }
-                    @else
-                    {
-                        <p>No available</p>
-                    }   
+                @if(courts.length > 0)
+                {
+                @for (court of courts; track court.id) {
+                <div [class]="
+                                            ' court rounded-corner ' + 
+                                            (court.isAvailable ? 'court-available' : 'court-unavailable') + 
+                                            (form.get('court')?.value === court.id ? ' selectedCourt' : '')
+                                            " (click)="onClickCourt(court.id, court.isAvailable)">
+                    <h3>{{ court.name }}</h3>
+                </div>
+                }
                 }
                 @else
                 {
-                    <p>No courts</p>
+                <p>No available</p>
+                }
+                }
+                @else
+                {
+                <p>No courts</p>
                 }
             </div>
         </div>
+        }
+
 
         <div class="complex-location">
-            <google-map height="100%" witdh="200px" [center]="(this.location)!" [options]="{
+            <google-map height="100%" witdh="200px" [center]="({lat:complex.location.x, lng:complex.location.y})"
+                [options]="{
                 mapTypeControl: false,streetViewControl: false, 
                 fullscreenControl: false,
                 zoomControl: false,
@@ -79,10 +86,10 @@
                 draggable: true,
                 keyboardShortcuts: true,
             }" [zoom]="16">
-                @if (this.location) {
-                <map-marker [position]="this.location" [title]="'Moja lokacija'">
+
+                <map-marker [position]="{lat:complex.location.x, lng:complex.location.y}" [title]="'Moja lokacija'">
                 </map-marker>
-                }
+
             </google-map>
         </div>
 
@@ -93,28 +100,28 @@
                 @if(weather$ | async; as weather)
                 {
 
-                    @if (weather.icon !== '') {
+                @if (weather.icon !== '') {
 
-                    <div class="weather-date">
-                        <p>{{ transformDate(form.get('date')?.value!) }}</p>
-                        <p>High: {{ weather.max_temp }}</p>
-                        <p>Low: {{ weather.min_temp }}</p>
-                    </div>
+                <div class="weather-date">
+                    <p>{{ transformDate(form.get('date')?.value!) }}</p>
+                    <p>High: {{ weather.max_temp }}</p>
+                    <p>Low: {{ weather.min_temp }}</p>
+                </div>
 
-                    <div class="">Temp: {{ weather.temp }}</div>
+                <div class="">Temp: {{ weather.temp }}</div>
 
 
-                    <div class="weather-icon">
-                        <img [src]="weather.icon" alt="weather-icon">
-                        <p>Condition: {{ weather.text }}</p>
-                    </div>
-                    }
-                    @else
-                    {
-                    <div class="weather-date">
-                        No data :(
-                    </div>
-                    }
+                <div class="weather-icon">
+                    <img [src]="weather.icon" alt="weather-icon">
+                    <p>Condition: {{ weather.text }}</p>
+                </div>
+                }
+                @else
+                {
+                <div class="weather-date">
+                    No data :(
+                </div>
+                }
                 }
                 @else
                 {
@@ -132,7 +139,11 @@
                 <mat-icon>wallet</mat-icon>
                 <p>Total Price</p>
             </div>
-            ${{ (((price$ | async) || 0) * (form.get('count')?.value || 1)).toFixed(2) }}
+            @if(selectedCourt$ | async; as court)
+            {
+            ${{ ((court.price || 0) * (form.get('count')?.value || 1)).toFixed(2) }}$
+
+            }
         </div>
 
         <div class="checkout">
@@ -145,9 +156,10 @@
 
         <div class="rating">
             <h4>Rate this complex</h4>
-            <app-rating [rating]="vote" [complex]="+id"></app-rating>
+            <app-rating [rating]="complex.votes" [complex]="+id"></app-rating>
         </div>
 
     </div>
 
 </form>
+}

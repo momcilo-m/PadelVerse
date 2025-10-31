@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTimepickerModule } from '@angular/material/timepicker';
@@ -10,7 +9,8 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { booking, loadCourts, selectComplex, selectCourt } from '../../store/actions/complex.action';
-import { selectAvailable, selectComplexes, selectCourts, selectedComplexID, selectedCourt } from '../../store/selectors/complex.selector';
+import { ActivatedRoute } from '@angular/router';
+//import { selectAvailable, selectComplexes, selectCourts, selectedComplexID, selectedCourt, selectSelectedComplex } from '../../store/selectors/complex.selector';
 import { combineLatest, defaultIfEmpty, distinctUntilChanged, filter, last, map, Observable, startWith, take, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { GoogleMapsModule } from '@angular/google-maps';
@@ -18,6 +18,8 @@ import { ComplexInterface } from '../../models/complex.interface';
 import { selectError } from '../../store/selectors/request.selector';
 import { selectWeather } from '../../store/selectors/weather.selector';
 import { Rating } from '../rating/rating';
+import { selectedComplex } from '../../store/selectors/complex.selector';
+import { selectAvailable, selectCourts, selectedCourt } from '../../store/selectors/court.selector';
 
 @Component({
   selector: 'app-complex',
@@ -35,13 +37,13 @@ export class Complex {
   constructor(private route: ActivatedRoute) { }
 
   today: Date = new Date();
-
   id: string = "";
-  location: { lat: number, lng: number } = { lat: 42, lng: 23 }
-  city: String = "";
-  country: String = "";
-  price: number = 1;
-  vote: number = 0;
+
+  // location: { lat: number, lng: number } = { lat: 42, lng: 23 }
+  // city: String = "";
+  // country: String = "";
+  // price: number = 1;
+  // vote: number = 0;
 
   form = new FormGroup({
     date: new FormControl<Date>(new Date()),
@@ -52,25 +54,15 @@ export class Complex {
 
   store = inject<Store<AppState>>(Store)
 
-  courts$ = this.store.select(selectCourts);
-  available$ = this.store.select(selectAvailable)
-  selectedCourtId$ = this.store.select(selectedCourt)
+  // courts$ = this.store.select(selectCourts);
+  // selectedCourtId$ = this.store.select(selectedCourt)
   weather$ = this.store.select(selectWeather);
   messageError$ = this.store.select(selectError);
 
-  complex$ = combineLatest([
-    this.store.select(selectComplexes),
-    this.store.select(selectedComplexID)])
-    .pipe(
-      map(([complexes, id]) => complexes.find(c => c.id === id))
-    )
-    .subscribe(complex => {
-      this.location = { lat: complex?.location.x || 42, lng: complex?.location.y || 23 };
-      this.city = complex?.city || ""
-      this.country = complex?.country || ""
-      this.vote = complex?.reviews || 0
-      console.log(this.location, this.city, this.country, this.vote)
-    })
+  complex$ = this.store.select(selectedComplex);
+  courts$ = this.store.select(selectCourts);
+  available$ = this.store.select(selectAvailable)
+  selectedCourt$ = this.store.select(selectedCourt)
 
   courtsWithStatus$ = combineLatest([this.courts$, this.available$]).pipe(
     map(([courts$, available$]) => {
@@ -86,13 +78,13 @@ export class Complex {
   )
 
 
-  selectedCourt$ = combineLatest([this.courts$, this.selectedCourtId$]).pipe(
-    map(([courts, id]) => courts.find(c => c.id === id) ?? null),
-  );
+  // selectedCourt$ = combineLatest([this.courts$, this.selectedCourtId$]).pipe(
+  //   map(([courts, id]) => courts.find(c => c.id === id) ?? null),
+  // );
 
-  price$ = this.selectedCourt$.pipe(
-    map(court => court ? court.price : 0),
-  )
+  // price$ = this.selectedCourt$.pipe(
+  //   map(court => court ? court.price : 0),
+  // )
 
 
   ngOnInit() {

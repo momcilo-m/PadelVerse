@@ -14,6 +14,7 @@ import { ComplexEffect } from './store/effects/complex.effect';
 import { weatherReducer } from './store/reducers/weather.reducer';
 import { WeatherEffect } from './store/effects/weather.effect';
 import { SimpleErrorHandler } from './handler/error.handler';
+import { courtReducer } from './store/reducers/court.reducers';
 //import { AuthInterceptor } from './interceptor/auth.interceptor';
 
 
@@ -27,7 +28,8 @@ export const appConfig: ApplicationConfig = {
       userStatus: userReducer,
       requestStatus: requestReducer,
       complexStatus: complexReducer,
-      weatherStatus: weatherReducer
+      weatherStatus: weatherReducer,
+      courtStatus: courtReducer
     }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode(), trace: true }),
     provideEffects(UserEffect, ComplexEffect, WeatherEffect),

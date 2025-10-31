@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,15 +12,15 @@ import { AppState } from '../../store/states/app.state';
 
 @Component({
   selector: 'app-login',
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, ReactiveFormsModule,FormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, ReactiveFormsModule, FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
 export class Login {
-  
+
   store = inject<Store<AppState>>(Store)
   hide = signal(true);
-  
+
   loginForm = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
@@ -31,9 +31,8 @@ export class Login {
     event.stopPropagation();
   }
 
-  onSubmit()
-  {
-    const {email,password} = this.loginForm.value;
-    this.store.dispatch(login({email:email!,password:password!}))
+  onSubmit() {
+    const { email, password } = this.loginForm.value;
+    this.store.dispatch(login({ email: email!, password: password! }))
   }
 }

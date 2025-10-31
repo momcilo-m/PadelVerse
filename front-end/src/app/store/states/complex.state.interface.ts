@@ -1,6 +1,6 @@
 import { ComplexInterface } from "../../models/complex.interface";
 
-export interface ComplexState {
+export interface ComplexStateInterface {
     selectedComplexId: number;
     complex: ComplexInterface[]
     courts: CourtInterface[],

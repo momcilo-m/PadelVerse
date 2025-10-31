@@ -18,10 +18,10 @@ export class Home {
 
   @ViewChild('bgVideo') bgVideo!: ElementRef<HTMLVideoElement>;
 
-  constructor() {}
+  constructor() { }
 
   ngAfterViewInit(): void {
-    this.bgVideo.nativeElement.play().catch(() => {});
+    this.bgVideo.nativeElement.play().catch(() => { });
   }
 
 }

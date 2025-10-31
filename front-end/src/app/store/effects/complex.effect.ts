@@ -48,10 +48,10 @@ export class ComplexEffect {
     })
 
     triggerGetVote$ = createEffect(() => {
-    return this.actions$.pipe(
-        ofType(addComplex),
-        map(({complex}) => getVote({ id: complex.id }))
-    );
+        return this.actions$.pipe(
+            ofType(addComplex),
+            map(({ complex }) => getVote({ id: complex.id }))
+        );
     });
 
     votes$ = createEffect(() => {
@@ -111,7 +111,7 @@ export class ComplexEffect {
                     switchMap((res) =>
                         from([
                             loadedCourts({ courts: res.all, avalaible: res.available }),
-                            weather({ date: param.date, hour: param.time })
+                            //weather({ date: param.date, hour: param.time })
                         ]
                         )),
                     catchError(({ error }) => of(failedComplex({ message: error.message || "Fail when load courts" })),
@@ -172,7 +172,7 @@ export class ComplexEffect {
                 map(court => {
                     this.notify.success("Court created successfully")
                     return addCourt({ court })
-                }), 
+                }),
                 catchError(({ error }) => of(
                     //failedCourts({ message: error.message || "Failed when create courts" })
                     failedComplex({ message: error.message || "Failed when create courts" })
