@@ -48,6 +48,14 @@ const review_controller_1 = require("./review/review.controller");
 const profile_service_1 = require("./profile/profile.service");
 const review_entity_1 = require("./models/review.entity");
 const location_module_1 = require("./location/location.module");
+const schedule_1 = require("@nestjs/schedule");
+const match_entity_1 = require("./models/match.entity");
+const player_entity_1 = require("./models/player.entity");
+const team_entity_1 = require("./models/team.entity");
+const stats_entity_1 = require("./models/stats.entity");
+const event_entity_1 = require("./models/event.entity");
+const simulator_module_1 = require("./simulator/simulator.module");
+const events_module_1 = require("./events/events.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -61,7 +69,7 @@ exports.AppModule = AppModule = __decorate([
                 username: 'momcilo',
                 password: 'padelvrese',
                 database: 'postgres',
-                entities: [user_entity_1.User, complex_entity_1.Complex, court_entity_1.Court, term_entity_1.Term, tournament_entity_1.Tournament, review_entity_1.Review],
+                entities: [user_entity_1.User, complex_entity_1.Complex, court_entity_1.Court, term_entity_1.Term, tournament_entity_1.Tournament, review_entity_1.Review, player_entity_1.Player, team_entity_1.Team, match_entity_1.Match, stats_entity_1.Stats, event_entity_1.Event],
                 synchronize: false,
             }),
             config_1.ConfigModule.forRoot({
@@ -72,6 +80,7 @@ exports.AppModule = AppModule = __decorate([
                 rootPath: (0, path_1.join)(__dirname, '..', 'public'),
                 serveRoot: '/',
             }),
+            schedule_1.ScheduleModule.forRoot(),
             users_module_1.UsersModule,
             mailer_module_1.MailerModule,
             complex_module_1.ComplexModule,
@@ -84,6 +93,8 @@ exports.AppModule = AppModule = __decorate([
             stats_module_1.StatsModule,
             review_module_1.ReviewModule,
             location_module_1.LocationModule,
+            simulator_module_1.SimulatorModule,
+            events_module_1.EventsModule,
         ],
         controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController, booking_controller_1.BookingController, profile_controller_1.ProfileController, review_controller_1.ReviewController],
         providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, complex_service_1.ComplexService, terms_service_1.TermsService, tournaments_service_1.TournamentsService, courts_service_1.CourtsService, profile_service_1.ProfileService],

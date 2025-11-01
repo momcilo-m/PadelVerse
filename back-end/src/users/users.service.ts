@@ -8,20 +8,18 @@ import { Repository } from 'typeorm';
 export class UsersService {
 
     constructor(
-        @InjectRepository(User) private readonly userRepository:Repository<User> 
-    ){}
+        @InjectRepository(User) private readonly userRepository: Repository<User>
+    ) { }
 
-    getAll()
-    {
+    getAll() {
         return this.userRepository.find();
     }
 
-    getById(id:number)
-    {
+    getById(id: number) {
         return this.userRepository
-        .createQueryBuilder('user')
-        .select(['user.email','user.photo','user.first_name','user.last_name'])
-        .where('user.id = :id', { id })
-        .getOne();
+            .createQueryBuilder('user')
+            .select(['user.email', 'user.photo', 'user.first_name', 'user.last_name'])
+            .where('user.id = :id', { id })
+            .getOne();
     }
 }

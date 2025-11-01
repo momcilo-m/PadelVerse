@@ -17,7 +17,7 @@ export class ComplexService {
         @InjectRepository(Complex) private readonly complexRepository: Repository<Complex>,
         @InjectRepository(Court) private readonly courtRepository: Repository<Court>,
         @Inject(forwardRef(() => TermsService)) private readonly termsService: TermsService,
-        @Inject() private readonly locationService:LocationService
+        @Inject() private readonly locationService: LocationService
     ) { }
 
     async getAll(query: Record<string, any>) {
@@ -53,11 +53,11 @@ export class ComplexService {
 
     async create(complexDTO: ComplexDTO) {
 
-        let {location:loc} = complexDTO;
-        loc = loc.slice(1,loc.length-1);
-        let [lat,lng] = loc.split(",");
+        let { location: loc } = complexDTO;
+        loc = loc.slice(1, loc.length - 1);
+        let [lat, lng] = loc.split(",");
 
-        let location = await this.locationService.reverseGeoCoding(+lat,+lng);
+        let location = await this.locationService.reverseGeoCoding(+lat, +lng);
 
         complexDTO.city = location.city;
         complexDTO.country = location.country;
@@ -149,7 +149,7 @@ export class ComplexService {
         if (price < complex.priceMin || price > complex.priceMax) {
             complex.priceMin = complex.priceMin === 0 ? price : Math.min(complex.priceMin, price);
             complex.priceMax = Math.max(complex.priceMax, price);
-            
+
             // @ts-ignore
             delete complex.location;
             await this.complexRepository.save(complex);

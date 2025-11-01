@@ -40,6 +40,14 @@ import { ProfileService } from './profile/profile.service';
 import { Review } from './models/review.entity';
 import { LocationService } from './location/location.service';
 import { LocationModule } from './location/location.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { Match } from './models/match.entity';
+import { Player } from './models/player.entity';
+import { Team } from './models/team.entity';
+import { Stats } from './models/stats.entity';
+import { Event } from './models/event.entity';
+import { SimulatorModule } from './simulator/simulator.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -50,7 +58,7 @@ import { LocationModule } from './location/location.module';
       username: 'momcilo',
       password: 'padelvrese',
       database: 'postgres',
-      entities: [User, Complex, Court, Term, Tournament, Review],
+      entities: [User, Complex, Court, Term, Tournament, Review, Player, Team, Match, Stats, Event],
       synchronize: false,
     }),
     ConfigModule.forRoot({
@@ -61,6 +69,7 @@ import { LocationModule } from './location/location.module';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/',
     }),
+    ScheduleModule.forRoot(),
     UsersModule,
     MailerModule,
     ComplexModule,
@@ -73,6 +82,8 @@ import { LocationModule } from './location/location.module';
     StatsModule,
     ReviewModule,
     LocationModule,
+    SimulatorModule,
+    EventsModule,
   ],
   controllers: [AppController, UsersController, AuthController, ComplexController, TermsController, TournamentsController, BookingController, ProfileController, ReviewController],
   providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService, ProfileService],

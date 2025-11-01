@@ -62,17 +62,16 @@ export class AuthController {
 
     @HttpCode(200)
     @Get("/logout")
-    logout(@Res({ passthrough: true }) response: Response)
-    {
-    
-       response.cookie('jwt', "ciao", {
-                httpOnly: true,
-                sameSite: 'none',
-                secure: true,
-                expires: new Date(Date.now()+ 10 * 1000)
-            });
-        
+    logout(@Res({ passthrough: true }) response: Response) {
+
+        response.cookie('jwt', "ciao", {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            expires: new Date(Date.now() + 10 * 1000)
+        });
+
         return { message: 'Logged out successfully' };
- 
+
     }
 }
