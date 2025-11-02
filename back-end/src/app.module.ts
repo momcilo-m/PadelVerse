@@ -48,6 +48,9 @@ import { Stats } from './models/stats.entity';
 import { Event } from './models/event.entity';
 import { SimulatorModule } from './simulator/simulator.module';
 import { EventsModule } from './events/events.module';
+import { MatchModule } from './match/match.module';
+import { ChatModule } from './chat/chat.module';
+import { Chat } from './models/chat.entity';
 
 @Module({
   imports: [
@@ -58,7 +61,7 @@ import { EventsModule } from './events/events.module';
       username: 'momcilo',
       password: 'padelvrese',
       database: 'postgres',
-      entities: [User, Complex, Court, Term, Tournament, Review, Player, Team, Match, Stats, Event],
+      entities: [User, Complex, Court, Term, Tournament, Review, Player, Team, Match, Stats, Event, Chat],
       synchronize: false,
     }),
     ConfigModule.forRoot({
@@ -84,6 +87,8 @@ import { EventsModule } from './events/events.module';
     LocationModule,
     SimulatorModule,
     EventsModule,
+    MatchModule,
+    ChatModule,
   ],
   controllers: [AppController, UsersController, AuthController, ComplexController, TermsController, TournamentsController, BookingController, ProfileController, ReviewController],
   providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService, ProfileService],

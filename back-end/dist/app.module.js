@@ -56,6 +56,9 @@ const stats_entity_1 = require("./models/stats.entity");
 const event_entity_1 = require("./models/event.entity");
 const simulator_module_1 = require("./simulator/simulator.module");
 const events_module_1 = require("./events/events.module");
+const match_module_1 = require("./match/match.module");
+const chat_module_1 = require("./chat/chat.module");
+const chat_entity_1 = require("./models/chat.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -69,7 +72,7 @@ exports.AppModule = AppModule = __decorate([
                 username: 'momcilo',
                 password: 'padelvrese',
                 database: 'postgres',
-                entities: [user_entity_1.User, complex_entity_1.Complex, court_entity_1.Court, term_entity_1.Term, tournament_entity_1.Tournament, review_entity_1.Review, player_entity_1.Player, team_entity_1.Team, match_entity_1.Match, stats_entity_1.Stats, event_entity_1.Event],
+                entities: [user_entity_1.User, complex_entity_1.Complex, court_entity_1.Court, term_entity_1.Term, tournament_entity_1.Tournament, review_entity_1.Review, player_entity_1.Player, team_entity_1.Team, match_entity_1.Match, stats_entity_1.Stats, event_entity_1.Event, chat_entity_1.Chat],
                 synchronize: false,
             }),
             config_1.ConfigModule.forRoot({
@@ -95,6 +98,8 @@ exports.AppModule = AppModule = __decorate([
             location_module_1.LocationModule,
             simulator_module_1.SimulatorModule,
             events_module_1.EventsModule,
+            match_module_1.MatchModule,
+            chat_module_1.ChatModule,
         ],
         controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController, booking_controller_1.BookingController, profile_controller_1.ProfileController, review_controller_1.ReviewController],
         providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, complex_service_1.ComplexService, terms_service_1.TermsService, tournaments_service_1.TournamentsService, courts_service_1.CourtsService, profile_service_1.ProfileService],

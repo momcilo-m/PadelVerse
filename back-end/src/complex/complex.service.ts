@@ -27,7 +27,7 @@ export class ComplexService {
 
     async getById(id: number) {
 
-        let complex = this.complexRepository
+        let complex = await this.complexRepository
             .createQueryBuilder('complex')
             .leftJoin('complex.owner', 'users')
             .addSelect(['users.phone', 'users.email'])

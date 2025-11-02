@@ -68,7 +68,7 @@ export class SimulatorService {
         return match;
     }
 
-    //@Cron('*/30  * * * * *')
+    //@Cron('*/10  * * * * *')
     async events() {
 
         const matches = await this.matchRepo.findBy({ live: true });
@@ -77,7 +77,6 @@ export class SimulatorService {
     }
 
     async matchEvent(match: Match) {
-
 
         //1. nasumicno generisi events
         const event = this.randomEvent();
@@ -89,7 +88,7 @@ export class SimulatorService {
         if (!stats) return;
 
         const [teamIndex, teamID, initId] = this.randomTeam(match, event, stats!.currentServe);
-
+        console.log("TIM", teamID, " je osvojio poen ", initId, " je generisao event ", event)
         //3. azuriraj statistiku
         const [finishGame, finishSet, finishMatch] = this.handlePoint(stats, teamIndex);
 
@@ -104,18 +103,18 @@ export class SimulatorService {
 
         await this.statsRepo.save(stats);
 
-        console.log(match.id, initId, event);
+        //console.log(match.id, initId, event);
+
 
         let ev = this.eventRepo.create();
         ev.match = match.id;
         ev.team = initId;
         ev.event = event as EventType
 
-        await this.eventRepo.save(ev);
+        let x = await this.eventRepo.save(ev);
 
         //Slanje poruke
-
-        this.eventsGateway.handleEvent(match.id, event, initId);
+        this.eventsGateway.handleEvent(match.id, event, initId, x.id, stats);
     }
 
     private randomIndex(array: Team[]) {
@@ -144,7 +143,7 @@ export class SimulatorService {
         return EventType.ERROR;
     }
 
-    //Da li je prvi ili drugi tim i njegov id, inicijator eventa
+    //Da li je prvi ili drugi tim i njegov id i inicijator eventa
     private randomTeam(match: Match, event: string, serve: number): number[] {
 
         let id: number = 0;
@@ -153,33 +152,45 @@ export class SimulatorService {
 
         switch (event) {
             case EventType.DOUBLE_ERROR:
-            case EventType.ACE:
-
-                index = serve == match.team1 ? 1 : 0;
-                id = serve == match.team1 ? match.team2 : match.team1;
-                idInit = serve == match.team1 ? match.team1 : match.team2;
+                index = serve === match.team1 ? 1 : 0;
+                id = serve === match.team1 ? match.team2 : match.team1;
+                idInit = serve;// === match.team1 ? match.team1 : match.team2;
                 break;
 
             case EventType.ERROR:
 
-                let rnd = Math.round(Math.random());
+                if (Math.random() < 0.5) {
+                    idInit = match.team1;
+                    id = match.team2;
+                    index = 1;
+                } else {
+                    idInit = match.team2;
+                    id = match.team1;
+                    index = 0;
+                }
 
-                index = rnd == match.team1 ? 1 : 0;
-                id = rnd == match.team1 ? match.team2 : match.team1;
-                idInit = rnd == match.team1 ? match.team1 : match.team2;
+                break;
+
+            case EventType.POINT:
+                if (Math.random() < 0.5) {
+                    id = match.team1;
+                    idInit = match.team1;
+                    index = 0;
+                } else {
+                    id = match.team2;
+                    idInit = match.team2;
+                    index = 1;
+                }
 
                 break;
 
             case EventType.ACE:
-            case EventType.POINT:
 
-                let rndNum = Math.round(Math.random());
-                index = rndNum == match.team1 ? 0 : 1;
-                id = rndNum == match.team1 ? match.team1 : match.team2;
-                idInit = id;
+                id = serve;
+                idInit = serve;
+                index = serve === match.team1 ? 0 : 1;
 
                 break;
-
         }
 
         return [index, id, idInit];
@@ -236,7 +247,7 @@ export class SimulatorService {
             let currentGames = index ? stats.game_t2 : stats.game_t1;
             newCurrentGame = ++currentGames;
 
-            let currentOpponentGames = index ? stats.game_t2 : stats.game_t1;
+            let currentOpponentGames = index ? stats.game_t1 : stats.game_t2;
 
             //Gotov je set
             if (currentGames >= 6 && currentGames - currentOpponentGames >= 2) {

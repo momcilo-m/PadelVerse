@@ -36,15 +36,15 @@ let EventsGateway = class EventsGateway {
         if (!match)
             return { success: false, message: "Match is finished" };
         client.join(data.room.toString());
-        console.log("JOIN JE");
+        console.log(`join ${data.room}`);
         return { success: true, room: data.room };
     }
-    async handleEvent(match, event, team) {
-        console.log("SALJE");
-        this.server.to(`${match}`).emit('event', { data: { match, event, team } });
+    async handleEvent(match, event, team, id, stats) {
+        this.server.to(`${match}`).emit('event', { data: { event, team, id, stats } });
     }
-    async handleUserEvent() {
-        await this.handleEvent(1, "POINT", 4);
+    async handleMessage(id, user, message, match, time) {
+        console.log("SALJE SE PORUKA U SOBI", match);
+        this.server.to(`${match}`).emit('chat', { data: { user, message, id, time: time } });
     }
 };
 exports.EventsGateway = EventsGateway;
@@ -60,12 +60,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], EventsGateway.prototype, "handleJoinRoom", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('event'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], EventsGateway.prototype, "handleUserEvent", null);
 exports.EventsGateway = EventsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {

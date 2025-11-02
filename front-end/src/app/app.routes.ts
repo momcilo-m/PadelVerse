@@ -12,6 +12,8 @@ import { Profile } from './components/profile/profile';
 import { Management } from './components/management/management';
 import { Register } from './components/register/register';
 import { ConfirmRegistration } from './components/confirm-registration/confirm-registration';
+import { Matches } from './components/matches/matches';
+import { Match } from './components/match/match';
 
 export const routes: Routes = [
   {
@@ -22,6 +24,8 @@ export const routes: Routes = [
       { path: 'maps', component: Maps, canActivate: [login] },
       { path: 'complex', component: Complexes },
       { path: 'complex/:id', component: Complex },
+      { path: 'matches', component: Matches },
+      { path: 'match/:id', component: Match },
       { path: 'profile', component: Profile, canActivate: [login] },
       { path: 'management', component: Management, canActivate: [login] },
     ]

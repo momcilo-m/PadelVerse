@@ -19,6 +19,7 @@ export class Match {
 
     @Column()
     @OneToOne(() => Stats)
+    @JoinColumn({ name: 'match_stats' })
     match_stats: number
 
     @Column()

@@ -15,7 +15,6 @@ var SimulatorService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SimulatorService = void 0;
 const common_1 = require("@nestjs/common");
-const schedule_1 = require("@nestjs/schedule");
 const typeorm_1 = require("@nestjs/typeorm");
 const events_gateway_1 = require("../events/events.gateway");
 const event_entity_1 = require("../models/event.entity");
@@ -80,6 +79,7 @@ let SimulatorService = SimulatorService_1 = class SimulatorService {
         if (!stats)
             return;
         const [teamIndex, teamID, initId] = this.randomTeam(match, event, stats.currentServe);
+        console.log("TIM", teamID, " je osvojio poen ", initId, " je generisao event ", event);
         const [finishGame, finishSet, finishMatch] = this.handlePoint(stats, teamIndex);
         if (finishGame) {
             stats.currentServe = stats.currentServe == match.team1 ? match.team2 : match.team1;
@@ -89,13 +89,12 @@ let SimulatorService = SimulatorService_1 = class SimulatorService {
             await this.matchRepo.save(match);
         }
         await this.statsRepo.save(stats);
-        console.log(match.id, initId, event);
         let ev = this.eventRepo.create();
         ev.match = match.id;
         ev.team = initId;
         ev.event = event;
-        await this.eventRepo.save(ev);
-        this.eventsGateway.handleEvent(match.id, event, initId);
+        let x = await this.eventRepo.save(ev);
+        this.eventsGateway.handleEvent(match.id, event, initId, x.id, stats);
     }
     randomIndex(array) {
         const i1 = Math.floor(Math.random() * array.length);
@@ -124,23 +123,38 @@ let SimulatorService = SimulatorService_1 = class SimulatorService {
         let idInit = 0;
         switch (event) {
             case event_entity_1.EventType.DOUBLE_ERROR:
-            case event_entity_1.EventType.ACE:
-                index = serve == match.team1 ? 1 : 0;
-                id = serve == match.team1 ? match.team2 : match.team1;
-                idInit = serve == match.team1 ? match.team1 : match.team2;
+                index = serve === match.team1 ? 1 : 0;
+                id = serve === match.team1 ? match.team2 : match.team1;
+                idInit = serve;
                 break;
             case event_entity_1.EventType.ERROR:
-                let rnd = Math.round(Math.random());
-                index = rnd == match.team1 ? 1 : 0;
-                id = rnd == match.team1 ? match.team2 : match.team1;
-                idInit = rnd == match.team1 ? match.team1 : match.team2;
+                if (Math.random() < 0.5) {
+                    idInit = match.team1;
+                    id = match.team2;
+                    index = 1;
+                }
+                else {
+                    idInit = match.team2;
+                    id = match.team1;
+                    index = 0;
+                }
+                break;
+            case event_entity_1.EventType.POINT:
+                if (Math.random() < 0.5) {
+                    id = match.team1;
+                    idInit = match.team1;
+                    index = 0;
+                }
+                else {
+                    id = match.team2;
+                    idInit = match.team2;
+                    index = 1;
+                }
                 break;
             case event_entity_1.EventType.ACE:
-            case event_entity_1.EventType.POINT:
-                let rndNum = Math.round(Math.random());
-                index = rndNum == match.team1 ? 0 : 1;
-                id = rndNum == match.team1 ? match.team1 : match.team2;
-                idInit = id;
+                id = serve;
+                idInit = serve;
+                index = serve === match.team1 ? 0 : 1;
                 break;
         }
         return [index, id, idInit];
@@ -182,7 +196,7 @@ let SimulatorService = SimulatorService_1 = class SimulatorService {
         if (finishGame) {
             let currentGames = index ? stats.game_t2 : stats.game_t1;
             newCurrentGame = ++currentGames;
-            let currentOpponentGames = index ? stats.game_t2 : stats.game_t1;
+            let currentOpponentGames = index ? stats.game_t1 : stats.game_t2;
             if (currentGames >= 6 && currentGames - currentOpponentGames >= 2) {
                 let currentSets = index ? stats.set_t2 : stats.set_t1;
                 newCurrentSet = ++currentSets;
@@ -213,12 +227,6 @@ let SimulatorService = SimulatorService_1 = class SimulatorService {
     }
 };
 exports.SimulatorService = SimulatorService;
-__decorate([
-    (0, schedule_1.Cron)('*/30  * * * * *'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], SimulatorService.prototype, "events", null);
 exports.SimulatorService = SimulatorService = SimulatorService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(match_entity_1.Match)),

@@ -1,9 +1,11 @@
 import { UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { stat } from 'fs';
 import { Server, Socket } from "socket.io";
 import { WsJwtAuthGuard } from 'src/auth/ws-jwt-auth.guard';
 import { Match } from 'src/models/match.entity';
+import { Stats } from 'src/models/stats.entity';
 import { User } from 'src/models/user.entity';
 import { Repository } from 'typeorm';
 
@@ -31,7 +33,6 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   handleConnection(client: any, ...args: any[]) {
-    // Prihvati sve konekcije
     console.log('Client connected:', client.id);
   }
 
@@ -48,37 +49,16 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return { success: false, message: "Match is finished" };
 
     client.join(data.room.toString());
-    console.log("JOIN JE")
+    console.log(`join ${data.room}`)
     return { success: true, room: data.room };
   }
 
-  async handleEvent(match: number, event: string, team: number) {
-    console.log("SALJE")
-    this.server.to(`${match}`).emit('event', { data: { match, event, team } });
+  async handleEvent(match: number, event: string, team: number, id: number, stats: Stats) {
+    this.server.to(`${match}`).emit('event', { data: { event, team, id, stats } });
   }
 
-  @SubscribeMessage('event')
-  async handleUserEvent() {
-    await this.handleEvent(1, "POINT", 4);
+  async handleMessage(id: number, user: string, message: string, match: number, time: Date) {
+    console.log("SALJE SE PORUKA U SOBI", match)
+    this.server.to(`${match}`).emit('chat', { data: { user, message, id, time: time } });
   }
 }
-// private async tryAuthenticateClient(client: any) {
-//   try {
-//     const guard = new WsJwtAuthGuard();
-//     const context = {
-//       switchToWs: () => ({
-//         getClient: () => client,
-//         getData: () => ({}),
-//       }),
-//       getHandler: () => ({} as any),
-//       getClass: () => EventsGateway,
-//     };
-
-//     if (await guard.canActivate(context as any)) {
-//       client.user = client.handshake.user;
-//       console.log('User authenticated:', client.user.id);
-//     }
-//   } catch (err) {
-//     // Ostavi client.user undefined - public konekcija
-//   }
-// }

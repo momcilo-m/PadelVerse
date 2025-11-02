@@ -15,6 +15,10 @@ import { weatherReducer } from './store/reducers/weather.reducer';
 import { WeatherEffect } from './store/effects/weather.effect';
 import { SimpleErrorHandler } from './handler/error.handler';
 import { courtReducer } from './store/reducers/court.reducers';
+import { matchReducers } from './store/reducers/match.reducers';
+import { MatchEffect } from './store/effects/match.effect';
+import { SocketService } from './services/socket.service';
+import { eventReducer } from './store/reducers/events.reducer';
 //import { AuthInterceptor } from './interceptor/auth.interceptor';
 
 
@@ -29,11 +33,14 @@ export const appConfig: ApplicationConfig = {
       requestStatus: requestReducer,
       complexStatus: complexReducer,
       weatherStatus: weatherReducer,
-      courtStatus: courtReducer
+      courtStatus: courtReducer,
+      matchStatus: matchReducers,
+      eventStatus: eventReducer
     }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode(), trace: true }),
-    provideEffects(UserEffect, ComplexEffect, WeatherEffect),
-    { provide: ErrorHandler, useClass: SimpleErrorHandler }
+    provideEffects(UserEffect, ComplexEffect, WeatherEffect, MatchEffect),
+    { provide: ErrorHandler, useClass: SimpleErrorHandler },
+    { provide: SocketService, useClass: SocketService }
     //{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ]
 };

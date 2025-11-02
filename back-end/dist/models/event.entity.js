@@ -34,6 +34,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     (0, typeorm_1.OneToOne)(() => match_entity_1.Match),
+    (0, typeorm_1.JoinColumn)({ name: 'match' }),
     __metadata("design:type", Number)
 ], Event.prototype, "match", void 0);
 __decorate([

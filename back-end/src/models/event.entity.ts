@@ -18,6 +18,7 @@ export class Event {
 
     @Column()
     @OneToOne(() => Match)
+    @JoinColumn({ name: 'match' })
     match: number
 
     @Column()

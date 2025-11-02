@@ -1,6 +1,7 @@
 import { OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server } from "socket.io";
 import { Match } from 'src/models/match.entity';
+import { Stats } from 'src/models/stats.entity';
 import { Repository } from 'typeorm';
 export declare class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly matchRepo;
@@ -20,6 +21,6 @@ export declare class EventsGateway implements OnGatewayConnection, OnGatewayDisc
         room: number;
         message?: undefined;
     }>;
-    handleEvent(match: number, event: string, team: number): Promise<void>;
-    handleUserEvent(): Promise<void>;
+    handleEvent(match: number, event: string, team: number, id: number, stats: Stats): Promise<void>;
+    handleMessage(id: number, user: string, message: string, match: number, time: Date): Promise<void>;
 }
