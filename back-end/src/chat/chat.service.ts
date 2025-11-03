@@ -24,6 +24,16 @@ export class ChatService {
     }
 
     async getMessageForMatch(id: number) {
-        return await this.chatRepo.findBy({ match: id });
+         return this.chatRepo
+            .createQueryBuilder('chat')
+            .leftJoin('chat.user', 'user')
+            .select([
+                '"chat"."id" AS id',
+                '"chat"."message" as message',
+                '"chat"."time" as time',
+                '"chat"."match" AS match',
+                '"user"."first_name" AS user',
+            ])
+            .getRawMany();
     }
 }

@@ -5,10 +5,6 @@ import * as fromEvent from './../reducers/events.reducer';
 export const selectEventhState = createFeatureSelector<EventState>('eventStatus');
 const { selectAll, selectEntities, selectIds, selectTotal } = fromEvent.adapter.getSelectors();
 
-// export const selectEvents = createSelector(
-//     selectEventhState,
-//     selectAll
-// )
 
 export const selectEventEntities = createSelector(
     selectEventhState,
@@ -17,8 +13,7 @@ export const selectEventEntities = createSelector(
 
 export const selectEventsID = createSelector(
     selectEventhState,
-    selectIds,
-    ({ ids }) => [...ids].reverse()
+    (state) => [...state.ids].reverse()
 );
 
 export const selectEvents = createSelector(
@@ -26,3 +21,7 @@ export const selectEvents = createSelector(
     selectEventsID,
     (dir, ids) => ids.map(id => dir[id])
 )
+    // export const selectEvents = createSelector(
+    //     selectEventhState,
+    //     selectAll
+    // )

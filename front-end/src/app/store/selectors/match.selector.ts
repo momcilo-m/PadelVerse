@@ -25,3 +25,8 @@ export const selectedMatch = createSelector(
     selectedMatchID,
     (entities, id) => (id !== null ? entities[id] : null)
 );
+
+export const selectStats = createSelector(
+    selectMatchState,
+    (state)=>state.selectedMatchStats
+)

@@ -4,7 +4,6 @@ export class ChatDTO {
 
     user: number;
 
-    @IsPositive()
     match: number;
 
     @MinLength(1)

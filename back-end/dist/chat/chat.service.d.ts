@@ -7,5 +7,5 @@ export declare class ChatService {
     private eventsGateway;
     constructor(chatRepo: Repository<Chat>, eventsGateway: EventsGateway);
     sendMessage(chatDTO: ChatDTO, username: string): Promise<Chat>;
-    getMessageForMatch(id: number): Promise<Chat[]>;
+    getMessageForMatch(id: number): Promise<any[]>;
 }

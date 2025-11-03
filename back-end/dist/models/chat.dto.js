@@ -19,10 +19,6 @@ class ChatDTO {
 }
 exports.ChatDTO = ChatDTO;
 __decorate([
-    (0, class_validator_1.IsPositive)(),
-    __metadata("design:type", Number)
-], ChatDTO.prototype, "match", void 0);
-__decorate([
     (0, class_validator_1.MinLength)(1),
     __metadata("design:type", String)
 ], ChatDTO.prototype, "message", void 0);

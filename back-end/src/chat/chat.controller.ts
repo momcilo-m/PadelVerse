@@ -15,9 +15,10 @@ export class ChatController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Post()
-    async sendMessage(@Req() req, @Body(new ValidationPipe({ transform: true })) chatDTO: ChatDTO) {
+    @Post(":id")
+    async sendMessage(@Req() req, @Body(new ValidationPipe({ transform: true })) chatDTO: ChatDTO,@Param("id", ParseIntPipe) id: number) {
         chatDTO.user = req.user.id;
+        chatDTO.match = id;
         return this.chatService.sendMessage(chatDTO, req.user.first_name)
     }
 

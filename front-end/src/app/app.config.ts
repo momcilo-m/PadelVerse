@@ -19,6 +19,8 @@ import { matchReducers } from './store/reducers/match.reducers';
 import { MatchEffect } from './store/effects/match.effect';
 import { SocketService } from './services/socket.service';
 import { eventReducer } from './store/reducers/events.reducer';
+import { chatReducer } from './store/reducers/chat.reducer';
+import { ChatEffect } from './store/effects/chat.effect';
 //import { AuthInterceptor } from './interceptor/auth.interceptor';
 
 
@@ -35,10 +37,11 @@ export const appConfig: ApplicationConfig = {
       weatherStatus: weatherReducer,
       courtStatus: courtReducer,
       matchStatus: matchReducers,
-      eventStatus: eventReducer
+      eventStatus: eventReducer,
+      chatStatus: chatReducer
     }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode(), trace: true }),
-    provideEffects(UserEffect, ComplexEffect, WeatherEffect, MatchEffect),
+    provideEffects(UserEffect, ComplexEffect, WeatherEffect, MatchEffect,ChatEffect),
     { provide: ErrorHandler, useClass: SimpleErrorHandler },
     { provide: SocketService, useClass: SocketService }
     //{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

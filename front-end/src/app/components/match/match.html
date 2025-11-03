@@ -1,1 +1,71 @@
-<p>match works!</p>
+@if(selectedMatch$ | async; as match)
+{
+    @if(stats$ | async; as stats)
+    {
+        <div class="container">
+            
+            <div class="score-header">
+                <div class="team">
+                    <div class="img-wrapper">
+                        <img [src]="base + match.team1.photo">
+                        <h4>{{stats.set_t1}}</h4>
+                    </div>
+                    <h1>{{match.team1.name}} <span [class]="match.team1.id === stats.currentServe ? 'serve' : 'not-serve'"></span> </h1>
+                </div>
+                <div class="stats">
+                    <h2>{{stats.game_t1}}</h2>
+                    <div class="points">
+                        <h3>{{stats.points_t1}}</h3>
+                        <h3>:</h3>
+                        <h3>{{stats.points_t2}}</h3>
+                    </div>
+                    <h2>{{stats.game_t2}}</h2>
+                </div>
+                <div class="team">
+                    <h1> <span [class]="match.team2.id === stats.currentServe ? 'serve' : 'not-serve'"></span> {{match.team2.name}} </h1>
+                    <div class="img-wrapper">
+                        <img [src]="base + match.team2.photo">
+                        <h4>{{stats.set_t2}}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div></div>
+
+            <div class="events">
+                @if(events$ | async)
+                {
+                        @for(event of events$ | async; track event!!.id)
+                        {
+                            <div [class]="'event ' + event!!.event">
+                                <h3>{{event!!.team === match.team1.id ? match.team1.name : match.team2.name}}</h3>
+                                <span class="type">{{event!!.event}}</span>
+                            </div>
+                        }
+                    }
+            </div>
+
+            <div>
+                <div #chatContainer class="chat">
+                    @if(chat$ | async; as chat)
+                    {
+                        @for(message of chat$ | async; track message!!.id)
+                        {
+                            <div class="message">
+                                <h6>{{message!!.user}}</h6>
+                                <p>{{message!!.message}}</p>
+                                <span>{{getTime(message!!.time.toString())}}</span>
+                            </div>       
+                        }
+                    } 
+                </div>
+            
+                <div class="action">
+                    <input type="text" name="message" [(ngModel)]="message">
+                    <button (click) = 'sendMessage()' ><mat-icon>start</mat-icon></button>
+                </div>
+            </div>
+                
+        </div>
+    }
+}

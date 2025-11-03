@@ -15,6 +15,7 @@ var SimulatorService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SimulatorService = void 0;
 const common_1 = require("@nestjs/common");
+const schedule_1 = require("@nestjs/schedule");
 const typeorm_1 = require("@nestjs/typeorm");
 const events_gateway_1 = require("../events/events.gateway");
 const event_entity_1 = require("../models/event.entity");
@@ -227,6 +228,12 @@ let SimulatorService = SimulatorService_1 = class SimulatorService {
     }
 };
 exports.SimulatorService = SimulatorService;
+__decorate([
+    (0, schedule_1.Cron)('*/10  * * * * *'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], SimulatorService.prototype, "events", null);
 exports.SimulatorService = SimulatorService = SimulatorService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(match_entity_1.Match)),

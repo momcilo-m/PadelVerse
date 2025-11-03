@@ -11,7 +11,7 @@ interface MatchEventData {
 }
 
 interface ChatEventData {
-  data: { user: string; message: string; time: Date };
+  data: {id:number, user: string; message: string; time: Date };
   type: "CHAT";
 }
 
@@ -72,10 +72,11 @@ export class SocketService {
 
   listenToChatEvents(): Observable<ChatEventData> {
     return new Observable<ChatEventData>(observer => {
-      const handler = (payload: { data: { user: string; message: string; time: Date } }) => {
+      const handler = (payload: { data: { id:number,user: string; message: string; time: Date } }) => {
         observer.next({
           type: "CHAT",
           data: {
+            id:payload.data.id,
             user: payload.data.user,
             message: payload.data.message,
             time: payload.data.time

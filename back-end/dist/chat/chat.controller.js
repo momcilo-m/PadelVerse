@@ -25,8 +25,9 @@ let ChatController = class ChatController {
     async getMessage(id) {
         return this.chatService.getMessageForMatch(id);
     }
-    async sendMessage(req, chatDTO) {
+    async sendMessage(req, chatDTO, id) {
         chatDTO.user = req.user.id;
+        chatDTO.match = id;
         return this.chatService.sendMessage(chatDTO, req.user.first_name);
     }
 };
@@ -40,11 +41,12 @@ __decorate([
 ], ChatController.prototype, "getMessage", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)(),
+    (0, common_1.Post)(":id"),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)(new common_1.ValidationPipe({ transform: true }))),
+    __param(2, (0, common_1.Param)("id", common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, chat_dto_1.ChatDTO]),
+    __metadata("design:paramtypes", [Object, chat_dto_1.ChatDTO, Number]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "sendMessage", null);
 exports.ChatController = ChatController = __decorate([
