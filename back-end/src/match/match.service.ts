@@ -39,4 +39,16 @@ export class MatchService {
     async getEvents(id: number) {
         return await this.eventRepo.find({ where: { match: id }, order: { id: 'ASC' } })
     }
+
+    async createMatch(match_stats:number, team1:number, team2:number)
+    {
+        let match = this.matchRepo.create({ match_stats, team1, team2});
+        return await this.matchRepo.save(match);
+    }
+
+    async finishMatch(match:Match)
+    {
+        match.live = false;
+        await this.matchRepo.save(match);
+    }
 }

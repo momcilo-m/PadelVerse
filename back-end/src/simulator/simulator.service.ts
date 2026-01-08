@@ -27,7 +27,7 @@ export class SimulatorService {
         [EventType.ERROR]: 0.35         // 35%
     };
 
-    @Cron('*/1 * * * *')
+    //@Cron('*/1 * * * *')
     async createMatch() {
         //1. Izaberi dva razlicita tima koji trenutno ne igraju
         const availableTeams = await this.teamRepo
@@ -64,11 +64,11 @@ export class SimulatorService {
         //4. Kreiraj match 
         const mtch = this.matchRepo.create({ match_stats: stats.id, team1: availableTeams[index1].id, team2: availableTeams[index2].id });
         const match = await this.matchRepo.save(mtch);
-
         return match;
+
     }
 
-    @Cron('*/10  * * * * *')
+    //@Cron('*/10  * * * * *')
     async events() {
 
         const matches = await this.matchRepo.findBy({ live: true });
@@ -80,15 +80,16 @@ export class SimulatorService {
 
         //1. nasumicno generisi events
         const event = this.randomEvent();
+        //console.log(event, typeof event)
 
-        console.log(event, typeof event)
 
         //2. izaberi koji tim je generisao event
         const stats = await this.statsRepo.findOne({ where: { id: match.match_stats } });
         if (!stats) return;
 
         const [teamIndex, teamID, initId] = this.randomTeam(match, event, stats!.currentServe);
-        console.log("TIM", teamID, " je osvojio poen ", initId, " je generisao event ", event)
+        //console.log("TIM", teamID, " je osvojio poen ", initId, " je generisao event ", event)
+        
         //3. azuriraj statistiku
         const [finishGame, finishSet, finishMatch] = this.handlePoint(stats, teamIndex);
 

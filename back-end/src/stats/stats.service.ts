@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ComplexService } from 'src/complex/complex.service';
 import { CourtsService } from 'src/courts/courts.service';
+import { PointType, Stats } from 'src/models/stats.entity';
 import { Term } from 'src/models/term.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
@@ -11,6 +12,7 @@ export class StatsService {
 
     constructor(
         @InjectRepository(Term) private readonly termsRepository: Repository<Term>,
+        @InjectRepository(Stats) private readonly statsRepo: Repository<Stats>,
         private readonly userService: UsersService,
         private readonly complexService: ComplexService,
         private readonly courtsService: CourtsService
@@ -186,5 +188,122 @@ export class StatsService {
             noOfTerms,
             totalAmount
         }
+    }
+
+    async createStats(currentServe:number)
+    {
+        const stats = this.statsRepo.create({ currentServe});
+        return await this.statsRepo.save(stats);
+    }
+
+    private handlePoint(stats:Stats, index:number)
+    {
+
+        let currentPoints = index ? stats.points_t2 : stats.points_t1;
+        let currentPointsOpponent = index ? stats.points_t1 : stats.points_t2;
+
+        let newCurrent: string;
+        let newCurrentOpponent: string = "";
+
+        let finishGame: boolean = false;
+        let finishSet: boolean = false;
+        let finishMatch: boolean = false;
+
+        let newCurrentGame: number = -1;
+        let newCurrentSet: number = -1;
+
+        if (+currentPoints == 15)
+            newCurrent = PointType.THIRTY;
+        else if (+currentPoints == 30)
+            newCurrent = PointType.FORTY;
+        //40:40 -> AD:0
+        else if (+currentPoints == 40 && +currentPointsOpponent == 40) {
+            newCurrent = PointType.ADVANTAGE;
+            newCurrentOpponent = PointType.LOVE
+        }
+        //Gotov gem regularno
+        else if (+currentPoints == 40) {
+            newCurrent = PointType.LOVE;
+            newCurrentOpponent = PointType.LOVE
+            finishGame = true;
+        }
+        //AD:0 -> 0:0
+        else if (currentPoints == PointType.ADVANTAGE) {
+            newCurrent = PointType.LOVE;
+            newCurrentOpponent = PointType.LOVE
+            finishGame = true;
+        }
+        //Iz AD:0 -> 40:40
+        else if (currentPoints == PointType.LOVE && currentPointsOpponent == PointType.ADVANTAGE) {
+            newCurrent = PointType.FORTY;
+            newCurrentOpponent = PointType.FORTY
+        }
+        //0:0 -> 15:0
+        else
+            newCurrent = PointType.FIFTEEN
+
+        //Da li je gejm gotov
+        if (finishGame) {
+            let currentGames = index ? stats.game_t2 : stats.game_t1;
+            newCurrentGame = ++currentGames;
+
+            let currentOpponentGames = index ? stats.game_t1 : stats.game_t2;
+
+            //Gotov je set
+            if (currentGames >= 6 && currentGames - currentOpponentGames >= 2) {
+                let currentSets = index ? stats.set_t2 : stats.set_t1;
+                newCurrentSet = ++currentSets;
+
+                finishSet = true;
+
+                //Gotov je match
+                if (currentSets == 2)
+                    finishMatch = true;
+            }
+        }
+
+        //Update statistike
+
+        //Poen je osvojio tim 1
+        if (!index) {
+
+            stats.points_t1 = newCurrent;
+
+            if (newCurrentOpponent != "")
+                stats.points_t2 = newCurrentOpponent;
+
+            if (newCurrentGame != -1)
+                stats.game_t1 = newCurrentGame;
+
+            if (newCurrentSet != -1)
+                stats.set_t1 = newCurrentSet;
+        }
+        //Poen je osvojio tim 2
+        else {
+            stats.points_t2 = newCurrent;
+
+            if (newCurrentOpponent != "")
+                stats.points_t1 = newCurrentOpponent;
+
+            if (newCurrentGame != -1)
+                stats.game_t2 = newCurrentGame;
+
+            if (newCurrentSet != -1)
+                stats.set_t2 = newCurrentSet;
+        }
+
+        return [finishGame, finishSet, finishMatch]
+    }
+
+    private async handleEvent(stats:Stats, index:number, team1:number, team2:number)
+    {
+        const [finishGame, finishSet, finishMatch] = this.handlePoint(stats, index);
+
+        if (finishGame) {
+            stats.currentServe = stats.currentServe == team1 ? team2 : team1;
+        }
+
+        await this.statsRepo.save(stats);
+
     }
 }

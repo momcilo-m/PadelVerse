@@ -51,6 +51,8 @@ import { EventsModule } from './events/events.module';
 import { MatchModule } from './match/match.module';
 import { ChatModule } from './chat/chat.module';
 import { Chat } from './models/chat.entity';
+import { EventController } from './event/event.controller';
+import { TeamsModule } from './teams/teams.module';
 
 @Module({
   imports: [
@@ -89,8 +91,9 @@ import { Chat } from './models/chat.entity';
     EventsModule,
     MatchModule,
     ChatModule,
+    TeamsModule,
   ],
-  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController, TournamentsController, BookingController, ProfileController, ReviewController],
+  controllers: [AppController, UsersController, AuthController, ComplexController, TermsController, TournamentsController, BookingController, ProfileController, ReviewController, EventController],
   providers: [AppService, AuthService, UsersService, MailerService, ComplexService, TermsService, TournamentsService, CourtsService, ProfileService],
 })
 export class AppModule { }
