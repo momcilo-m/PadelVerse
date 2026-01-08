@@ -14,6 +14,7 @@ import { selectChat } from '../../store/selectors/chat.selector';
 import { addMessage, loadChat, sendMessage } from '../../store/actions/chat.action';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import { selectUser } from '../../store/selectors/user.selector';
 
 @Component({
   selector: 'app-match',
@@ -26,16 +27,20 @@ export class Match {
   private eventsSub?: Subscription;
   private id: string = "";
 
+  message:string = "";
+  disabledBtn:boolean = false;
+  
+  base = environment.apiUrl+'/photo/';
+  
   store = inject<Store<AppState>>(Store)
+
 
   selectedMatch$ = this.store.select(selectedMatch);
   stats$ = this.store.select(selectStats);
   events$ = this.store.select(selectEvents);
   chat$ = this.store.select(selectChat)
+  user$ = this.store.select(selectUser).subscribe((user)=>user?.id ? this.disabledBtn = false : this.disabledBtn = true)
 
-  chats$ = this.store.select(selectChat).subscribe(el=>console.log(el))
-
-  base = environment.apiUrl+'/photo/';
 
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -45,7 +50,6 @@ export class Match {
     private socketService: SocketService
   ) { }
 
-  message:string = "";
 
   ngOnDestroy(): void {
     this.socketService.disconnect();
@@ -60,22 +64,22 @@ export class Match {
 
     this.store.dispatch(loadChat({id:+this.id}))
 
-    this.eventsSub = this.socketService.getAllEvents().subscribe(event => {
+    // this.eventsSub = this.socketService.getAllEvents().subscribe(event => {
 
-      if (event.type === "EVENT") {
-        const { stats, ...cleanData } = event.data;
-        this.store.dispatch(addEvent({ event: cleanData }));
-        this.store.dispatch(matchStatsSuccess({ stats }))
-      }
-      else if (event.type === "CHAT") {
-        this.store.dispatch(addMessage({message:event.data}))
-      }
-    });
+    //   if (event.type === "EVENT") {
+    //     const { stats, ...cleanData } = event.data;
+    //     this.store.dispatch(addEvent({ event: cleanData }));
+    //     this.store.dispatch(matchStatsSuccess({ stats }))
+    //   }
+    //   else if (event.type === "CHAT") {
+    //     this.store.dispatch(addMessage({message:event.data}))
+    //   }
+    // });
+
+    this.eventsSub = this.socketService.listenToAllEvents().subscribe(action => this.store.dispatch(action));
   }
 
-  // ngAfterViewInit() {
-  //   this.scrollToBottom();
-  // }
+
 
   ngAfterViewChecked() {
     this.scrollToBottom();

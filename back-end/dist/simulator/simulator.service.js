@@ -229,6 +229,12 @@ let SimulatorService = SimulatorService_1 = class SimulatorService {
 };
 exports.SimulatorService = SimulatorService;
 __decorate([
+    (0, schedule_1.Cron)('*/1 * * * *'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], SimulatorService.prototype, "createMatch", null);
+__decorate([
     (0, schedule_1.Cron)('*/10  * * * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

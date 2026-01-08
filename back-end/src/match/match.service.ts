@@ -32,7 +32,8 @@ export class MatchService {
     }
 
     async getStats(id: number) {
-        return await this.matchRepo.findOne({ where: { id }, relations: ['match_stats'] })
+        let res = await this.matchRepo.findOne({ where: { id }, relations: ['match_stats']})
+        return res?.match_stats;
     }
 
     async getEvents(id: number) {

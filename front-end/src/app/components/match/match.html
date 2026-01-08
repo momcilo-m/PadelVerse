@@ -62,7 +62,7 @@
             
                 <div class="action">
                     <input type="text" name="message" [(ngModel)]="message">
-                    <button (click) = 'sendMessage()' ><mat-icon>start</mat-icon></button>
+                    <button (click) = 'sendMessage()' [disabled] = 'disabledBtn'><mat-icon>start</mat-icon></button>
                 </div>
             </div>
                 

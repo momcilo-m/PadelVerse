@@ -11,8 +11,8 @@ export class SimpleErrorHandler implements ErrorHandler {
     private router = inject(Router)
     private notificationService = inject(NotificationService)
 
-    private unprotected = ["/", "/home", "/complex"];
-    private unprotectedIndexed = ["/complex/"]
+    private unprotected = ["/", "/home", "/complex",'/matches'];
+    private unprotectedIndexed = ["/complex/","/match/"]
 
     handleError(error: any): void {
 

@@ -39,7 +39,8 @@ let MatchService = class MatchService {
         };
     }
     async getStats(id) {
-        return await this.matchRepo.findOne({ where: { id }, relations: ['match_stats'] });
+        let res = await this.matchRepo.findOne({ where: { id }, relations: ['match_stats'] });
+        return res?.match_stats;
     }
     async getEvents(id) {
         return await this.eventRepo.find({ where: { match: id }, order: { id: 'ASC' } });

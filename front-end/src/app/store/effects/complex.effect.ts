@@ -111,7 +111,7 @@ export class ComplexEffect {
                     switchMap((res) =>
                         from([
                             loadedCourts({ courts: res.all, avalaible: res.available }),
-                            //weather({ date: param.date, hour: param.time })
+                            weather({ date: param.date, hour: param.time })
                         ]
                         )),
                     catchError(({ error }) => of(failedComplex({ message: error.message || "Fail when load courts" })),

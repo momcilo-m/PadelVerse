@@ -27,7 +27,7 @@ export class SimulatorService {
         [EventType.ERROR]: 0.35         // 35%
     };
 
-    //@Cron('*/10 * * * *')
+    @Cron('*/1 * * * *')
     async createMatch() {
         //1. Izaberi dva razlicita tima koji trenutno ne igraju
         const availableTeams = await this.teamRepo
@@ -68,7 +68,7 @@ export class SimulatorService {
         return match;
     }
 
-    //@Cron('*/10  * * * * *')
+    @Cron('*/10  * * * * *')
     async events() {
 
         const matches = await this.matchRepo.findBy({ live: true });

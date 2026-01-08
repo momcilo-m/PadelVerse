@@ -154,8 +154,8 @@
 
         @if (count$ | async; as count) {
 
-        <mat-paginator [length]="count" [pageSize]="2" (page)="paginate($event)" [pageSizeOptions]="[2,5, 10, 25]"
-            aria-label="Select page"></mat-paginator>
+        <mat-paginator [length]="count" [pageSize]="pageSize" (page)="paginate($event)"
+         [pageSizeOptions]="[2,5, 10, 25]" aria-label="Select page"></mat-paginator>
         }
     </div>
 </div>

@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { environment } from '../../environments/environment.development';
-import { BehaviorSubject, filter, map, merge, Observable, share, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, merge, mergeMap, Observable, share, tap } from 'rxjs';
 import { MatchStatsInterface } from '../models/match.stats.interface';
+import { Action } from '@ngrx/store';
+import { addEvent } from '../store/actions/events.action';
+import { matchStatsSuccess } from '../store/actions/match.action';
+import { addMessage } from '../store/actions/chat.action';
 
 
 interface MatchEventData {
@@ -89,7 +93,25 @@ export class SocketService {
       return () => this.socket.off('chat', handler);
     });
   }
-  getAllEvents(): Observable<EventData> {
-    return merge(this.listenToMatchEvents(), this.listenToChatEvents());
+  // getAllEvents(): Observable<EventData> {
+  //   return merge(this.listenToMatchEvents(), this.listenToChatEvents());
+  // }
+
+  listenToAllEvents(): Observable<Action> {
+  return merge(
+    this.listenToMatchEvents().pipe(
+      map(event => {
+         const { stats, ...cleanData } = (event.data as { event: string; team: number; id: number; stats: MatchStatsInterface });
+        return [
+          addEvent({ event: cleanData }),
+          matchStatsSuccess({ stats })
+        ];
+      }),
+      mergeMap(actions => actions)
+    ),
+    this.listenToChatEvents().pipe(
+      map(event => addMessage({ message: event.data }))
+    )
+  );
   }
 }

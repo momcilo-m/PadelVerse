@@ -36,6 +36,8 @@ export class Complexes {
   store = inject<Store<AppState>>(Store)
   router = inject(Router)
 
+  pageSize = 2; 
+
   private page = 1;
   private limit = 2;
 
@@ -76,6 +78,7 @@ export class Complexes {
     const { pageSize, pageIndex } = event;
     this.limit = pageSize;
     this.page = pageIndex + 1;
+    this.pageSize = pageSize;
 
     this.execute();
   }

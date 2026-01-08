@@ -16,6 +16,6 @@ export declare class MatchService {
         };
         stats: number;
     }>;
-    getStats(id: number): Promise<Match | null>;
+    getStats(id: number): Promise<number | undefined>;
     getEvents(id: number): Promise<Event[]>;
 }

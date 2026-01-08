@@ -203,3 +203,7 @@ button{
     width: 20%;
     height: 40px;
 }
+
+button:disabled{
+    cursor: not-allowed;
+}
