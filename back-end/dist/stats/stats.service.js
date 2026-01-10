@@ -17,34 +17,25 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const complex_service_1 = require("../complex/complex.service");
 const courts_service_1 = require("../courts/courts.service");
-const term_entity_1 = require("../models/term.entity");
+const match_service_1 = require("../match/match.service");
+const stats_entity_1 = require("../models/stats.entity");
+const terms_service_1 = require("../terms/terms.service");
 const users_service_1 = require("../users/users.service");
 const typeorm_2 = require("typeorm");
 let StatsService = class StatsService {
-    termsRepository;
+    statsRepo;
     userService;
     complexService;
     courtsService;
-    constructor(termsRepository, userService, complexService, courtsService) {
-        this.termsRepository = termsRepository;
+    termSrevice;
+    matchSrevice;
+    constructor(statsRepo, userService, complexService, courtsService, termSrevice, matchSrevice) {
+        this.statsRepo = statsRepo;
         this.userService = userService;
         this.complexService = complexService;
         this.courtsService = courtsService;
-    }
-    async getTermsByDateRange(complexes, startOfMonth, endOfMonth) {
-        if (!complexes || complexes.length === 0) {
-            return [];
-        }
-        let res = await this.termsRepository.manager
-            .getRepository(term_entity_1.Term)
-            .createQueryBuilder('term')
-            .leftJoinAndSelect('term.court', 'court')
-            .where('court.complex IN (:...complexes)', { complexes })
-            .andWhere('term.date BETWEEN :start AND :end', { start: startOfMonth, end: endOfMonth })
-            .addSelect('court.price', 'price')
-            .addSelect('court.name', 'name')
-            .getRawMany();
-        return res;
+        this.termSrevice = termSrevice;
+        this.matchSrevice = matchSrevice;
     }
     thisMonth() {
         const startOfMonth = new Date();
@@ -68,7 +59,7 @@ let StatsService = class StatsService {
     }
     async monthStats(complex) {
         const [start, end] = this.thisMonth();
-        let res = await this.getTermsByDateRange([complex], start, end);
+        let res = await this.termSrevice.getTermsByDateRange([complex], start, end);
         let totalCount = 0;
         let courtsCount = {};
         let players = {};
@@ -101,7 +92,7 @@ let StatsService = class StatsService {
     }
     async weekStats(complex) {
         const [start, end] = this.thisWeek();
-        var res = await this.getTermsByDateRange([complex], start, end);
+        var res = await this.termSrevice.getTermsByDateRange([complex], start, end);
         let totalCount = 0;
         let totalAmount = 0;
         let courtsCount = {};
@@ -137,7 +128,7 @@ let StatsService = class StatsService {
         const now = new Date();
         const startOfYear = new Date(now.getFullYear(), 0, 1);
         const endOfYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
-        let res = await this.getTermsByDateRange(ids, startOfYear, endOfYear);
+        let res = await this.termSrevice.getTermsByDateRange(ids, startOfYear, endOfYear);
         let noOfTerms = res.length;
         let totalAmount = 0;
         res.forEach(el => totalAmount += el.term_count * el.price);
@@ -148,14 +139,99 @@ let StatsService = class StatsService {
             totalAmount
         };
     }
+    async createStats(currentServe) {
+        const stats = this.statsRepo.create({ currentServe });
+        return await this.statsRepo.save(stats);
+    }
+    handlePoint(stats, index) {
+        let currentPoints = index ? stats.points_t2 : stats.points_t1;
+        let currentPointsOpponent = index ? stats.points_t1 : stats.points_t2;
+        let newCurrent;
+        let newCurrentOpponent = "";
+        let finishGame = false;
+        let finishSet = false;
+        let finishMatch = false;
+        let newCurrentGame = -1;
+        let newCurrentSet = -1;
+        if (+currentPoints == 15)
+            newCurrent = stats_entity_1.PointType.THIRTY;
+        else if (+currentPoints == 30)
+            newCurrent = stats_entity_1.PointType.FORTY;
+        else if (+currentPoints == 40 && +currentPointsOpponent == 40) {
+            newCurrent = stats_entity_1.PointType.ADVANTAGE;
+            newCurrentOpponent = stats_entity_1.PointType.LOVE;
+        }
+        else if (+currentPoints == 40) {
+            newCurrent = stats_entity_1.PointType.LOVE;
+            newCurrentOpponent = stats_entity_1.PointType.LOVE;
+            finishGame = true;
+        }
+        else if (currentPoints == stats_entity_1.PointType.ADVANTAGE) {
+            newCurrent = stats_entity_1.PointType.LOVE;
+            newCurrentOpponent = stats_entity_1.PointType.LOVE;
+            finishGame = true;
+        }
+        else if (currentPoints == stats_entity_1.PointType.LOVE && currentPointsOpponent == stats_entity_1.PointType.ADVANTAGE) {
+            newCurrent = stats_entity_1.PointType.FORTY;
+            newCurrentOpponent = stats_entity_1.PointType.FORTY;
+        }
+        else
+            newCurrent = stats_entity_1.PointType.FIFTEEN;
+        if (finishGame) {
+            let currentGames = index ? stats.game_t2 : stats.game_t1;
+            newCurrentGame = ++currentGames;
+            let currentOpponentGames = index ? stats.game_t1 : stats.game_t2;
+            if (currentGames >= 6 && currentGames - currentOpponentGames >= 2) {
+                let currentSets = index ? stats.set_t2 : stats.set_t1;
+                newCurrentSet = ++currentSets;
+                finishSet = true;
+                if (currentSets == 2)
+                    finishMatch = true;
+            }
+        }
+        if (!index) {
+            stats.points_t1 = newCurrent;
+            if (newCurrentOpponent != "")
+                stats.points_t2 = newCurrentOpponent;
+            if (newCurrentGame != -1)
+                stats.game_t1 = newCurrentGame;
+            if (newCurrentSet != -1)
+                stats.set_t1 = newCurrentSet;
+        }
+        else {
+            stats.points_t2 = newCurrent;
+            if (newCurrentOpponent != "")
+                stats.points_t1 = newCurrentOpponent;
+            if (newCurrentGame != -1)
+                stats.game_t2 = newCurrentGame;
+            if (newCurrentSet != -1)
+                stats.set_t2 = newCurrentSet;
+        }
+        return [finishGame, finishSet, finishMatch];
+    }
+    async handleEvent(match_id, stats, index, team1, team2) {
+        const [finishGame, finishSet, finishMatch] = this.handlePoint(stats, index);
+        if (finishGame) {
+            stats.currentServe = stats.currentServe == team1 ? team2 : team1;
+        }
+        await this.statsRepo.save(stats);
+        if (finishMatch) {
+            this.matchSrevice.finishMatch(match_id);
+        }
+    }
+    async findById(id) {
+        return await this.statsRepo.findOne({ where: { id } });
+    }
 };
 exports.StatsService = StatsService;
 exports.StatsService = StatsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(term_entity_1.Term)),
+    __param(0, (0, typeorm_1.InjectRepository)(stats_entity_1.Stats)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         users_service_1.UsersService,
         complex_service_1.ComplexService,
-        courts_service_1.CourtsService])
+        courts_service_1.CourtsService,
+        terms_service_1.TermsService,
+        match_service_1.MatchService])
 ], StatsService);
 //# sourceMappingURL=stats.service.js.map

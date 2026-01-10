@@ -1,5 +1,6 @@
 import { BadRequestException, Get, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EventsService } from 'src/events/events.service';
 import { Event } from 'src/models/event.entity';
 import { Match } from 'src/models/match.entity';
 import { Stats } from 'src/models/stats.entity';
@@ -10,7 +11,6 @@ export class MatchService {
 
     constructor(
         @InjectRepository(Match) private readonly matchRepo: Repository<Match>,
-        @InjectRepository(Event) private readonly eventRepo: Repository<Event>,
     ) { }
 
     async getLiveMatch() {
@@ -36,19 +36,20 @@ export class MatchService {
         return res?.match_stats;
     }
 
-    async getEvents(id: number) {
-        return await this.eventRepo.find({ where: { match: id }, order: { id: 'ASC' } })
-    }
-
     async createMatch(match_stats:number, team1:number, team2:number)
     {
         let match = this.matchRepo.create({ match_stats, team1, team2});
         return await this.matchRepo.save(match);
     }
 
-    async finishMatch(match:Match)
+    async finishMatch(id:number)
     {
-        match.live = false;
-        await this.matchRepo.save(match);
+        await this.matchRepo.update(id,{live:true})
+    }
+
+    async getLiveMatchById(id:number)
+    {
+        return await this.matchRepo.findOneBy({ id, live: true });
+
     }
 }

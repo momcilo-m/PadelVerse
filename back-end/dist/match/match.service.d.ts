@@ -1,11 +1,9 @@
 import { BadRequestException } from '@nestjs/common';
-import { Event } from 'src/models/event.entity';
 import { Match } from 'src/models/match.entity';
 import { Repository } from 'typeorm';
 export declare class MatchService {
     private readonly matchRepo;
-    private readonly eventRepo;
-    constructor(matchRepo: Repository<Match>, eventRepo: Repository<Event>);
+    constructor(matchRepo: Repository<Match>);
     getLiveMatch(): Promise<Match[]>;
     getMatchById(id: number): Promise<BadRequestException | {
         match: {
@@ -17,5 +15,7 @@ export declare class MatchService {
         stats: number;
     }>;
     getStats(id: number): Promise<number | undefined>;
-    getEvents(id: number): Promise<Event[]>;
+    createMatch(match_stats: number, team1: number, team2: number): Promise<Match>;
+    finishMatch(id: number): Promise<void>;
+    getLiveMatchById(id: number): Promise<Match | null>;
 }

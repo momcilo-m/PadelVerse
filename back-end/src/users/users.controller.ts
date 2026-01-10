@@ -7,17 +7,10 @@ export class UsersController {
 
     constructor(
         private readonly service: UsersService,
-        @Inject() private readonly testService: SimulatorService
     ) { }
 
     @Get()
     getUsers() {
         return this.service.getAll();
     }
-
-    @Get("test")
-    test() {
-        return this.testService.events();
-    }
-
 }

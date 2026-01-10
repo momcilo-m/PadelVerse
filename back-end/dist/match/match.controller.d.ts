@@ -13,5 +13,4 @@ export declare class MatchController {
         };
         stats: number;
     }>;
-    getEvents(id: number): Promise<import("../models/event.entity").Event[]>;
 }

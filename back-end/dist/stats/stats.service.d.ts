@@ -1,15 +1,18 @@
 import { ComplexService } from 'src/complex/complex.service';
 import { CourtsService } from 'src/courts/courts.service';
-import { Term } from 'src/models/term.entity';
+import { MatchService } from 'src/match/match.service';
+import { Stats } from 'src/models/stats.entity';
+import { TermsService } from 'src/terms/terms.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 export declare class StatsService {
-    private readonly termsRepository;
+    private readonly statsRepo;
     private readonly userService;
     private readonly complexService;
     private readonly courtsService;
-    constructor(termsRepository: Repository<Term>, userService: UsersService, complexService: ComplexService, courtsService: CourtsService);
-    private getTermsByDateRange;
+    private readonly termSrevice;
+    private readonly matchSrevice;
+    constructor(statsRepo: Repository<Stats>, userService: UsersService, complexService: ComplexService, courtsService: CourtsService, termSrevice: TermsService, matchSrevice: MatchService);
     private thisMonth;
     private thisWeek;
     monthStats(complex: number): Promise<{
@@ -45,4 +48,8 @@ export declare class StatsService {
         noOfTerms: number;
         totalAmount: number;
     }>;
+    createStats(currentServe: number): Promise<Stats>;
+    private handlePoint;
+    handleEvent(match_id: number, stats: Stats, index: number, team1: number, team2: number): Promise<void>;
+    findById(id: number): Promise<Stats | null>;
 }

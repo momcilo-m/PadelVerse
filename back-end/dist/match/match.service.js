@@ -15,15 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MatchService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const event_entity_1 = require("../models/event.entity");
 const match_entity_1 = require("../models/match.entity");
 const typeorm_2 = require("typeorm");
 let MatchService = class MatchService {
     matchRepo;
-    eventRepo;
-    constructor(matchRepo, eventRepo) {
+    constructor(matchRepo) {
         this.matchRepo = matchRepo;
-        this.eventRepo = eventRepo;
     }
     async getLiveMatch() {
         return await this.matchRepo.find({ where: { live: true }, relations: ['team1', 'team2'] });
@@ -42,16 +39,21 @@ let MatchService = class MatchService {
         let res = await this.matchRepo.findOne({ where: { id }, relations: ['match_stats'] });
         return res?.match_stats;
     }
-    async getEvents(id) {
-        return await this.eventRepo.find({ where: { match: id }, order: { id: 'ASC' } });
+    async createMatch(match_stats, team1, team2) {
+        let match = this.matchRepo.create({ match_stats, team1, team2 });
+        return await this.matchRepo.save(match);
+    }
+    async finishMatch(id) {
+        await this.matchRepo.update(id, { live: true });
+    }
+    async getLiveMatchById(id) {
+        return await this.matchRepo.findOneBy({ id, live: true });
     }
 };
 exports.MatchService = MatchService;
 exports.MatchService = MatchService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(match_entity_1.Match)),
-    __param(1, (0, typeorm_1.InjectRepository)(event_entity_1.Event)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], MatchService);
 //# sourceMappingURL=match.service.js.map

@@ -105,6 +105,25 @@ export class TermsService {
     }
 
 
+    async getTermsByDateRange(complexes: number[], startOfMonth: Date, endOfMonth: Date) {
+
+        if (!complexes || complexes.length === 0) {
+            return [];
+        }
+
+        let res = await this.termsRepository.manager
+            .getRepository(Term)
+            .createQueryBuilder('term')
+            .leftJoinAndSelect('term.court', 'court')
+            .where('court.complex IN (:...complexes)', { complexes })
+            .andWhere('term.date BETWEEN :start AND :end', { start: startOfMonth, end: endOfMonth })
+            .addSelect('court.price', 'price')
+            .addSelect('court.name', 'name')
+            .getRawMany()
+
+        return res;
+    }
+
     async delete(id: number) {
         const terms = await this.termsRepository.findOneBy({ id });
 
@@ -120,4 +139,7 @@ export class TermsService {
 
         return await this.termsRepository.delete({ id })
     }
+
+    
+
 }

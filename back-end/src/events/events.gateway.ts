@@ -4,6 +4,7 @@ import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect,
 import { stat } from 'fs';
 import { Server, Socket } from "socket.io";
 import { WsJwtAuthGuard } from 'src/auth/ws-jwt-auth.guard';
+import { MatchService } from 'src/match/match.service';
 import { Match } from 'src/models/match.entity';
 import { Stats } from 'src/models/stats.entity';
 import { User } from 'src/models/user.entity';
@@ -26,7 +27,8 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private users = new Map<string, string>();
 
   constructor(
-    @InjectRepository(Match) private readonly matchRepo: Repository<Match>
+    //@InjectRepository(Match) private readonly matchRepo: Repository<Match>
+    private readonly matchService:MatchService
   ) { }
 
   @WebSocketServer()
@@ -43,7 +45,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('join-room')
   async handleJoinRoom(@ConnectedSocket() client: any, @MessageBody() data: { room: number }) {
 
-    let match = await this.matchRepo.findOneBy({ id: data.room, live: true });
+    let match = await this.matchService.getLiveMatchById(data.room)
 
     if (!match)
       return { success: false, message: "Match is finished" };

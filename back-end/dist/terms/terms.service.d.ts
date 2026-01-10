@@ -11,5 +11,6 @@ export declare class TermsService {
     getByIds(court?: number, user?: number, start_date?: Date, end_date?: Date): Promise<Term[]>;
     create(termsDTO: TermsCreateDTO): Promise<Term>;
     isTermFree(startTime: string, endTime: string, date: Date, courtId: number): Promise<Boolean>;
+    getTermsByDateRange(complexes: number[], startOfMonth: Date, endOfMonth: Date): Promise<any[]>;
     delete(id: number): Promise<import("typeorm").DeleteResult>;
 }

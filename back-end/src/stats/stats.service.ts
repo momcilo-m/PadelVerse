@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ComplexService } from 'src/complex/complex.service';
 import { CourtsService } from 'src/courts/courts.service';
+import { MatchService } from 'src/match/match.service';
 import { PointType, Stats } from 'src/models/stats.entity';
 import { Term } from 'src/models/term.entity';
+import { TeamsService } from 'src/teams/teams.service';
+import { TermsService } from 'src/terms/terms.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 
@@ -11,33 +14,15 @@ import { Repository } from 'typeorm';
 export class StatsService {
 
     constructor(
-        @InjectRepository(Term) private readonly termsRepository: Repository<Term>,
+        // @InjectRepository(Term) private readonly termsRepository: Repository<Term>,
         @InjectRepository(Stats) private readonly statsRepo: Repository<Stats>,
         private readonly userService: UsersService,
         private readonly complexService: ComplexService,
-        private readonly courtsService: CourtsService
+        private readonly courtsService: CourtsService,
+        private readonly termSrevice: TermsService,
+        private readonly matchSrevice: MatchService,
         //@Inject(forwardRef(() => ComplexService)) private readonly complexService: ComplexService
     ) { }
-
-
-    private async getTermsByDateRange(complexes: number[], startOfMonth: Date, endOfMonth: Date) {
-
-        if (!complexes || complexes.length === 0) {
-            return [];
-        }
-
-        let res = await this.termsRepository.manager
-            .getRepository(Term)
-            .createQueryBuilder('term')
-            .leftJoinAndSelect('term.court', 'court')
-            .where('court.complex IN (:...complexes)', { complexes })
-            .andWhere('term.date BETWEEN :start AND :end', { start: startOfMonth, end: endOfMonth })
-            .addSelect('court.price', 'price')
-            .addSelect('court.name', 'name')
-            .getRawMany()
-
-        return res;
-    }
 
     private thisMonth() {
         const startOfMonth = new Date();
@@ -71,7 +56,7 @@ export class StatsService {
 
         const [start, end] = this.thisMonth()
 
-        let res = await this.getTermsByDateRange([complex], start, end)
+        let res = await this.termSrevice.getTermsByDateRange([complex], start, end)
 
         let totalCount = 0;
         let courtsCount: Record<string, number> = {}
@@ -121,7 +106,7 @@ export class StatsService {
     async weekStats(complex: number) {
         const [start, end] = this.thisWeek();
 
-        var res = await this.getTermsByDateRange([complex], start, end)
+        var res = await this.termSrevice.getTermsByDateRange([complex], start, end)
 
         let totalCount = 0;
         let totalAmount = 0;
@@ -175,7 +160,7 @@ export class StatsService {
         const startOfYear = new Date(now.getFullYear(), 0, 1)
         const endOfYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999)
 
-        let res = await this.getTermsByDateRange(ids, startOfYear, endOfYear);
+        let res = await this.termSrevice.getTermsByDateRange(ids, startOfYear, endOfYear);
 
 
         let noOfTerms = res.length
@@ -295,7 +280,7 @@ export class StatsService {
         return [finishGame, finishSet, finishMatch]
     }
 
-    private async handleEvent(stats:Stats, index:number, team1:number, team2:number)
+    async handleEvent(match_id:number,stats:Stats, index:number, team1:number, team2:number)
     {
         const [finishGame, finishSet, finishMatch] = this.handlePoint(stats, index);
 
@@ -305,5 +290,13 @@ export class StatsService {
 
         await this.statsRepo.save(stats);
 
+        if (finishMatch) {
+            this.matchSrevice.finishMatch(match_id);
+        }
+    }
+
+    async findById(id:number)
+    {
+        return await this.statsRepo.findOne({ where: { id} });
     }
 }

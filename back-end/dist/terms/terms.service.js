@@ -85,6 +85,21 @@ let TermsService = class TermsService {
         }
         return true;
     }
+    async getTermsByDateRange(complexes, startOfMonth, endOfMonth) {
+        if (!complexes || complexes.length === 0) {
+            return [];
+        }
+        let res = await this.termsRepository.manager
+            .getRepository(term_entity_1.Term)
+            .createQueryBuilder('term')
+            .leftJoinAndSelect('term.court', 'court')
+            .where('court.complex IN (:...complexes)', { complexes })
+            .andWhere('term.date BETWEEN :start AND :end', { start: startOfMonth, end: endOfMonth })
+            .addSelect('court.price', 'price')
+            .addSelect('court.name', 'name')
+            .getRawMany();
+        return res;
+    }
     async delete(id) {
         const terms = await this.termsRepository.findOneBy({ id });
         if (!terms)

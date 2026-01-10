@@ -1,23 +1,18 @@
 import { EventsGateway } from "src/events/events.gateway";
-import { Event } from "src/models/event.entity";
+import { EventsService } from "src/events/events.service";
+import { MatchService } from "src/match/match.service";
 import { Match } from "src/models/match.entity";
-import { Stats } from "src/models/stats.entity";
-import { Team } from "src/models/team.entity";
-import { Repository } from "typeorm";
+import { StatsService } from "src/stats/stats.service";
+import { TeamsService } from "src/teams/teams.service";
 export declare class SimulatorService {
-    private readonly matchRepo;
-    private readonly eventRepo;
-    private readonly teamRepo;
-    private readonly statsRepo;
+    private readonly teamService;
+    private readonly matchService;
+    private readonly eventService;
+    private readonly statService;
     private eventsGateway;
     private readonly logger;
-    constructor(matchRepo: Repository<Match>, eventRepo: Repository<Event>, teamRepo: Repository<Team>, statsRepo: Repository<Stats>, eventsGateway: EventsGateway);
-    private eventProbabilities;
+    constructor(teamService: TeamsService, matchService: MatchService, eventService: EventsService, statService: StatsService, eventsGateway: EventsGateway);
     createMatch(): Promise<Match | undefined>;
     events(): Promise<void>;
     matchEvent(match: Match): Promise<void>;
-    private randomIndex;
-    private randomEvent;
-    private randomTeam;
-    private handlePoint;
 }

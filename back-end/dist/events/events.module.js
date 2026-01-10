@@ -10,18 +10,19 @@ exports.EventsModule = void 0;
 const common_1 = require("@nestjs/common");
 const events_gateway_1 = require("./events.gateway");
 const typeorm_1 = require("@nestjs/typeorm");
-const player_entity_1 = require("../models/player.entity");
-const team_entity_1 = require("../models/team.entity");
-const match_entity_1 = require("../models/match.entity");
-const fs_1 = require("fs");
+const events_controller_1 = require("./events.controller");
+const teams_module_1 = require("../teams/teams.module");
+const match_module_1 = require("../match/match.module");
+const events_service_1 = require("./events.service");
 let EventsModule = class EventsModule {
 };
 exports.EventsModule = EventsModule;
 exports.EventsModule = EventsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([player_entity_1.Player, team_entity_1.Team, match_entity_1.Match, fs_1.Stats, Event])],
-        providers: [events_gateway_1.EventsGateway],
-        exports: [events_gateway_1.EventsGateway]
+        imports: [typeorm_1.TypeOrmModule.forFeature([Event]), teams_module_1.TeamsModule, match_module_1.MatchModule],
+        providers: [events_gateway_1.EventsGateway, events_service_1.EventsService],
+        exports: [events_gateway_1.EventsGateway, events_service_1.EventsService],
+        controllers: [events_controller_1.EventsController]
     })
 ], EventsModule);
 //# sourceMappingURL=events.module.js.map

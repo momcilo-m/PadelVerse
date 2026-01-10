@@ -29,9 +29,6 @@ let MatchController = class MatchController {
     async getById(id) {
         return this.matchService.getMatchById(id);
     }
-    async getEvents(id) {
-        return this.matchService.getEvents(id);
-    }
 };
 exports.MatchController = MatchController;
 __decorate([
@@ -54,13 +51,6 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], MatchController.prototype, "getById", null);
-__decorate([
-    (0, common_1.Get)(":id/events"),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], MatchController.prototype, "getEvents", null);
 exports.MatchController = MatchController = __decorate([
     (0, common_1.Controller)('match'),
     __metadata("design:paramtypes", [match_service_1.MatchService])

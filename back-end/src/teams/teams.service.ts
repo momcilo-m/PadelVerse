@@ -36,13 +36,16 @@ export class TeamsService {
                     .getMany();
         
                 if (availableTeams.length < 2)
-                    return;
+                    return [null,null];
         
 
-        return this.randomIndex(availableTeams);
+        const [i1,i2] = this.randomIndex(availableTeams);
+
+        return [availableTeams[i1],availableTeams[i2]]
+
     }
 
-    private randomIndex(array: Team[]) {
+    private randomIndex(array: Team[]):number[]{
         const i1 = Math.floor(Math.random() * array.length);
         let i2: number;
         do {
@@ -52,7 +55,7 @@ export class TeamsService {
         return [i1, i2];
     }
 
-    private randomTeam(match: Match, event: string, serve: number): number[] {
+    randomTeam(match: Match, event: string, serve: number): number[] {
 
         let id: number = 0;
         let index: number = 0;

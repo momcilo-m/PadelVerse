@@ -8,28 +8,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersController = void 0;
+exports.EventsController = void 0;
 const common_1 = require("@nestjs/common");
-const users_service_1 = require("./users.service");
-let UsersController = class UsersController {
+const events_service_1 = require("./events.service");
+let EventsController = class EventsController {
     service;
     constructor(service) {
         this.service = service;
     }
-    getUsers() {
-        return this.service.getAll();
+    async getEvents(id) {
+        return this.service.getEvents(id);
     }
 };
-exports.UsersController = UsersController;
+exports.EventsController = EventsController;
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)(":id/events"),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "getUsers", null);
-exports.UsersController = UsersController = __decorate([
-    (0, common_1.Controller)('users'),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
-], UsersController);
-//# sourceMappingURL=users.controller.js.map
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], EventsController.prototype, "getEvents", null);
+exports.EventsController = EventsController = __decorate([
+    (0, common_1.Controller)('events'),
+    __metadata("design:paramtypes", [events_service_1.EventsService])
+], EventsController);
+//# sourceMappingURL=events.controller.js.map

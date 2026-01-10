@@ -20,9 +20,4 @@ export class MatchController {
     async getById(@Param('id', ParseIntPipe) id: number) {
         return this.matchService.getMatchById(id);
     }
-
-    @Get(":id/events")
-    async getEvents(@Param('id', ParseIntPipe) id: number) {
-        return this.matchService.getEvents(id);
-    }
 }

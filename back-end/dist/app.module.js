@@ -59,6 +59,9 @@ const events_module_1 = require("./events/events.module");
 const match_module_1 = require("./match/match.module");
 const chat_module_1 = require("./chat/chat.module");
 const chat_entity_1 = require("./models/chat.entity");
+const events_controller_1 = require("./events/events.controller");
+const teams_module_1 = require("./teams/teams.module");
+const teams_controller_1 = require("./teams/teams.controller");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -100,8 +103,9 @@ exports.AppModule = AppModule = __decorate([
             events_module_1.EventsModule,
             match_module_1.MatchModule,
             chat_module_1.ChatModule,
+            teams_module_1.TeamsModule,
         ],
-        controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController, booking_controller_1.BookingController, profile_controller_1.ProfileController, review_controller_1.ReviewController],
+        controllers: [app_controller_1.AppController, users_controller_1.UsersController, auth_controller_1.AuthController, complex_controller_1.ComplexController, terms_controller_1.TermsController, tournaments_controller_1.TournamentsController, booking_controller_1.BookingController, profile_controller_1.ProfileController, review_controller_1.ReviewController, events_controller_1.EventsController, teams_controller_1.TeamsController],
         providers: [app_service_1.AppService, auth_service_1.AuthService, users_service_1.UsersService, mailer_service_1.MailerService, complex_service_1.ComplexService, terms_service_1.TermsService, tournaments_service_1.TournamentsService, courts_service_1.CourtsService, profile_service_1.ProfileService],
     })
 ], AppModule);

@@ -7,7 +7,7 @@ import { SimulatorModule } from 'src/simulator/simulator.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), SimulatorModule],
+  imports: [TypeOrmModule.forFeature([User])],
   exports: [TypeOrmModule, UsersService],
   providers: [UsersService],
   controllers: [UsersController],

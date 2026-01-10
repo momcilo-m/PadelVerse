@@ -13,16 +13,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EventsGateway = void 0;
-const typeorm_1 = require("@nestjs/typeorm");
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
-const match_entity_1 = require("../models/match.entity");
-const typeorm_2 = require("typeorm");
+const match_service_1 = require("../match/match.service");
 let EventsGateway = class EventsGateway {
-    matchRepo;
+    matchService;
     users = new Map();
-    constructor(matchRepo) {
-        this.matchRepo = matchRepo;
+    constructor(matchService) {
+        this.matchService = matchService;
     }
     server;
     handleConnection(client, ...args) {
@@ -32,7 +30,7 @@ let EventsGateway = class EventsGateway {
         console.log('Client disconnected:', client.id);
     }
     async handleJoinRoom(client, data) {
-        let match = await this.matchRepo.findOneBy({ id: data.room, live: true });
+        let match = await this.matchService.getLiveMatchById(data.room);
         if (!match)
             return { success: false, message: "Match is finished" };
         client.join(data.room.toString());
@@ -73,7 +71,6 @@ exports.EventsGateway = EventsGateway = __decorate([
             credentials: true
         }
     }),
-    __param(0, (0, typeorm_1.InjectRepository)(match_entity_1.Match)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [match_service_1.MatchService])
 ], EventsGateway);
 //# sourceMappingURL=events.gateway.js.map

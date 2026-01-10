@@ -14,6 +14,9 @@ const terms_module_1 = require("../terms/terms.module");
 const users_module_1 = require("../users/users.module");
 const complex_module_1 = require("../complex/complex.module");
 const courts_module_1 = require("../courts/courts.module");
+const match_module_1 = require("../match/match.module");
+const stats_entity_1 = require("../models/stats.entity");
+const typeorm_1 = require("@nestjs/typeorm");
 let StatsModule = class StatsModule {
 };
 exports.StatsModule = StatsModule;
@@ -21,7 +24,8 @@ exports.StatsModule = StatsModule = __decorate([
     (0, common_1.Module)({
         controllers: [stats_controller_1.StatsController],
         providers: [stats_service_1.StatsService],
-        imports: [terms_module_1.TermsModule, users_module_1.UsersModule, complex_module_1.ComplexModule, courts_module_1.CourtsModule]
+        imports: [typeorm_1.TypeOrmModule.forFeature([stats_entity_1.Stats]), terms_module_1.TermsModule, users_module_1.UsersModule, complex_module_1.ComplexModule, courts_module_1.CourtsModule, match_module_1.MatchModule],
+        exports: [stats_service_1.StatsService]
     })
 ], StatsModule);
 //# sourceMappingURL=stats.module.js.map
