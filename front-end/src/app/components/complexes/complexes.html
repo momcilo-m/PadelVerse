@@ -1,0 +1,161 @@
+<div class="box">
+    <div class="panel">
+        
+        <form [formGroup]="formFilter">
+            
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Filter</mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="filter">
+
+                    
+                    <mat-form-field class="time" appearance="outline" style="width: 200px; height: 50px;">
+                        <mat-label>Start</mat-label>
+                    <input matInput [matTimepicker]="startPicker" formControlName="open_time">
+                    <mat-timepicker-toggle matIconSuffix [for]="startPicker"></mat-timepicker-toggle>
+                    <mat-timepicker interval="1h" #startPicker></mat-timepicker>
+                </mat-form-field>
+
+                <mat-form-field class="time" appearance="outline" style="width: 200px; height: 50px;">
+                    <mat-label>End</mat-label>
+                    <input matInput [matTimepicker]="endPicker" formControlName="close_time">
+                    <mat-timepicker-toggle matIconSuffix [for]="endPicker"></mat-timepicker-toggle>
+                    <mat-timepicker interval="1h" #endPicker></mat-timepicker>
+                </mat-form-field>
+                
+                <mat-label>Price:</mat-label>
+
+                <mat-slider min="0" max="100" step="1" discrete>
+                    <input matSliderStartThumb formControlName="priceMin" />
+                    <input matSliderEndThumb formControlName="priceMax" />
+                </mat-slider>
+            </div>
+                
+            </mat-expansion-panel>
+
+            
+            <!-- <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Rating</mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <mat-radio-group formControlName="rating" class="example-radio-group">
+                    <mat-radio-button class="example-radio-button" [value]="4">4+</mat-radio-button>
+                    <mat-radio-button class="example-radio-button" [value]="3">3+</mat-radio-button>
+                    <mat-radio-button class="example-radio-button" [value]="2">2+</mat-radio-button>
+                    <mat-radio-button class="example-radio-button" [value]="" checked>None</mat-radio-button>
+                </mat-radio-group>
+            </mat-expansion-panel> -->
+        </form>
+
+        <form [formGroup]="formSort" class="sort-container">            
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Sort</mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="sort">
+
+                    
+                    <div class="sort-row">
+                        <span class="sort-label">Name:</span>
+                <button mat-raised-button color="primary" type="button" (click)="sort('name')">
+                    <mat-icon>
+                        {{
+                        formSort.get('name')?.value === 'asc' ? 'arrow_upward' :
+                        formSort.get('name')?.value === 'desc' ? 'arrow_downward' :
+                        'close'
+                    }}
+                </mat-icon>
+                </button>
+            </div>
+
+            <div class="sort-row">
+                    <span class="sort-label">PriceMin:</span>
+                    <button mat-raised-button color="primary" type="button" (click)="sort('priceMin')">
+                        <mat-icon>
+                            {{
+                            formSort.get('priceMin')?.value === 'asc' ? 'arrow_upward' :
+                            formSort.get('priceMin')?.value === 'desc' ? 'arrow_downward' :
+                            'close'
+                            }}
+                        </mat-icon>
+                    </button>
+                </div>
+    
+                <div class="sort-row">
+                    <span class="sort-label">PriceMax:</span>
+                    <button mat-raised-button color="primary" type="button" (click)="sort('priceMax')">
+                        <mat-icon>
+                            {{
+                            formSort.get('priceMax')?.value === 'asc' ? 'arrow_upward' :
+                            formSort.get('priceMax')?.value === 'desc' ? 'arrow_downward' :
+                            'close'
+                            }}
+                        </mat-icon>
+                    </button>
+                </div>
+    
+                <!-- TIME START -->
+                <div class="sort-row">
+                    <span class="sort-label">Time Start:</span>
+                    <button mat-raised-button color="primary" type="button" (click)="sort('timeStart')">
+                        <mat-icon>
+                            {{
+                            formSort.get('timeStart')?.value === 'asc' ? 'arrow_upward' :
+                            formSort.get('timeStart')?.value === 'desc' ? 'arrow_downward' :
+                            'close'
+                            }}
+                        </mat-icon>
+    
+                    </button>
+                </div>
+    
+                <!-- TIME END -->
+                <div class="sort-row">
+                    <span class="sort-label">Time End:</span>
+                    <button mat-raised-button color="primary" type="button" (click)="sort('timeEnd')">
+                        <mat-icon>
+                            {{
+                                formSort.get('timeEnd')?.value === 'asc' ? 'arrow_upward' :
+                                formSort.get('timeEnd')?.value === 'desc' ? 'arrow_downward' :
+                                'close'
+                            }}
+                        </mat-icon>
+                    </button>
+                </div>
+            </div>
+            </mat-expansion-panel>
+            
+        </form>
+
+        <button mat-raised-button color="primary" (click)="execute()">
+            Sort & Filter
+        </button>
+    </div>
+
+    <!-- (click)="toggleSort('timeStart')" -->
+
+
+    <div class="content">
+        <div class="complex-list">
+
+            @for (item of complex$ | async; track item.id)
+            {
+            <app-complex-card photo={{item.photo}} name={{item.name}} city={{item.city}} country={{item.country}}
+                openTime={{item.open_time}} closeTime={{item.close_time}} price="5 $/hrs" [rating]="item.rating"
+                [votes]="item.votes" [priceMin]="item.priceMin" [priceMax]="item.priceMax" (click)=pickComplex(item.id)>
+
+            </app-complex-card>
+            }
+        </div>
+
+        @if (count$ | async; as count) {
+
+        <mat-paginator [length]="count" [pageSize]="pageSize" (page)="paginate($event)"
+         [pageSizeOptions]="[2,5, 10, 25]" aria-label="Select page"></mat-paginator>
+        }
+    </div>
+</div>

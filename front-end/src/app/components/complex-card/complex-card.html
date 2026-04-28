@@ -1,0 +1,39 @@
+<mat-card class="complex-card">
+  <!-- Gornja polovina -->
+  <div class="card-header">
+    <img [src]="'http://localhost:3000/photo/' + photo" alt="{{ name }}" class="card-image" />
+    <div class="overlay"></div>
+    <h2 class="place-name">{{ name }}</h2>
+  </div>
+
+  <!-- Donja polovina -->
+  <div class="card-content">
+    <div class="info-row">
+      <mat-icon>location_on</mat-icon>
+      <span>{{ city }}, {{ country }}</span>
+    </div>
+
+    <div class="info-row">
+      <mat-icon>schedule</mat-icon>
+      <span>{{ openTime }} - {{ closeTime }}</span>
+    </div>
+
+    <div class="info-row">
+      <mat-icon>attach_money</mat-icon>
+      <span>{{ priceMin }}$ - {{priceMax}}$</span>
+    </div>
+
+    <div class="info-row">
+      <mat-icon>star</mat-icon>
+      @if(votes > 0)
+      {
+      <span>{{ rating/votes | number:'1.1-1' }} / 5 rating</span>
+      }
+      @else
+      {
+      <span>Not voted yet</span>
+      }
+
+    </div>
+  </div>
+</mat-card>

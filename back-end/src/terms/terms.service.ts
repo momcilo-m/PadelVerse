@@ -1,0 +1,145 @@
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { plainToClass } from 'class-transformer';
+import { ComplexService } from 'src/complex/complex.service';
+import { CourtsService } from 'src/courts/courts.service';
+import { Complex } from 'src/models/complex.entity';
+import { Court } from 'src/models/court.entity';
+import { TermsCreateDTO } from 'src/models/term.create.dto';
+import { TermsDTO } from 'src/models/term.dto';
+import { Term } from 'src/models/term.entity';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+
+@Injectable()
+export class TermsService {
+
+    constructor(
+        @InjectRepository(Term) private readonly termsRepository: Repository<Term>,
+        @Inject(forwardRef(() => ComplexService)) private readonly complexService: ComplexService,
+        private readonly courtService: CourtsService,
+    ) { }
+
+    async getByIds(court?: number, user?: number, start_date?: Date, end_date?: Date) {
+        if (court == null && user == null)
+            throw new BadRequestException('Please insert a court-id or user-id');
+
+        let where: any = {};
+
+        if (court) where.court = court;
+        if (user) where.id = user;
+
+        if (start_date)
+            where.start_date = MoreThanOrEqual(start_date);
+
+        if (end_date)
+            where.end_date = LessThanOrEqual(end_date)
+
+        return await this.termsRepository.find({ where })
+    }
+
+    async create(termsDTO: TermsCreateDTO) {
+        const { time, count, date: dateString, court: cId } = termsDTO;
+
+        let date = new Date(dateString)
+        date.setUTCHours(0, 0, 0, 0);
+
+        const startTime = time;
+        const endTime = (count + parseInt(time.split(":")[0])).toString().padStart(2, '0') + ":00:00";
+
+        const court = await this.courtService.getByIdWithCourt(cId);
+
+        if (!court || !court.complex)
+            throw new NotFoundException("Court not found");
+
+        await this.isTermFree(startTime, endTime, date, cId);
+
+        return await this.termsRepository.save(plainToClass(Term, termsDTO));
+    }
+
+    async isTermFree(
+        startTime: string,
+        endTime: string,
+        date: Date,
+        courtId: number,
+    ): Promise<Boolean> {
+        // 1. Uzimamo court zajedno sa complex (join)
+        const court = await this.termsRepository.manager
+            .getRepository(Court)
+            .createQueryBuilder('court')
+            .leftJoinAndSelect('court.complex', 'complex')
+            .where('court.id = :courtId', { courtId })
+            .getOne();
+
+        if (!court) {
+            throw new BadRequestException('Court not found');
+        }
+
+        const complex = court.complex;
+
+        if (!complex) {
+            throw new BadRequestException('Court has no complex assigned');
+        }
+
+        // 2. Proveravamo da li termin upada u radno vreme kompleksa
+        if (startTime < complex.open_time || endTime > complex.close_time) {
+            throw new BadRequestException('Term must be within court working hours');
+        }
+
+        // 3. Proveravamo da li se preklapa sa postojećim terminima
+        const overlapingTerms = await this.termsRepository
+            .createQueryBuilder('term')
+            .where('term.court = :courtId', { courtId })
+            .andWhere('term.date = :date', { date })
+            .andWhere(
+                ':startTime < (term.time + (term.count || \' hours\')::interval)',
+                { startTime },
+            )
+            .andWhere(':endTime > term.time', { endTime })
+            .getMany();
+
+        if (overlapingTerms.length > 0) {
+            throw new BadRequestException('Terms are intercepted');
+        }
+
+        return true;
+    }
+
+
+    async getTermsByDateRange(complexes: number[], startOfMonth: Date, endOfMonth: Date) {
+
+        if (!complexes || complexes.length === 0) {
+            return [];
+        }
+
+        let res = await this.termsRepository.manager
+            .getRepository(Term)
+            .createQueryBuilder('term')
+            .leftJoinAndSelect('term.court', 'court')
+            .where('court.complex IN (:...complexes)', { complexes })
+            .andWhere('term.date BETWEEN :start AND :end', { start: startOfMonth, end: endOfMonth })
+            .addSelect('court.price', 'price')
+            .addSelect('court.name', 'name')
+            .getRawMany()
+
+        return res;
+    }
+
+    async delete(id: number) {
+        const terms = await this.termsRepository.findOneBy({ id });
+
+        if (!terms)
+            throw new NotFoundException(terms);
+
+        const termTime = new Date(terms.date);
+        const [hours] = terms.time.split(':').map(Number);
+        termTime.setHours(hours);
+
+        if (termTime.getTime() < Date.now())
+            throw new BadRequestException('You can\'t delete term that past');
+
+        return await this.termsRepository.delete({ id })
+    }
+
+    
+
+}

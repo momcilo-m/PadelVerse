@@ -1,0 +1,14 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+    padding: 10px;
+}
+
+a{
+    margin-top: 10px;
+  color: var(--mat-sys-on-primary-container);
+  text-decoration: none;
+}

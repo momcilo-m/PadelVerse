@@ -1,0 +1,23 @@
+.mapa {
+  position: static !important;
+}
+
+::ng-deep .map-container {
+  position: static !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+::ng-deep .gm-control-active
+{
+  display: none !important;
+}
+
+::ng-depp .gm-svpc
+{
+  display: none !important;
+}
+
+::ng-deep a{
+  text-align: center;
+}

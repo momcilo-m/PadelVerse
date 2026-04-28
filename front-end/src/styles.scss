@@ -1,0 +1,137 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+// // :root {
+// //   @include mat.snack-bar-overrides((container-color: red,
+// //       supporting-text-color:white));
+// // }
+
+// html {
+//   @include mat.theme((color: (primary: mat.$azure-palette,
+//         tertiary: mat.$blue-palette,
+//       ),
+//       typography: Roboto,
+//       density: 0,
+//     ));
+// }
+
+// body {
+//   // Default the application to a light color theme. This can be changed to
+//   // `dark` to enable the dark color theme, or to `light dark` to defer to the
+//   // user's system settings.
+//   color-scheme: light;
+
+//   // Set a default background, font and text colors for the application using
+//   // Angular Material's system-level CSS variables. Learn more about these
+//   // variables at https://material.angular.dev/guide/system-variables
+//   background-color: var(--mat-sys-surface);
+//   color: var(--mat-sys-on-surface);
+//   font: var(--mat-sys-body-medium);
+
+//   // Reset the user agent margin.
+//   margin: 0;
+// }
+
+html {
+  @include mat.theme((color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: dark;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-on-primary-fixed);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+
+  overflow: hidden;
+
+  z-index: 1;
+  height: 100vh;
+}
+
+.mat-drawer-container, .mat-toolbar, .mat-drawer
+{
+  background-color: transparent !important;
+}
+
+app-management, app-complex, app-profile,app-login{
+  display: block;
+  height: 100% !important;
+}
+
+app-login{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mat-drawer-content.mat-sidenav-content {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+}
+
+app-home{
+  z-index: 3;
+}
+
+.my-marker {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  color: white;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 50%;
+  pointer-events: auto;
+  font-size: 15px;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
+  background-color: #791811;
+  color: white;
+}
+
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
+  background-color: #04672c;
+  color: white;
+}
+
+.popup {
+  position: absolute;
+  bottom: 35px;
+  left: -50px;
+  width: 150px;
+  padding: 5px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  display: none;
+
+  // display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+a:visited {
+  color: black;
+}

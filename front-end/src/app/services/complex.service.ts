@@ -1,0 +1,73 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable, retry, throwError } from 'rxjs';
+import { ComplexInterface } from '../models/complex.interface';
+import { Complex } from '../components/complex/complex';
+import { CreateComplex } from '../models/create.complex.interface';
+import { environment } from '../../environments/environment.development';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ComplexService {
+
+  private http = inject(HttpClient)
+
+  private BASE = environment.apiUrl
+  private FORECAST_BASE = environment.forecast_api
+  private FORECAST_KEY = environment.forecast_key
+
+  getComplex(query?: string): Observable<[complexes: ComplexInterface[], length: number]> {
+    return this.http.get<[complexes: ComplexInterface[], length: number,]>(`${this.BASE}/complex?${query ? query : ""}`, { withCredentials: true })
+  }
+
+  getComplexById(id: number): Observable<ComplexInterface> {
+    return this.http.get<ComplexInterface>(`${this.BASE}/complex/${id}`, { withCredentials: true })
+  }
+
+  getAvailableCourt(id: number, date: string, time: string, count: number) {
+    console.log(id, date, time, count)
+    return this.http.get<AvalaibleCourtsInterface>(`${this.BASE}/complex/free/${id}?date=${date}&time=${time}&count=${count}`)
+  }
+
+  getWeather(date: string, time: string, location: string): Observable<ForecastResponse> {
+    // let base = "http://api.weatherapi.com/v1";
+    // let key = "29b677f206f94d6295a175818251009";
+
+    if (location === "[undefined,undefined]") {
+      return throwError(() => new Error("Bad request: location is required"));
+    }
+    return this.http.get<ForecastResponse>(`${this.FORECAST_BASE}/forecast.json?key=${this.FORECAST_KEY}&q=${location}&dt=${date}&hour=${time}`)
+  }
+
+  getComplexByOwner(owner: number) {
+    return this.http.get<[complexes: ComplexInterface[], count: number]>(`${this.BASE}/complex?owner=${owner}`)
+  }
+
+  createComplex(complex: CreateComplex): Observable<ComplexInterface> {
+    return this.http.post<ComplexInterface>(`${this.BASE}/complex`, complex, { withCredentials: true })
+  }
+
+  createCourt(court: CourtInterface): Observable<CourtInterface> {
+    return this.http.post<CourtInterface>(`${this.BASE}/complex/courts`, court, { withCredentials: true })
+  }
+
+  editComplex(complex: CreateComplex, id: number): Observable<CreateComplex> {
+    return this.http.patch<CreateComplex>(`${this.BASE}/complex/${id}`, complex, { withCredentials: true })
+  }
+
+  uploadComplexImage(file: File, id: number): Observable<{ path: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<{ path: string }>(`${this.BASE}/complex/photo/${id}`, formData, { withCredentials: true });
+  }
+
+  getReview(complex: number): Observable<{ rating: number }> {
+    return this.http.get<{ rating: number }>(`${this.BASE}/review/${complex}`, { withCredentials: true })
+  }
+
+  vote(user: number, rating: number, complex: number): Observable<{ rating: number, user: number, complex: number }> {
+    return this.http.post<{ rating: number, user: number, complex: number }>(`${this.BASE}/review`, { user, rating, complex }, { withCredentials: true })
+  }
+}

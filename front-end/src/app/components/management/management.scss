@@ -1,0 +1,119 @@
+.complex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.complex img {
+    width: 140px;
+    height: 70px;
+    flex: 1
+}
+
+.complex h3 {
+    flex: 1;
+}
+
+.managament-container
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.complex-list {
+    border: 1px solid white;
+    border-right: none;
+    border-radius: 20px;
+    max-width: 400px;
+    max-height: 440px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: 0;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.complex:hover {
+    cursor: pointer;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+    flex: 1
+}
+
+.complex h3 {
+    text-align: center;
+}
+
+#edit {
+    color: rgb(0, 38, 255);
+}
+
+#delete {
+    color: rgb(253, 49, 49);
+}
+
+.charts {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.stats-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px;
+}
+
+.profile img {
+    width: 100px;
+    height: 200px;
+    object-fit: cover;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.bar span {
+    font-weight: normal;
+}
+
+mat-select {
+    width: 200px;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    //margin-top: auto;
+    align-self: center;
+    gap: 50px;
+}
+
+.stats {
+    flex: 3;
+}
+
+.stats h3 {
+    text-align: center;
+}

@@ -1,0 +1,11 @@
+@for (item of matches$ | async; track item.id)
+{
+<app-match-card 
+    team1Name={{item.team1.name}}
+    team2Name="{{item.team2.name}}"
+    [live]="item.live"
+    [team1Photo]="base + item.team1.photo"
+    [team2Photo]="base + item.team2.photo"
+    (click)="handleClick(item.id)">
+</app-match-card>
+}

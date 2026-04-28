@@ -1,0 +1,6 @@
+<div class="flex space-x-1">
+    @for (filled of stars; track $index) {
+    <span (mouseenter)="hover($index)" (mouseleave)="unHover()" (click)="vote($index)" [class.text-yellow-400]="filled"
+        [class.text-gray-300]="!filled">★</span>
+    }
+</div>

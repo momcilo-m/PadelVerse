@@ -1,0 +1,50 @@
+.match-card
+{
+    display: flex;
+    flex-direction: column;
+    max-width: 150px;
+    min-height: 100px;
+    align-items: center;
+    justify-content: space-around;
+    position:relative;
+    cursor: pointer;
+    gap: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.match-row
+{
+    display: flex;
+    gap: 15px;
+}
+
+.red-dot
+{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 10px;
+    width: 10px;
+    background-color: red;
+    border-radius: 50%;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100%{
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50%{
+        opacity: 0.3;
+        transform: scale(0.7);
+    }
+}
+
+img{
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+}

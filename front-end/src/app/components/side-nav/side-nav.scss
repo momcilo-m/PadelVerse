@@ -1,0 +1,36 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.content {
+  padding: 16px;
+}
+
+.sidenav-content {
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.sidenav-content>main {
+  max-width: 1400px;
+  width: 100%;
+  padding: 20px;
+}
+
+.no-link
+{
+  color: white;
+  text-decoration: none;
+}
+
+.no-link :visited
+{
+  color: white;
+  text-decoration: none;
+}

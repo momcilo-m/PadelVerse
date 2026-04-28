@@ -1,0 +1,165 @@
+@if(complex$ | async; as complex)
+{
+<form [formGroup]="form" style=" display: grid; gap: 15px; height: 100%; grid-template-rows: 1fr 5fr 1fr;">
+    <div class="panel">
+        <div class="location">
+            <div class="rounded-corner panel">
+                <mat-icon> location_on</mat-icon>
+                <p>{{complex.city}} {{complex.country}}</p>
+            </div>
+        </div>
+        <div class="date-picker">
+            <mat-form-field appearance="outline" style="width: 200px; height: 50px;">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="datePicker" formControlName="date" [min]="today">
+                <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+                <mat-datepicker #datePicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <div class="time-picker">
+            <mat-form-field class="time" appearance="outline" style="width: 200px; height: 50px;">
+                <mat-label>Start</mat-label>
+                <input matInput [matTimepicker]="startPicker" formControlName="startTime">
+                <mat-timepicker-toggle matIconSuffix [for]="startPicker"></mat-timepicker-toggle>
+                <mat-timepicker interval="1h" #startPicker></mat-timepicker>
+            </mat-form-field>
+        </div>
+
+        <div class="counter">
+            <mat-icon>schedule</mat-icon>
+
+            <button mat-icon-button (click)="decrement()">
+                <mat-icon>remove</mat-icon>
+            </button>
+
+            <span class="value">{{ form.get('count')?.value }}</span>
+
+            <button mat-icon-button (click)="increment()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+
+    </div>
+
+    <div class="grid-content">
+        @if(courts$ | async; as courts)
+        {
+        <div>
+            <div class="courts rounded-corner">
+                @if (courtsWithStatus$ | async; as courts) {
+
+                @if(courts.length > 0)
+                {
+                @for (court of courts; track court.id) {
+                <div [class]="
+                                            ' court rounded-corner ' + 
+                                            (court.isAvailable ? 'court-available' : 'court-unavailable') + 
+                                            (form.get('court')?.value === court.id ? ' selectedCourt' : '')
+                                            " (click)="onClickCourt(court.id, court.isAvailable)">
+                    <h3>{{ court.name }}</h3>
+                </div>
+                }
+                }
+                @else
+                {
+                <p>No available</p>
+                }
+                }
+                @else
+                {
+                <p>No courts</p>
+                }
+            </div>
+        </div>
+        }
+
+
+        <div class="complex-location">
+            <google-map height="100%" witdh="200px" [center]="({lat:complex.location.x, lng:complex.location.y})"
+                [options]="{
+                mapTypeControl: false,streetViewControl: false, 
+                fullscreenControl: false,
+                zoomControl: false,
+                disableDoubleClickZoom: false,
+                scrollwheel: true,
+                draggable: true,
+                keyboardShortcuts: true,
+            }" [zoom]="16">
+
+                <map-marker [position]="{lat:complex.location.x, lng:complex.location.y}" [title]="'Moja lokacija'">
+                </map-marker>
+
+            </google-map>
+        </div>
+
+        <div class="weather-container">
+            Weather Prediction
+            <div class="weather rounded-corner">
+
+                @if(weather$ | async; as weather)
+                {
+
+                @if (weather.icon !== '') {
+
+                <div class="weather-date">
+                    <p>{{ transformDate(form.get('date')?.value!) }}</p>
+                    <p>High: {{ weather.max_temp }}</p>
+                    <p>Low: {{ weather.min_temp }}</p>
+                </div>
+
+                <div class="">Temp: {{ weather.temp }}</div>
+
+
+                <div class="weather-icon">
+                    <img [src]="weather.icon" alt="weather-icon">
+                    <p>Condition: {{ weather.text }}</p>
+                </div>
+                }
+                @else
+                {
+                <div class="weather-date">
+                    No data :(
+                </div>
+                }
+                }
+                @else
+                {
+                <div class="weather-date">
+                    No data :(
+                </div>
+                }
+
+            </div>
+        </div>
+
+
+        <div class="price">
+            <div style="display: flex; align-items: center;">
+                <mat-icon>wallet</mat-icon>
+                <p>Total Price</p>
+            </div>
+            @if(selectedCourt$ | async; as court)
+            {
+            ${{ ((court.price || 0) * (form.get('count')?.value || 1)).toFixed(2) }}$
+
+            }
+        </div>
+
+        <div class="checkout">
+            <button [class]=" 'submit-btn rounded-corner'" mat-raised-button color="secondary" type="submit"
+                (click)="checkout()" [disabled]="(form.get('court')?.value === -1 ?  true : false)">
+                Proceed Checkout
+                <mat-icon>input</mat-icon>
+            </button>
+        </div>
+
+        <div class="rating">
+            <h4>Rate this complex</h4>
+            <app-rating [rating]="complex.votes" [complex]="+id"></app-rating>
+        </div>
+
+    </div>
+
+</form>
+}

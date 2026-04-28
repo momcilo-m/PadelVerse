@@ -1,0 +1,21 @@
+<mat-card class="match-card">
+    
+    <div class="match-row">
+        <img [src]="team1Photo" alt="team1photo">
+        {{team1Name}}    
+    </div>
+
+    <div class="match-row">
+        VS
+    </div>
+
+    <div class="match-row">
+        {{team2Name}}
+        <img [src]="team2Photo" alt="team2photo">
+    </div>
+
+    @if(live)
+    {
+        <div class="red-dot"></div>
+    }
+</mat-card>

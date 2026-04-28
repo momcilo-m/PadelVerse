@@ -1,0 +1,22 @@
+@if(loading$ | async; as load)
+{
+@if(load)
+{
+<h3>The request is being processed</h3>
+<mat-spinner></mat-spinner>
+}
+}
+@else if(error$ | async; as error)
+{
+@if(error)
+{
+<h3>Your request has been rejected ❌</h3>
+<p>{{ error }}</p>
+}
+}
+@else
+{
+<h3>
+    You have successfully activated your account. Redirecting to login...
+</h3>
+}
